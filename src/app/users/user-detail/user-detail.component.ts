@@ -26,7 +26,11 @@ export class UserDetailComponent implements OnInit {
     )
     .subscribe(
       user => this.user = user,
-      error => alert('Erro ao carregar o usuário')
+      error => console.error('Erro ao carregar o usuário: ' + error)
     );
+  }
+
+  public goBack() {
+    this.location.back();
   }
 }
