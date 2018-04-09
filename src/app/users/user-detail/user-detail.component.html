@@ -1,0 +1,118 @@
+<div *ngIf="user">
+  <h1 class="page-header text-center"><strong> {{ user?.name }} </strong> </h1>
+
+  <form id="user_detail_form" (ngSubmit)="update()">
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="name" class="control-label">Nome</label>
+        <input
+          id="name"
+          [(ngModel)]="user.name"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control"
+          placeholder=""
+          type="text"
+        />
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="surname" class="control-label">Sobrenome</label>
+        <input
+          id="surname"
+          [(ngModel)]="user.surname"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control"
+          placeholder=""
+          type="text"
+        />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="registration" class="control-label">Matrícula</label>
+        <input
+          id="registration"
+          [(ngModel)]="user.registration"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control"
+          placeholder=""
+          type="text"
+        />
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="cpf" class="control-label">CPF</label>
+        <input
+          id="cpf"
+          [(ngModel)]="user.cpf"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control"
+          placeholder=""
+          type="text"
+        />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="landline" class="control-label">Telefone fixo</label>
+        <input
+          id="landline"
+          [(ngModel)]="user.landline"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control"
+          placeholder=""
+          type="text"
+        />
+      </div>
+
+      <div class="form-group col-md-4">
+        <label for="cellphone" class="control-label">Celular</label>
+        <input
+          id="cellphone"
+          [(ngModel)]="user.cellphone"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control"
+          placeholder=""
+          type="text"
+        />
+      </div>
+
+      <div class="form-group col-md-4">
+        <label for="whatsapp" class="control-label">WhatsApp</label>
+        <input
+          id="whatsapp"
+          [(ngModel)]="user.whatsapp"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control"
+          placeholder=""
+          type="text"
+        />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label for="simple_address" class="control-label">Endereço</label>
+        <input
+          id="simple_address"
+          [(ngModel)]="user.simple_address"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control"
+          placeholder=""
+          type="text"
+        />
+      </div>
+    </div>
+
+    <br/>
+
+    <div class="row text-center">
+      <div class="col-md-12">
+        <button class="btn btn-default" (click)="goBack()">Voltar</button>
+        <button type="submit" class="btn btn-success" (click)='update()'>Atualizar</button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -12,6 +12,7 @@ import { ContentComponent } from './shared/content/content.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { ControlSidebarComponent } from './shared/control-sidebar/control-sidebar.component';
 import { UsersComponent } from './users/users.component';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { DataTablesModule } from 'angular-datatables';
 
 // Services
@@ -42,16 +43,16 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     ContentComponent,
     FooterComponent,
     ControlSidebarComponent,
-    UsersComponent
+    UsersComponent,
+    UserDetailComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule,
-    DataTablesModule
+    AppRoutingModule
   ],
   providers: [ UserService ],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

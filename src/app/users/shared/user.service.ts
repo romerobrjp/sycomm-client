@@ -16,51 +16,29 @@ export class UserService {
   public getAll(): Observable<User[]> {
     return this.http.get(`${this.baseUrl}/users`, {headers: this.headers})
       .catch(this.handleErrors)
-      .map((response: Response) => {
-        return response.json() as User[];
-      });
+      .map((response: Response) => this.responseToUsers(response));
+  }
 
-    // return this.http.get(`${this.baseUrl}/users`, {headers: this.headers})
-    //   .catch(this.handleErrors)
-    //   .map((response: Response) => this.responseToUsers(response));
+  public getById(id: number): Observable<User> {
+    const url = `${this.baseUrl}/users/${id}`;
+
+    return this.http.get(url)
+      .catch(this.handleErrors)
+      .map((response: Response) => response.json() as User);
   }
 
   // PRIVATE METHODS -----------------------------------------------------------
 
   private handleErrors(error: Response) {
-    console.error('Erro em UserSvice: ' + error);
+    console.error('Erro em UserService: ' + error);
     return Observable.throw(error);
   }
 
   private responseToUsers(response: Response): Array<User> {
-    const collection = response.json().data as Array<any>;
-    console.log(collection);
     const users: User[] = [];
 
-    collection.forEach(item => {
-      const user = new User(
-        item.id,
-        item.attributes.registration,
-        item.attributes.name,
-        item.attributes.surname,
-        item.attributes.nickname,
-        item.attributes.email,
-        item.attributes.password,
-        item.attributes.password_confirmation,
-        item.attributes.cpf,
-        item.attributes.landline,
-        item.attributes.cellphone,
-        item.attributes.whatsapp,
-        item.attributes.simple_address,
-        item.attributes.type,
-        item.attributes.organization_id,
-        item.attributes.role_id,
-        item.attributes.address_id,
-        item.attributes.created_at,
-        item.attributes.auth_token
-      );
-
-      users.push(user);
+    response.json().forEach(item => {
+      users.push(item as User);
     });
 
     return users;
