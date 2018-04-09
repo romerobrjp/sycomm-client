@@ -36,6 +36,7 @@ import * as $ from 'jquery';
 import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
 import { RolesComponent } from './roles/roles.component';
 import {RoleService} from './roles/shared/role.service';
+import {OrganizationService} from './organizations/shared/organization.service';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,7 @@ import {RoleService} from './roles/shared/role.service';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [ UserService, RoleService ],
+  providers: [ UserService, RoleService, OrganizationService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

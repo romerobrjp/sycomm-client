@@ -1,33 +1,32 @@
 import { Injectable } from '@angular/core';
 import {Headers, Http, Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
-import {Role} from './role.model';
-import {logger} from 'codelyzer/util/logger';
+import {Organization} from './organization';
 
 @Injectable()
-export class RoleService {
-  public baseUrl = 'http://api.sycomm.com:3000/roles';
+export class OrganizationService {
+  public baseUrl = 'http://api.sycomm.com:3000/organizations';
   private headers = new Headers({'Content-Type': 'application/json', 'Accept': 'application/vnd.sycomm.v1'});
 
   constructor(private http: Http) { }
 
-  public getAll(): Observable<Role[]> {
+  public getAll(): Observable<Organization[]> {
     return this.http.get(`${this.baseUrl}`, {headers: this.headers})
       .catch(this.handleErrors)
-      .map((response: Response) => this.responseToRoles(response));
+      .map((response: Response) => this.responseToOrganizations(response));
   }
 
   private handleErrors(error: Response) {
-    console.error('Erro em RoleService: ' + error);
+    console.error('Erro em OrganizationService: ' + error);
     return Observable.throw(error);
   }
 
-  private responseToRoles(response: Response): Array<Role> {
-    const roles: Role[] = [];
+  private responseToOrganizations(response: Response): Array<Organization> {
+    const organizations: Organization[] = [];
 
     response.json().forEach(item => {
-      roles.push(item as Role);
+      organizations.push(item as Organization);
     });
-    return roles;
+    return organizations;
   }
 }

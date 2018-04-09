@@ -7,6 +7,8 @@ import { User } from '../shared/user.model';
 import { UserService } from '../shared/user.service';
 import { Role } from '../../roles/shared/role.model';
 import { RoleService } from '../../roles/shared/role.service';
+import {OrganizationService} from '../../organizations/shared/organization.service';
+import {Organization} from '../../organizations/shared/organization';
 
 @Component({
   selector: 'app-user',
@@ -15,12 +17,13 @@ import { RoleService } from '../../roles/shared/role.service';
 })
 
 export class UserDetailComponent implements OnInit {
-  public user: User;
-  public roles: Role[];
-  public form: FormGroup;
+  user: User;
+  roles: Role[];
+  organizations: Organization[];
+  form: FormGroup;
 
   constructor(
-    private userService: UserService, private roleService: RoleService,
+    private userService: UserService, private roleService: RoleService, private organizationService: OrganizationService,
     private route: ActivatedRoute,
     private location: Location,
     private formBuilder: FormBuilder
@@ -51,6 +54,11 @@ export class UserDetailComponent implements OnInit {
     this.roleService.getAll().subscribe(
       roles => this.roles = roles,
       error => console.error('Erro ao carregar cargos: ' + error)
+    );
+
+    this.organizationService.getAll().subscribe(
+      organizations => this.organizations = organizations,
+      error => console.error('Erro ao carregar organizações: ' + error)
     );
   }
 
