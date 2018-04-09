@@ -1,7 +1,7 @@
 // Angular
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 // Components
@@ -34,6 +34,8 @@ import 'rxjs/add/observable/throw';
 
 import * as $ from 'jquery';
 import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
+import { RolesComponent } from './roles/roles.component';
+import {RoleService} from './roles/shared/role.service';
 
 @NgModule({
   declarations: [
@@ -44,15 +46,17 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     FooterComponent,
     ControlSidebarComponent,
     UsersComponent,
-    UserDetailComponent
+    UserDetailComponent,
+    RolesComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     AppRoutingModule
   ],
-  providers: [ UserService ],
+  providers: [ UserService, RoleService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
