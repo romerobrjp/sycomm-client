@@ -31,11 +31,11 @@ export class UserDetailComponent implements OnInit {
     this.form = this.formBuilder.group({
       name: [null, [Validators.required]],
       surname: [null],
-      email: [null],
+      email: [null, Validators.required],
       registration: [null, Validators.required],
       cpf: [null, Validators.required],
       landline: [null],
-      cellphone: [null],
+      cellphone: [null, Validators.required],
       whatsapp: [null],
       simple_address: [null],
       role: [null, Validators.required],
