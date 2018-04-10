@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { User } from '../shared/user';
 import { UserService } from '../shared/user.service';
@@ -60,8 +60,6 @@ export class UserDetailComponent implements OnInit {
       organizations => this.organizations = organizations,
       error => console.error('Erro ao carregar organizações: ' + error)
     );
-
-    console.log(`Roles: ${this.roles}`);
   }
 
   update() {
@@ -70,8 +68,12 @@ export class UserDetailComponent implements OnInit {
     this.user.email = this.form.get('email').value;
     this.user.registration = this.form.get('registration').value;
     this.user.cpf = this.form.get('cpf').value;
-
-    console.log('>>>>>>>>>>>>>>>>>>>');
+    this.user.landline = this.form.get('landline').value;
+    this.user.cellphone = this.form.get('cellphone').value;
+    this.user.whatsapp = this.form.get('whatsapp').value;
+    this.user.simple_address = this.form.get('simple_address').value;
+    this.user.role = this.form.get('organization').value;
+    this.user.organization = this.form.get('organization').value;
 
     this.userService.update(this.user).subscribe(
       () => alert(`Usuário ${this.user.name} atualizado com sucesso`),
