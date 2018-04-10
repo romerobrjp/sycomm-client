@@ -13,10 +13,14 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { ControlSidebarComponent } from './shared/control-sidebar/control-sidebar.component';
 import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { RolesComponent } from './roles/roles.component';
+import { OrganizationsComponent } from './organizations/organizations.component';
 import { DataTablesModule } from 'angular-datatables';
 
 // Services
 import { UserService } from './users/shared/user.service';
+import { RoleService } from './roles/shared/role.service';
+import { OrganizationService } from './organizations/shared/organization.service';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -34,9 +38,6 @@ import 'rxjs/add/observable/throw';
 
 import * as $ from 'jquery';
 import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
-import { RolesComponent } from './roles/roles.component';
-import {RoleService} from './roles/shared/role.service';
-import {OrganizationService} from './organizations/shared/organization.service';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import {OrganizationService} from './organizations/shared/organization.service';
     ControlSidebarComponent,
     UsersComponent,
     UserDetailComponent,
-    RolesComponent
+    RolesComponent,
+    OrganizationsComponent
   ],
   imports: [
     BrowserModule,
