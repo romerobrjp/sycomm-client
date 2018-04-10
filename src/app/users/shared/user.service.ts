@@ -1,30 +1,38 @@
 import { Response, Http, Headers } from '@angular/http';
 // import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs/Observable';
 
-import { User } from './user.model';
+import { User } from './user';
 
 @Injectable()
 export class UserService {
-  public baseUrl = 'http://api.sycomm.com:3000';
+  public baseUrl = 'http://api.sycomm.com:3000/users';
   private headers = new Headers({'Content-Type': 'application/json', 'Accept': 'application/vnd.sycomm.v1'});
 
   constructor(private http: Http) { }
 
   public getAll(): Observable<User[]> {
-    return this.http.get(`${this.baseUrl}/users`, {headers: this.headers})
+    return this.http.get(`${this.baseUrl}`, {headers: this.headers})
       .catch(this.handleErrors)
       .map((response: Response) => this.responseToUsers(response));
   }
 
   public getById(id: number): Observable<User> {
-    const url = `${this.baseUrl}/users/${id}`;
+    const url = `${this.baseUrl}/${id}`;
 
     return this.http.get(url)
       .catch(this.handleErrors)
       .map((response: Response) => response.json() as User);
+  }
+
+  public update(user: User): Observable<User> {
+    const url = `${this.baseUrl}/${user.id}`;
+    const body = JSON.stringify(user);
+
+    return this.http.put(url, body,{headers: this.headers})
+      .catch(this.handleErrors)
+      .map(() => user);
   }
 
   // PRIVATE METHODS -----------------------------------------------------------

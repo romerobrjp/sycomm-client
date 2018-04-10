@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Headers, Http, Response} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import {Role} from './role.model';
-import {logger} from 'codelyzer/util/logger';
+import { Headers, Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { Role } from './role';
 
 @Injectable()
 export class RoleService {

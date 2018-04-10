@@ -3,12 +3,12 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
-import { User } from '../shared/user.model';
+import { User } from '../shared/user';
 import { UserService } from '../shared/user.service';
-import { Role } from '../../roles/shared/role.model';
+import { Role } from '../../roles/shared/role';
 import { RoleService } from '../../roles/shared/role.service';
-import {OrganizationService} from '../../organizations/shared/organization.service';
-import {Organization} from '../../organizations/shared/organization';
+import { Organization } from '../../organizations/shared/organization';
+import { OrganizationService } from '../../organizations/shared/organization.service';
 
 @Component({
   selector: 'app-user',
@@ -59,6 +59,23 @@ export class UserDetailComponent implements OnInit {
     this.organizationService.getAll().subscribe(
       organizations => this.organizations = organizations,
       error => console.error('Erro ao carregar organizações: ' + error)
+    );
+
+    console.log(`Roles: ${this.roles}`);
+  }
+
+  update() {
+    this.user.name = this.form.get('name').value;
+    this.user.surname = this.form.get('surname').value;
+    this.user.email = this.form.get('email').value;
+    this.user.registration = this.form.get('registration').value;
+    this.user.cpf = this.form.get('cpf').value;
+
+    console.log('>>>>>>>>>>>>>>>>>>>');
+
+    this.userService.update(this.user).subscribe(
+      () => alert(`Usuário ${this.user.name} atualizado com sucesso`),
+      (error) => alert('Ocorreu um erro no update em UserDetailComponent: ' + error)
     );
   }
 
