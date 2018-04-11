@@ -6,6 +6,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 // 3rd party modules
 import { TableModule } from 'primeng/table';
+import { GrowlModule } from 'primeng/growl';
+import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/primeng';
 
 // Components
 import { AppComponent } from './app.component';
@@ -61,12 +65,16 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    TableModule
+    TableModule,
+    GrowlModule,
+    MessageModule,
+    MessagesModule
   ],
   providers: [
     UserService,
     RoleService,
-    OrganizationService
+    OrganizationService,
+    MessageService
   ],
   bootstrap: [ AppComponent ]
 })

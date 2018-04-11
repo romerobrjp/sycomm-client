@@ -10,6 +10,9 @@ import { RoleService } from '../../roles/shared/role.service';
 import { Organization } from '../../organizations/shared/organization';
 import { OrganizationService } from '../../organizations/shared/organization.service';
 
+import {MessageService} from 'primeng/components/common/messageservice';
+import {Message} from 'primeng/components/common/api';
+
 @Component({
   selector: 'app-user',
   templateUrl: './user-detail.component.html',
@@ -21,12 +24,14 @@ export class UserDetailComponent implements OnInit {
   roles: Role[];
   organizations: Organization[];
   form: FormGroup;
+  msgs: Message[] = [];
 
   constructor(
     private userService: UserService, private roleService: RoleService, private organizationService: OrganizationService,
     private route: ActivatedRoute,
     private location: Location,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private messageService: MessageService
   ) {
     this.form = this.formBuilder.group({
       name: [null, [Validators.required]],
@@ -74,8 +79,8 @@ export class UserDetailComponent implements OnInit {
     this.user.organization = this.form.get('organization').value;
 
     this.userService.update(this.user).subscribe(
-      () => alert(`Usuário ${this.user.name} atualizado com sucesso`),
-      (error) => alert('Ocorreu um erro no update em UserDetailComponent: ' + error)
+      () => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário atualizado!'}),
+      (error) => this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao atualizar o usuário.'})
     );
   }
 
