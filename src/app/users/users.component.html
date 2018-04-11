@@ -1,34 +1,43 @@
 <h1 class="text-center page-header">Usuários</h1>
 
-<table id="users_table" class="cell-border row-border hover stripe">
-  <thead>
-    <tr>
-      <th>Matrícula</th>
-      <th>Nome</th>
-      <th>CPF</th>
-      <th>Cargo</th>
-      <th>Organização</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
+<p-table id="users_p-table" [value]="users" [paginator]="true" [rows]="5" [responsive]="true" [resizableColumns]="true">
+  <ng-template pTemplate="caption">
+    <div style="text-align: right">
+      <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+      <input type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+    </div>
+  </ng-template>
 
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.registration }}</td>
-      <td>{{ user.name }}</td>
-      <td>{{ user.cpf }}</td>
-      <td>{{ user.role }}</td>
-      <td>{{ user.organization }}</td>
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+        {{col.header}}
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+
+      <th>
+        Acoes
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-user>
+    <tr>
+      <td *ngFor="let col of columns" pResizableColumn>
+        {{user[col.field]}}
+      </td>
+
       <td>
         <a [routerLink]="['/users', user.id]" class="btn btn-info">
           Detalhes
-          <span class="glyphicon glyphicon-info-sign"></span>
+          <span class="fa fa-info-circle"></span>
         </a>
+
         <button class="btn btn-danger" (click)="delete(user)">
           Excluir
-          <span class="glyphicon glyphicon-trash"></span>
+          <span class="fa fa-trash"></span>
         </button>
       </td>
     </tr>
-  </tbody>
-</table>
+  </ng-template>
+</p-table>

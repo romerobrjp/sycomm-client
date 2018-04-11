@@ -10,6 +10,7 @@ import { UserService } from './shared/user.service';
 })
 export class UsersComponent implements OnInit, AfterViewInit {
   public users: User[];
+  public columns: any[];
 
   public constructor(private userService: UserService) {}
 
@@ -20,10 +21,19 @@ export class UsersComponent implements OnInit, AfterViewInit {
       },
       error => alert('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );
-    console.log(this.users);
+
+    this.columns = [
+      { field: 'registration', header: 'Matrícula' },
+      { field: 'name', header: 'Nome' },
+      { field: 'surname', header: 'Sobrenome' },
+      { field: 'email', header: 'E-mail' },
+      { field: 'cpf', header: 'CPF' },
+      { field: 'role', header: 'Cargo' },
+      { field: 'organization', header: 'Organização' }
+    ];
   }
 
   public ngAfterViewInit() {
-    $('#users_table').DataTable();
+    console.log('ngAfterViewInit');
   }
 }
