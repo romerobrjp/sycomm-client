@@ -30,7 +30,6 @@ export class UserDetailComponent implements OnInit {
   ) {
     this.form = this.formBuilder.group({
       name: [null, [Validators.required]],
-      surname: [null],
       email: [null, Validators.required],
       registration: [null, Validators.required],
       cpf: [null, Validators.required],
@@ -64,7 +63,6 @@ export class UserDetailComponent implements OnInit {
 
   update() {
     this.user.name = this.form.get('name').value;
-    this.user.surname = this.form.get('surname').value;
     this.user.email = this.form.get('email').value;
     this.user.registration = this.form.get('registration').value;
     this.user.cpf = this.form.get('cpf').value;

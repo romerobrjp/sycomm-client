@@ -2,7 +2,6 @@ export interface User {
   id: number;
   registration: number;
   name: string;
-  surname: string;
   nickname: string;
   email: string;
   password: string;

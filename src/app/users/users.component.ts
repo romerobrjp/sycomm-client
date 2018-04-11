@@ -25,7 +25,6 @@ export class UsersComponent implements OnInit, AfterViewInit {
     this.columns = [
       { field: 'registration', header: 'Matrícula' },
       { field: 'name', header: 'Nome' },
-      { field: 'surname', header: 'Sobrenome' },
       { field: 'email', header: 'E-mail' },
       { field: 'cpf', header: 'CPF' },
       { field: 'role', header: 'Cargo' },
