@@ -1,10 +1,10 @@
 <h1 class="text-center page-header">Usuários</h1>
 
-<p-table id="users_p-table" [value]="users" [paginator]="true" [rows]="5" [responsive]="true" [resizableColumns]="true">
+<p-table id="users_p-table" [value]="users" [paginator]="true" [rows]="10" [responsive]="true" [resizableColumns]="true">
   <ng-template pTemplate="caption">
     <div style="text-align: right">
       <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-      <input type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+      <input type="text" pInputText size="50" placeholder="Filtre por aqui" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
     </div>
   </ng-template>
 
