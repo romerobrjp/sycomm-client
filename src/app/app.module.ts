@@ -1,8 +1,11 @@
 // Angular
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+// 3rd party modules
+import { TableModule } from 'primeng/table';
 
 // Components
 import { AppComponent } from './app.component';
@@ -15,7 +18,6 @@ import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { RolesComponent } from './roles/roles.component';
 import { OrganizationsComponent } from './organizations/organizations.component';
-import { DataTablesModule } from 'angular-datatables';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -54,12 +56,18 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
-    AppRoutingModule
+    HttpClientModule,
+    AppRoutingModule,
+    TableModule
   ],
-  providers: [ UserService, RoleService, OrganizationService ],
+  providers: [
+    UserService,
+    RoleService,
+    OrganizationService
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
