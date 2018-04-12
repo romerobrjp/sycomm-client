@@ -9,18 +9,20 @@ import { UserService } from './shared/user.service';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit, AfterViewInit {
-  public users: User[];
-  public columns: any[];
+  users: User[];
+  columns: any[];
+  paginator = {
+    page_number: 0,
+    per_page: 10,
+    offset: 0
+  };
+  total_count = 0;
+  loading: boolean;
 
   public constructor(private userService: UserService) {}
 
-  public ngOnInit() {
-    this.userService.getAll().subscribe(
-      users => {
-        this.users = users;
-      },
-      error => alert('Ocorreu um erro ao tentar buscar os usuários:' + error)
-    );
+  ngOnInit() {
+    this.getPaginated();
 
     this.columns = [
       { field: 'registration', header: 'Matrícula' },
@@ -32,7 +34,25 @@ export class UsersComponent implements OnInit, AfterViewInit {
     ];
   }
 
-  public ngAfterViewInit() {
+  ngAfterViewInit() {
     console.log('ngAfterViewInit');
+  }
+
+  getPaginated() {
+    this.userService.getAllPaginated(this.paginator.page_number, this.paginator.per_page).subscribe(
+      response => {
+        this.users = response['data'];
+        this.total_count = response['total_count'];
+      },
+      error => alert('Ocorreu um erro ao tentar buscar os usuários:' + error)
+    );
+  }
+
+  public loadDataOnChange(event) {
+    this.paginator.offset = event.first;
+    this.paginator.per_page = event.rows;
+    this.paginator.page_number = Math.ceil(this.paginator.offset / this.paginator.per_page) + 1;
+
+    this.getPaginated();
   }
 }

@@ -13,12 +13,10 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  public getAll(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl)
-      .pipe(
-        tap(users => console.log(users)),
-        catchError(this.handleErrors)
-      );
+  public getAllPaginated(page_number: number, per_page: number): Observable<User[]> {
+    const url = `${this.baseUrl}/get_all_paginated?page_number=${page_number}&per_page=${per_page}`;
+
+    return this.http.get<User[]>(url);
   }
 
   public getById(id: number): Observable<User> {

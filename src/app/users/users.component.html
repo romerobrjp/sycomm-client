@@ -1,6 +1,19 @@
 <h1 class="text-center page-header">Usuários</h1>
 
-<p-table id="users_p-table" [value]="users" [paginator]="true" [rows]="10" [responsive]="true" [resizableColumns]="true">
+<p-table
+  id="users_p-table"
+  [value]="users"
+  [paginator]="true"
+  [pageLinks]="10"
+  [totalRecords]="total_count"
+  [rows]="paginator.per_page"
+  [responsive]="true"
+  [resizableColumns]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="loading"
+  [lazy]="true"
+  (onLazyLoad)="loadDataOnChange($event)"
+>
   <ng-template pTemplate="caption">
     <div style="text-align: right">
       <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
