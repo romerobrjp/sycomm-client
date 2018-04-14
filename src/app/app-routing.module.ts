@@ -14,6 +14,10 @@ const ROUTES = RouterModule.forRoot([
     component: UserDetailComponent
   },
   {
+    path: 'users/new',
+    component: UserDetailComponent
+  },
+  {
     path: '',
     redirectTo: '/users',
     pathMatch: 'full'
