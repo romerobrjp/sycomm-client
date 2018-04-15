@@ -37,6 +37,12 @@ export class UserService {
     return this.http.put<User>(url, user, { headers: this.headers });
   }
 
+  public delete(id: number): Observable<{}  > {
+    const url = `${this.baseUrl}/${id}`;
+
+    return this.http.delete(url, { headers: this.headers});
+  }
+
   // PRIVATE METHODS -----------------------------------------------------------
 
   private handleErrors(error: Response) {

@@ -9,9 +9,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 // Primefaces modules
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
-import { MessageService } from 'primeng/components/common/messageservice';
 import { MessageModule } from 'primeng/message';
-import { MessagesModule } from 'primeng/primeng';
+import { ConfirmDialogModule, MessagesModule} from 'primeng/primeng';
 
 // Components
 import { AppComponent } from './app.component';
@@ -29,6 +28,9 @@ import { OrganizationsComponent } from './organizations/organizations.component'
 import { UserService } from './users/shared/user.service';
 import { RoleService } from './roles/shared/role.service';
 import { OrganizationService } from './organizations/shared/organization.service';
+// Primefaces Services
+import { MessageService } from 'primeng/components/common/messageservice';
+import { ConfirmationService } from 'primeng/api';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -71,13 +73,15 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     GrowlModule,
     MessageModule,
     MessagesModule,
+    ConfirmDialogModule,
     TextMaskModule
   ],
   providers: [
     UserService,
     RoleService,
     OrganizationService,
-    MessageService
+    MessageService,
+    ConfirmationService
   ],
   bootstrap: [ AppComponent ]
 })

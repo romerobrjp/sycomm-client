@@ -56,3 +56,10 @@
     </tr>
   </ng-template>
 </p-table>
+
+<p-confirmDialog #deleteUserDialog>
+  <p-footer>
+    <button class="btn btn-danger" type="button" (click)="deleteUserDialog.accept()">Sim</button>
+    <button class="btn btn-default" type="button" (click)="deleteUserDialog.reject()">Não</button>
+  </p-footer>
+</p-confirmDialog>

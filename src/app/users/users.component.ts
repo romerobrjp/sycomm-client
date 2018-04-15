@@ -1,14 +1,17 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { User } from './shared/user.model';
 import { UserService } from './shared/user.service';
+
+import { MessageService } from 'primeng/components/common/messageservice';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent implements OnInit, AfterViewInit {
+export class UsersComponent implements OnInit {
   users: User[];
   columns: any[];
   paginator = {
@@ -19,7 +22,11 @@ export class UsersComponent implements OnInit, AfterViewInit {
   total_count = 0;
   loading: boolean;
 
-  public constructor(private userService: UserService) {}
+  public constructor(
+    private userService: UserService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit() {
     this.getPaginated();
@@ -34,10 +41,6 @@ export class UsersComponent implements OnInit, AfterViewInit {
     ];
   }
 
-  ngAfterViewInit() {
-    console.log('ngAfterViewInit');
-  }
-
   getPaginated() {
     this.userService.getAllPaginated(this.paginator.page_number, this.paginator.per_page).subscribe(
       response => {
@@ -48,11 +51,28 @@ export class UsersComponent implements OnInit, AfterViewInit {
     );
   }
 
-  public loadDataOnChange(event) {
+  loadDataOnChange(event) {
     this.paginator.offset = event.first;
     this.paginator.per_page = event.rows;
     this.paginator.page_number = Math.ceil(this.paginator.offset / this.paginator.per_page) + 1;
 
     this.getPaginated();
+  }
+
+  delete(user) {
+    this.confirmationService.confirm({
+      header: 'Confirmação',
+      message: 'Deseja realmente remover este usuário?',
+      icon: 'fa fa-question-circle',
+      accept: () => {
+        this.userService.delete(user.id).subscribe(
+          response => this.getPaginated()
+        );
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário removido!'});
+      },
+      reject: () => {
+        return false;
+      }
+    });
   }
 }
