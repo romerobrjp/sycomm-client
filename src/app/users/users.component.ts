@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
-import { User } from './shared/user';
+import { User } from './shared/user.model';
 import { UserService } from './shared/user.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
       { field: 'email', header: 'E-mail' },
       { field: 'cpf', header: 'CPF' },
       { field: 'role', header: 'Cargo' },
-      { field: 'organization', header: 'Organização' }
+      { field: 'organization', header: 'Órgão' }
     ];
   }
 
