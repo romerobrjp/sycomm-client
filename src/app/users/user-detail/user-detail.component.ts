@@ -13,6 +13,9 @@ import { OrganizationService } from '../../organizations/shared/organization.ser
 import {MessageService} from 'primeng/components/common/messageservice';
 import {Message} from 'primeng/components/common/api';
 
+import * as cpf from '@fnando/cpf'; // import the whole library
+import {isValid as isValidCpf} from '@fnando/cpf'; // import just one function
+
 @Component({
   selector: 'app-user',
   templateUrl: './user-detail.component.html',
@@ -104,7 +107,12 @@ export class UserDetailComponent implements OnInit {
 
   update() {
     this.applyFormValues();
-    console.log(this.user);
+
+    if (!cpf.isValid(this.user.cpf)) {
+      this.messageService.add({severity: 'warn', summary: 'Atneção', detail: 'CPF inválido.'})
+      return false;
+    }
+
     this.userService.update(this.user).subscribe(
       () => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário atualizado!'}),
       (error) => this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao atualizar o usuário.'})
@@ -141,7 +149,7 @@ export class UserDetailComponent implements OnInit {
     this.user.name = this.form.get('name').value;
     this.user.email = this.form.get('email').value;
     this.user.registration = this.form.get('registration').value;
-    this.user.cpf = this.form.get('cpf').value;
+    this.user.cpf = cpf.strip(this.form.get('cpf').value);
     this.user.landline = this.form.get('landline').value;
     this.user.cellphone = this.form.get('cellphone').value;
     this.user.whatsapp = this.form.get('whatsapp').value;
