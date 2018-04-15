@@ -109,7 +109,7 @@ export class UserDetailComponent implements OnInit {
     this.applyFormValues();
 
     if (!cpf.isValid(this.user.cpf)) {
-      this.messageService.add({severity: 'warn', summary: 'Atneção', detail: 'CPF inválido.'})
+      this.messageService.add({severity: 'warn', summary: 'Atenção', detail: 'CPF inválido.'})
       return false;
     }
 
