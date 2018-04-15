@@ -25,6 +25,8 @@ export class UserDetailComponent implements OnInit {
   organizations: Organization[];
   form: FormGroup;
   msgs: Message[] = [];
+  cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
+  phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   constructor(
     private userService: UserService, private roleService: RoleService, private organizationService: OrganizationService,

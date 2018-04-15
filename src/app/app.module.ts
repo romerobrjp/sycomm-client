@@ -5,6 +5,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 // 3rd party modules
+import { TextMaskModule } from 'angular2-text-mask';
+// Primefaces modules
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -68,7 +70,8 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     TableModule,
     GrowlModule,
     MessageModule,
-    MessagesModule
+    MessagesModule,
+    TextMaskModule
   ],
   providers: [
     UserService,

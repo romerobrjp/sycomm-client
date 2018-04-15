@@ -47,8 +47,9 @@
           id="cpf"
           formControlName="cpf"
           class="form-control"
-          placeholder=""
+          placeholder="000.000.000-00"
           type="text"
+          [textMask]="{ mask: cpfMask }"
         />
       </div>
     </div>
@@ -84,8 +85,9 @@
           id="landline"
           formControlName="landline"
           class="form-control"
-          placeholder=""
+          placeholder="(83) 9-1234-5678"
           type="text"
+          [textMask]="{ mask: phoneMask }"
         />
       </div>
 
@@ -95,8 +97,9 @@
           id="cellphone"
           formControlName="cellphone"
           class="form-control"
-          placeholder=""
+          placeholder="(83) 9-1234-5678"
           type="text"
+          [textMask]="{ mask: phoneMask }"
         />
       </div>
 
@@ -106,8 +109,9 @@
           id="whatsapp"
           formControlName="whatsapp"
           class="form-control"
-          placeholder=""
+          placeholder="(83) 9-1234-5678"
           type="text"
+          [textMask]="{ mask: phoneMask }"
         />
       </div>
     </div>
