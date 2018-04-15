@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location, NgIf } from '@angular/common';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
@@ -34,6 +34,7 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private userService: UserService, private roleService: RoleService, private organizationService: OrganizationService,
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location,
     private formBuilder: FormBuilder,
     private messageService: MessageService
@@ -105,6 +106,17 @@ export class UserDetailComponent implements OnInit {
     );
   }
 
+  create() {
+    this.applyFormValues();
+
+    this.userService.create(this.user).subscribe(
+      () => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário criado com sucesso!'}),
+      (error) => this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao tentar criar o usuário.'})
+    );
+
+    this.router.navigate(['/']);
+  }
+
   update() {
     this.applyFormValues();
 
@@ -116,15 +128,6 @@ export class UserDetailComponent implements OnInit {
     this.userService.update(this.user).subscribe(
       () => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário atualizado!'}),
       (error) => this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao atualizar o usuário.'})
-    );
-  }
-
-  create() {
-    this.applyFormValues();
-
-    this.userService.create(this.user).subscribe(
-      () => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário criado com sucesso!'}),
-      (error) => this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao tentar criar o usuário.'})
     );
   }
 
