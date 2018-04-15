@@ -16,8 +16,10 @@
 >
   <ng-template pTemplate="caption">
     <div style="text-align: right">
-      <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-      <input type="text" pInputText size="50" placeholder="Filtre por aqui" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+      <a [routerLink]="['/users/new']" class="btn btn-success" style="color: white; margin: 5px;">
+        Novo
+        <span class="fa fa-plus"></span>
+      </a>
     </div>
   </ng-template>
 

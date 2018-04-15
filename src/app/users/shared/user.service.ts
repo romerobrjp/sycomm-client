@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { catchError, tap } from 'rxjs/operators';
 
-import { User } from './user';
+import { User } from './user.model';
 
 @Injectable()
 export class UserService {
@@ -22,20 +22,19 @@ export class UserService {
   public getById(id: number): Observable<User> {
     const url = `${this.baseUrl}/${id}`;
 
-    return this.http.get(url)
-      .pipe(
-        tap(_ => console.log(_)),
-        catchError(this.handleErrors)
-      );
+    return this.http.get<User>(url);
+  }
+
+  public create(user: User): Observable<User> {
+    const url = `${this.baseUrl}`;
+
+    return this.http.post<User>(url, user, { headers: this.headers });
   }
 
   public update(user: User): Observable<User> {
     const url = `${this.baseUrl}/${user.id}`;
 
-    return this.http.put(url, user, { headers: this.headers }).pipe(
-      tap(_ => console.log(`Atualizou o user ${_}`)),
-      catchError(this.handleErrors)
-    );
+    return this.http.put<User>(url, user, { headers: this.headers });
   }
 
   // PRIVATE METHODS -----------------------------------------------------------
