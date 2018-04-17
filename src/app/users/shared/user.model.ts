@@ -11,7 +11,7 @@ export class User {
     public cellphone: string,
     public whatsapp: string,
     public simple_address: string,
-    public type: string,
+    public user_type: string,
     public organization_id: number,
     public role_id: number,
     public address_id: number,
