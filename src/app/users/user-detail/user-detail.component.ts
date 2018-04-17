@@ -30,6 +30,12 @@ export class UserDetailComponent implements OnInit, OnChanges {
   form: FormGroup;
   formUtils: FormUtils;
   msgs: Message[] = [];
+  userTypes: Array<any> = [
+    { value: 'Admin', text: 'Administrador'},
+    { value: 'Employee', text: 'Funcionário' },
+    { value: 'Customer', text: 'Cliente' }
+  ];
+  // masls
   registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
   cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
   phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -42,6 +48,7 @@ export class UserDetailComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
     private messageService: MessageService
   ) {
+
     this.user = new User(
       null,
       '',
@@ -54,7 +61,7 @@ export class UserDetailComponent implements OnInit, OnChanges {
       '',
       '',
       '',
-      'Customer',
+      '',
       null,
       null,
       null,
@@ -80,7 +87,8 @@ export class UserDetailComponent implements OnInit, OnChanges {
       whatsapp: [null],
       simple_address: [null],
       role_id: [null, Validators.required],
-      organization_id: [null, Validators.required]
+      organization_id: [null, Validators.required],
+      user_type: [null, Validators.required]
     });
 
     this.formUtils = new FormUtils(this.form);
@@ -183,6 +191,7 @@ export class UserDetailComponent implements OnInit, OnChanges {
     if (this.form.get('simple_address').value) { this.user.simple_address = this.form.get('simple_address').value; }
     if (this.form.get('role_id').value) { this.user.role_id = this.form.get('role_id').value; }
     if (this.form.get('organization_id').value) { this.user.organization_id = this.form.get('organization_id').value; }
+    if (this.form.get('user_type').value) { this.user.user_type = this.form.get('user_type').value; }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
