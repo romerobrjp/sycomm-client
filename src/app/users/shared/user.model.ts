@@ -1,7 +1,7 @@
 export class User {
   public constructor(
     public id: number,
-    public registration: number,
+    public registration: string,
     public name: string,
     public email: string,
     public password: string,
