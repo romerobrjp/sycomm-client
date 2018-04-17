@@ -15,8 +15,8 @@ export class EmployeesComponent implements OnInit {
   employees: Employee[];
   columns: any[];
   paginator = {
-    page_number: 0,
-    per_page: 10,
+    pageNumber: 0,
+    perPage: 10,
     offset: 0
   };
   total_count = 0;
@@ -39,10 +39,10 @@ export class EmployeesComponent implements OnInit {
   }
 
   listPaginated() {
-    this.employeeService.listPaginated(this.paginator.page_number, this.paginator.per_page).subscribe(
+    this.employeeService.listPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
       response => {
         this.employees = response['data'];
-        this.total_count = response['total_count'];
+        this.total_count = response['totalCount'];
       },
       error => alert('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );
@@ -50,8 +50,8 @@ export class EmployeesComponent implements OnInit {
 
   loadDataOnChange(event) {
     this.paginator.offset = event.first;
-    this.paginator.per_page = event.rows;
-    this.paginator.page_number = Math.ceil(this.paginator.offset / this.paginator.per_page) + 1;
+    this.paginator.perPage = event.rows;
+    this.paginator.pageNumber = Math.ceil(this.paginator.offset / this.paginator.perPage) + 1;
 
     this.listPaginated();
   }
