@@ -6,8 +6,8 @@
 
   <form [formGroup]="form" (ngSubmit)="createOrUpdate()">
     <div class="row">
-      <div class="form-group col-lg-3 col-lg-offset-3">
-        <label for="name" class="control-label">Nome</label>
+      <div class="form-group col-lg-3 col-lg-offset-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
+        <label for="name" class="control-label">Nome *</label>
         <input
           id="name"
           formControlName="name"
@@ -15,9 +15,13 @@
           placeholder=""
           type="text"
         />
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
+          <div *ngIf="form.get('name').errors.required"><strong>Nome</strong> é obrigatório</div>
+        </div>
       </div>
 
-      <div class="form-group col-lg-3">
+      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('email')">
         <label for="email" class="control-label">E-mail</label>
         <input
           id="email"
@@ -30,19 +34,24 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-lg-2 col-lg-offset-3">
+      <div class="form-group col-lg-2 col-lg-offset-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('registration')">
         <label for="registration" class="control-label">Matrícula</label>
         <input
           id="registration"
           formControlName="registration"
           class="form-control"
-          placeholder=""
+          maxlength="10"
+          placeholder="1234567890"
           type="text"
         />
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('registration')">
+          <div *ngIf="form.get('registration').errors.required"><strong>Matrícula</strong> é obrigatória</div>
+        </div>
       </div>
 
-      <div class="form-group col-lg-2">
-        <label for="cpf" class="control-label">CPF</label>
+      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')">
+        <label for="cpf" class="control-label">CPF *</label>
         <input
           id="cpf"
           formControlName="cpf"
@@ -51,12 +60,16 @@
           type="text"
           [textMask]="{ mask: cpfMask }"
         />
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('cpf')">
+          <div *ngIf="form.get('cpf').errors.required"><strong>CPF</strong> é obrigatório</div>
+        </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group col-lg-3 col-lg-offset-3">
-        <label for="role" class="control-label">Cargo</label>
+      <div class="form-group col-lg-3 col-lg-offset-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('role_id')">
+        <label for="role" class="control-label">Cargo *</label>
         <select
           id="role"
           class="form-control"
@@ -64,10 +77,14 @@
         >
           <option *ngFor="let option of roles" [value]="option.id">{{ option.name }}</option>
         </select>
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('role_id')">
+          <div *ngIf="form.get('role_id').errors.required"><strong>Cargo</strong> é obrigatório</div>
+        </div>
       </div>
 
-      <div class="form-group col-lg-3">
-        <label for="organization" class="control-label">Órgão</label>
+      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('organization_id')">
+        <label for="organization" class="control-label">Órgão *</label>
         <select
           id="organization"
           class="form-control"
@@ -75,6 +92,10 @@
         >
           <option *ngFor="let option of organizations" [value]="option.id">{{ option.name }}</option>
         </select>
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('organization_id')">
+          <div *ngIf="form.get('organization_id').errors.required"><strong>Órgão</strong> é obrigatório</div>
+        </div>
       </div>
     </div>
 
@@ -91,8 +112,8 @@
         />
       </div>
 
-      <div class="form-group col-lg-2">
-        <label for="cellphone" class="control-label">Celular</label>
+      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+        <label for="cellphone" class="control-label">Celular *</label>
         <input
           id="cellphone"
           formControlName="cellphone"
@@ -101,9 +122,13 @@
           type="text"
           [textMask]="{ mask: phoneMask }"
         />
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone')" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+          <div *ngIf="form.get('cellphone').errors.required"><strong>Celular</strong> é obrigatório</div>
+        </div>
       </div>
 
-      <div class="form-group col-lg-2">
+      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('whatsapp')">
         <label for="whatsapp" class="control-label">WhatsApp</label>
         <input
           id="whatsapp"
@@ -117,7 +142,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-lg-6 col-lg-offset-3">
+      <div class="form-group col-lg-6 col-lg-offset-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('simple_address')">
         <label for="simple_address" class="control-label">Endereço</label>
         <input
           id="simple_address"
