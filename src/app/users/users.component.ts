@@ -14,7 +14,7 @@ import { ConfirmationService } from 'primeng/api';
 export class UsersComponent implements OnInit {
   users: User[];
   columns: any[];
-  pageSizes = [20, 50, 100];
+  pageSizes = [25, 50, 100];
   paginator = {
     pageNumber: 0,
     perPage: this.pageSizes[0],
