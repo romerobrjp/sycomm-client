@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -15,7 +15,8 @@ import { Message } from 'primeng/components/common/api';
 
 import { FormUtils} from '../../shared/form-utils';
 
-import * as cpf from '@fnando/cpf'; // import the whole library
+import * as cpf from '@fnando/cpf';
+import {SuperForm} from 'angular-super-validator'; // import the whole library
 
 @Component({
   selector: 'app-user',
@@ -23,7 +24,7 @@ import * as cpf from '@fnando/cpf'; // import the whole library
   styleUrls: ['./user-detail.component.css']
 })
 
-export class UserDetailComponent implements OnInit, OnChanges {
+export class UserDetailComponent implements OnInit {
   user: User;
   roles: Role[];
   organizations: Organization[];
@@ -33,7 +34,7 @@ export class UserDetailComponent implements OnInit, OnChanges {
   userTypes: Array<any> = [
     { value: 'Admin', text: 'Administrador'},
     { value: 'Employee', text: 'Funcionário' },
-    { value: 'Customer', text: 'Cliente' }
+    { value: 'CustomerModel', text: 'Cliente' }
   ];
   // masls
   registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
@@ -87,8 +88,7 @@ export class UserDetailComponent implements OnInit, OnChanges {
       whatsapp: [null],
       simple_address: [null],
       role_id: [null, Validators.required],
-      organization_id: [null, Validators.required],
-      user_type: [null, Validators.required]
+      organization_id: [null, Validators.required]
     });
 
     this.formUtils = new FormUtils(this.form);
@@ -126,8 +126,6 @@ export class UserDetailComponent implements OnInit, OnChanges {
       () => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário criado com sucesso!'}),
       (error) => this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao tentar criar o usuário.'})
     );
-
-    this.router.navigate(['/']);
   }
 
   update() {
@@ -169,6 +167,8 @@ export class UserDetailComponent implements OnInit, OnChanges {
     } else {
       this.create();
     }
+
+    this.router.navigate(['/users']);
   }
 
   public goBack() {
@@ -191,10 +191,5 @@ export class UserDetailComponent implements OnInit, OnChanges {
     if (this.form.get('simple_address').value) { this.user.simple_address = this.form.get('simple_address').value; }
     if (this.form.get('role_id').value) { this.user.role_id = this.form.get('role_id').value; }
     if (this.form.get('organization_id').value) { this.user.organization_id = this.form.get('organization_id').value; }
-    if (this.form.get('user_type').value) { this.user.user_type = this.form.get('user_type').value; }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
   }
 }
