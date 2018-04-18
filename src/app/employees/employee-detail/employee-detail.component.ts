@@ -130,6 +130,8 @@ export class EmployeeDetailComponent implements OnInit, OnChanges {
     } else {
       this.create();
     }
+
+    this.router.navigate(['/employees']);
   }
 
   public goBack() {
