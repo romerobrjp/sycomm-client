@@ -5,12 +5,11 @@
   [value]="employees"
   [paginator]="true"
   [pageLinks]="10"
-  [totalRecords]="total_count"
-  [rows]="paginator.per_page"
+  [totalRecords]="totalCount"
+  [rows]="paginator.perPage"
   [responsive]="true"
   [resizableColumns]="true"
-  [rowsPerPageOptions]="[10, 25, 50]"
-  [loading]="loading"
+  [rowsPerPageOptions]="pageSizes"
   [lazy]="true"
   (onLazyLoad)="loadDataOnChange($event)"
 >
@@ -57,9 +56,9 @@
   </ng-template>
 </p-table>
 
-<p-confirmDialog #deleteUserDialog>
+<p-confirmDialog #deleteEmployeeDialog>
   <p-footer>
-    <button class="btn btn-danger" type="button" (click)="deleteUserDialog.accept()">Sim</button>
-    <button class="btn btn-default" type="button" (click)="deleteUserDialog.reject()">Não</button>
+    <button class="btn btn-danger" type="button" (click)="deleteEmployeeDialog.accept()">Sim</button>
+    <button class="btn btn-default" type="button" (click)="deleteEmployeeDialog.reject()">Não</button>
   </p-footer>
 </p-confirmDialog>

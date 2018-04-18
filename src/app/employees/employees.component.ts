@@ -14,13 +14,13 @@ import { ConfirmationService } from 'primeng/api';
 export class EmployeesComponent implements OnInit {
   employees: Employee[];
   columns: any[];
+  pageSizes = [25, 50, 100];
   paginator = {
     pageNumber: 0,
-    perPage: 10,
+    perPage: this.pageSizes[0],
     offset: 0
   };
-  total_count = 0;
-  loading: boolean;
+  totalCount = 0;
 
   public constructor(
     private employeeService: EmployeeService,
@@ -42,7 +42,7 @@ export class EmployeesComponent implements OnInit {
     this.employeeService.listPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
       response => {
         this.employees = response['data'];
-        this.total_count = response['totalCount'];
+        this.totalCount = response['totalCount'];
       },
       error => alert('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );
