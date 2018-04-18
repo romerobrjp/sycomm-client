@@ -8,12 +8,9 @@ import { EmployeeDetailComponent } from './employees/employee-detail/employee-de
 
 const ROUTES = RouterModule.forRoot([
   {
-    path: 'employees',
-    component: EmployeesComponent
-  },
-  {
-    path: 'employees/new',
-    component: EmployeeDetailComponent
+    path: '',
+    redirectTo: '/users',
+    pathMatch: 'full'
   },
   {
     path: 'users',
@@ -28,10 +25,17 @@ const ROUTES = RouterModule.forRoot([
     component: UserDetailComponent
   },
   {
-    path: '',
-    redirectTo: '/users',
-    pathMatch: 'full'
-  }
+    path: 'employees',
+    component: EmployeesComponent
+  },
+  {
+    path: 'employees/new',
+    component: EmployeeDetailComponent
+  },
+  {
+    path: 'employees/:id',
+    component: EmployeeDetailComponent
+  },
 ]);
 
 @NgModule({

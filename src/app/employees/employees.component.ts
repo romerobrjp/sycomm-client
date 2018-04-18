@@ -59,7 +59,7 @@ export class EmployeesComponent implements OnInit {
   delete(employee) {
     this.confirmationService.confirm({
       header: 'Confirmação',
-      message: 'Deseja realmente remover este usuário?',
+      message: 'Deseja realmente remover este funcionário?',
       icon: 'fa fa-question-circle',
       accept: () => {
         this.employeeService.delete(employee.id).subscribe(
