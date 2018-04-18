@@ -5,6 +5,8 @@ import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeDetailComponent } from './employees/employee-detail/employee-detail.component';
+import {CustomerDetailComponent} from './customers/customer-detail/customer-detail.component';
+import {CustomersComponent} from './customers/customers.component';
 
 const ROUTES = RouterModule.forRoot([
   {
@@ -35,6 +37,18 @@ const ROUTES = RouterModule.forRoot([
   {
     path: 'employees/:id',
     component: EmployeeDetailComponent
+  },
+  {
+    path: 'customers',
+    component: CustomersComponent
+  },
+  {
+    path: 'customers/new',
+    component: CustomerDetailComponent
+  },
+  {
+    path: 'customers/:id',
+    component: CustomerDetailComponent
   },
 ]);
 

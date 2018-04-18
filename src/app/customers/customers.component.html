@@ -1,0 +1,64 @@
+<h1 class="text-center page-header">Clientes</h1>
+
+<p-table
+  id="customers_p-table"
+  [value]="customers"
+  [paginator]="true"
+  [pageLinks]="10"
+  [totalRecords]="totalCount"
+  [rows]="paginator.perPage"
+  [responsive]="true"
+  [resizableColumns]="true"
+  [rowsPerPageOptions]="pageSizes"
+  [lazy]="true"
+  (onLazyLoad)="loadDataOnChange($event)"
+>
+  <ng-template pTemplate="caption">
+    <div style="text-align: right">
+      <a [routerLink]="['/customers/new']" class="btn btn-success" style="color: white; margin: 5px;">
+        Novo
+        <span class="fa fa-plus"></span>
+      </a>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+        {{col.header}}
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+
+      <th>
+        Ações
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-customer>
+    <tr>
+      <td *ngFor="let col of columns" pResizableColumn>
+        {{customer[col.field]}}
+      </td>
+
+      <td>
+        <a [routerLink]="['/customers', customer.id]" class="btn btn-info">
+          Detalhes
+          <span class="fa fa-info-circle"></span>
+        </a>
+
+        <button class="btn btn-danger" (click)="delete(customer)">
+          Excluir
+          <span class="fa fa-trash"></span>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-confirmDialog #deleteCustomerDialog>
+  <p-footer>
+    <button class="btn btn-danger" type="button" (click)="deleteCustomerDialog.accept()">Sim</button>
+    <button class="btn btn-default" type="button" (click)="deleteCustomerDialog.reject()">Não</button>
+  </p-footer>
+</p-confirmDialog>
