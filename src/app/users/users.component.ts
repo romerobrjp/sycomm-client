@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getPaginated();
+    this.listPaginated();
 
     this.columns = [
       { field: 'registration', header: 'Matrícula' },
@@ -41,7 +41,7 @@ export class UsersComponent implements OnInit {
     ];
   }
 
-  getPaginated() {
+  listPaginated() {
     this.userService.listPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
       response => {
         this.users = response['data'];
@@ -56,7 +56,7 @@ export class UsersComponent implements OnInit {
     this.paginator.perPage = event.rows;
     this.paginator.pageNumber = Math.ceil(this.paginator.offset / this.paginator.perPage) + 1;
 
-    this.getPaginated();
+    this.listPaginated();
   }
 
   delete(user) {
@@ -66,7 +66,7 @@ export class UsersComponent implements OnInit {
       icon: 'fa fa-question-circle',
       accept: () => {
         this.userService.delete(user.id).subscribe(
-          response => this.getPaginated()
+          response => this.listPaginated()
         );
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário removido!'});
       },
