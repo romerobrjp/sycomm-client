@@ -21,6 +21,8 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { ControlSidebarComponent } from './shared/control-sidebar/control-sidebar.component';
 import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { AdminsComponent } from './admins/admins.component';
+import { AdminDetailComponent } from './admins/admin-detail/admin-detail.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeDetailComponent } from './employees/employee-detail/employee-detail.component';
 import { CustomersComponent } from './customers/customers.component';
@@ -30,8 +32,9 @@ import { OrganizationsComponent } from './organizations/organizations.component'
 
 // Services
 import { UserService } from './users/shared/user.service';
+import {AdminService} from './admins/shared/admin.service';
 import { EmployeeService } from './employees/shared/employee.service';
-import {CustomerService} from './customers/shared/customer.service';
+import { CustomerService } from './customers/shared/customer.service';
 import { RoleService } from './roles/shared/role.service';
 import { OrganizationService } from './organizations/shared/organization.service';
 // Primefaces Services
@@ -70,7 +73,9 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     OrganizationsComponent,
     EmployeeDetailComponent,
     CustomersComponent,
-    CustomerDetailComponent
+    CustomerDetailComponent,
+    AdminsComponent,
+    AdminDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -88,6 +93,7 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
   ],
   providers: [
     UserService,
+    AdminService,
     EmployeeService,
     CustomerService,
     RoleService,

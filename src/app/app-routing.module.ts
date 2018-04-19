@@ -3,10 +3,12 @@ import { RouterModule } from '@angular/router';
 
 import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { AdminsComponent } from './admins/admins.component';
+import { AdminDetailComponent } from './admins/admin-detail/admin-detail.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeDetailComponent } from './employees/employee-detail/employee-detail.component';
-import {CustomerDetailComponent} from './customers/customer-detail/customer-detail.component';
-import {CustomersComponent} from './customers/customers.component';
+import { CustomerDetailComponent } from './customers/customer-detail/customer-detail.component';
+import { CustomersComponent } from './customers/customers.component';
 
 const ROUTES = RouterModule.forRoot([
   {
@@ -25,6 +27,18 @@ const ROUTES = RouterModule.forRoot([
   {
     path: 'users/new',
     component: UserDetailComponent
+  },
+  {
+    path: 'admins',
+    component: AdminsComponent
+  },
+  {
+    path: 'admins/new',
+    component: AdminDetailComponent
+  },
+  {
+    path: 'admins/:id',
+    component: AdminDetailComponent
   },
   {
     path: 'employees',
