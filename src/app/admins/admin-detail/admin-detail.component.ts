@@ -57,9 +57,9 @@ export class AdminDetailComponent implements OnInit, OnChanges {
 
     this.form = this.formBuilder.group({
       name: [null, [Validators.required]],
-      email: [null],
+      email: [null, [Validators.required]],
       landline: [null],
-      cellphone: [null, [Validators.required]],
+      cellphone: [null],
       whatsapp: [null],
       simple_address: [null]
     });
@@ -93,20 +93,6 @@ export class AdminDetailComponent implements OnInit, OnChanges {
 
   update() {
     this.applyFormValues();
-
-    let errorFound = false;
-
-    if (this.admin.cellphone && this.admin.cellphone.length !== 11) {
-      this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Celular precisa ter 11 dígitos.'});
-      errorFound = true;
-    }
-
-    if (this.admin.whatsapp && this.admin.whatsapp.length !== 11) {
-      this.messageService.add({severity: 'error', summary: 'Erro', detail: 'WhatsApp precisa ter 11 dígitos.'});
-      errorFound = true;
-    }
-
-    if (errorFound) { return false; };
 
     this.adminService.update(this.admin).subscribe(
       (response) => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Administrador atualizado!'}),
