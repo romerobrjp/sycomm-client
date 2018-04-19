@@ -34,7 +34,8 @@ export class EmployeesComponent implements OnInit {
     this.columns = [
       { field: 'name', header: 'Nome' },
       { field: 'email', header: 'E-mail' },
-      { field: 'cpf', header: 'CPF' }
+      { field: 'cpf', header: 'CPF' },
+      { field: 'cellphone', header: 'Celular' }
     ];
   }
 
