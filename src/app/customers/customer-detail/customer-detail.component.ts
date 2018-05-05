@@ -16,7 +16,6 @@ import { Message } from 'primeng/components/common/api';
 import { FormUtils} from '../../shared/form-utils';
 
 import * as cpf from '@fnando/cpf';
-import {SuperForm} from 'angular-super-validator'; // import the whole library
 
 @Component({
   selector: 'app-customer',
