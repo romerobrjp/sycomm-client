@@ -9,60 +9,85 @@ import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeDetailComponent } from './employees/employee-detail/employee-detail.component';
 import { CustomerDetailComponent } from './customers/customer-detail/customer-detail.component';
 import { CustomersComponent } from './customers/customers.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+
+import { AuthGuard } from './guards/auth.guard';
 
 const ROUTES = RouterModule.forRoot([
   {
     path: '',
-    redirectTo: '/users',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'sign-in',
+    component: SignInComponent
+  },
+  {
     path: 'users',
-    component: UsersComponent
+    component: UsersComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'users/:id',
-    component: UserDetailComponent
+    component: UserDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'users/new',
-    component: UserDetailComponent
+    component: UserDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'admins',
-    component: AdminsComponent
+    component: AdminsComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'admins/new',
-    component: AdminDetailComponent
+    component: AdminDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'admins/:id',
-    component: AdminDetailComponent
+    component: AdminDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'employees',
-    component: EmployeesComponent
+    component: EmployeesComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'employees/new',
-    component: EmployeeDetailComponent
+    component: EmployeeDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'employees/:id',
-    component: EmployeeDetailComponent
+    component: EmployeeDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'customers',
-    component: CustomersComponent
+    component: CustomersComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'customers/new',
-    component: CustomerDetailComponent
+    component: CustomerDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'customers/:id',
-    component: CustomerDetailComponent
+    component: CustomerDetailComponent,
+    canActivate: [AuthGuard]
   },
 ]);
 
