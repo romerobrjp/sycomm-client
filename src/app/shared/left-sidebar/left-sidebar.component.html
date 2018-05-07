@@ -1,5 +1,5 @@
 <!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar">
+<aside class="main-sidebar" *ngIf="authService.userSignedIn()">
   <!-- sidebar: style can be found in sidebar.less -->
   <section class="sidebar">
     <!-- Sidebar user panel -->
@@ -26,17 +26,24 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">Menu</li>
-      <li class="active treeview">
+
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active">
+          <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
+        </a>
+      </li>
+
+      <li class="treeview">
         <a href="#">
-          <i class="fa fa-dashboard"></i> <span>Administração</span>
+          <i class="fa fa-cogs"></i> <span>Administração</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a routerLink="/admins" class="nav-link"><i class="fa fa-circle-o"></i>Administradores</a></li>
-          <li><a routerLink="/employees" class="nav-link"><i class="fa fa-circle-o"></i>Funcionários</a></li>
-          <li><a routerLink="/customers" class="nav-link"><i class="fa fa-circle-o"></i>Clientes</a></li>
+          <li><a routerLink="/admins" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Administradores</a></li>
+          <li><a routerLink="/employees" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Funcionários</a></li>
+          <li><a routerLink="/customers" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Clientes</a></li>
         </ul>
       </li>
     </ul>
