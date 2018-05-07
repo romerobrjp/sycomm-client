@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 // 3rd party modules
 import { TextMaskModule } from 'angular2-text-mask';
 // Primefaces modules
@@ -29,10 +30,12 @@ import { CustomersComponent } from './customers/customers.component';
 import { CustomerDetailComponent } from './customers/customer-detail/customer-detail.component';
 import { RolesComponent } from './roles/roles.component';
 import { OrganizationsComponent } from './organizations/organizations.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
-import {AdminService} from './admins/shared/admin.service';
+import { AdminService } from './admins/shared/admin.service';
 import { EmployeeService } from './employees/shared/employee.service';
 import { CustomerService } from './customers/shared/customer.service';
 import { RoleService } from './roles/shared/role.service';
@@ -40,6 +43,9 @@ import { OrganizationService } from './organizations/shared/organization.service
 // Primefaces Services
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
+
+// Guards
+import { AuthGuard } from './guards/auth.guard';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -57,6 +63,9 @@ import 'rxjs/add/observable/throw';
 
 import * as $ from 'jquery';
 import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
+import { AuthService } from './shared/auth.service';
+import { TokenService } from './shared/token.service';
+import { Angular2TokenService } from 'angular2-token';
 
 @NgModule({
   declarations: [
@@ -75,7 +84,9 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     CustomersComponent,
     CustomerDetailComponent,
     AdminsComponent,
-    AdminDetailComponent
+    AdminDetailComponent,
+    DashboardComponent,
+    SignInComponent
   ],
   imports: [
     BrowserModule,
@@ -83,6 +94,7 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    HttpModule,
     AppRoutingModule,
     TableModule,
     GrowlModule,
@@ -99,7 +111,11 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     RoleService,
     OrganizationService,
     MessageService,
-    ConfirmationService
+    ConfirmationService,
+    AuthService,
+    Angular2TokenService,
+    TokenService,
+    AuthGuard
   ],
   bootstrap: [ AppComponent ]
 })
