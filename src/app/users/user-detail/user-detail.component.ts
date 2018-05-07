@@ -16,7 +16,6 @@ import { Message } from 'primeng/components/common/api';
 import { FormUtils} from '../../shared/form-utils';
 
 import * as cpf from '@fnando/cpf';
-import {SuperForm} from 'angular-super-validator'; // import the whole library
 
 @Component({
   selector: 'app-user',
@@ -34,9 +33,9 @@ export class UserDetailComponent implements OnInit {
   userTypes: Array<any> = [
     { value: 'Admin', text: 'Administrador'},
     { value: 'Employee', text: 'Funcionário' },
-    { value: 'CustomerModel', text: 'Cliente' }
+    { value: 'Customer', text: 'Cliente' }
   ];
-  // masls
+  // masks
   registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
   cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
   phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
