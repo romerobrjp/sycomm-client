@@ -6,9 +6,7 @@ import {TokenService} from './token.service';
 @Injectable()
 export class AuthService {
 
-  public constructor(private tokenService: TokenService) {
-
-  }
+  public constructor(private tokenService: TokenService) {}
 
   public signUp(user: User): Observable<Response> {
     return this.tokenService.registerAccount(user as any).catch(this.handleErrors);
