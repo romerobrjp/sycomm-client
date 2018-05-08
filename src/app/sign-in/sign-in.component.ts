@@ -32,21 +32,21 @@ export class SignInComponent {
 
     console.log('Tentou fazer SignIn');
 
-    // this.authService.signIn(this.form.get('email').value, this.form.get('password').value)
-    //   .subscribe(
-    //     success => {
-    //       this.formErrors = null;
-    //       this.router.navigate(['/dashboard']);
-    //     },
-    //     error => {
-    //       this.submitted = false;
-    //       if (error.status === 401) {
-    //         this.formErrors = JSON.parse(error._body).errors;
-    //       } else {
-    //         this.formErrors = ['Ocorreu um erro e não foi possível logar. Tente novamente mais tarde.']
-    //       }
-    //     }
-    //   );
+    this.authService.signIn(this.form.get('email').value, this.form.get('password').value)
+      .subscribe(
+        success => {
+          this.formErrors = null;
+          this.router.navigate(['/dashboard']);
+        },
+        error => {
+          this.submitted = false;
+          if (error.status === 401) {
+            this.formErrors = JSON.parse(error._body).errors;
+          } else {
+            this.formErrors = ['Ocorreu um erro e não foi possível logar. Tente novamente mais tarde.']
+          }
+        }
+      );
   }
 
   public setupForm() {
