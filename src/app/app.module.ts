@@ -40,6 +40,9 @@ import { EmployeeService } from './employees/shared/employee.service';
 import { CustomerService } from './customers/shared/customer.service';
 import { RoleService } from './roles/shared/role.service';
 import { OrganizationService } from './organizations/shared/organization.service';
+import { AuthService } from './shared/auth.service';
+import { TokenService } from './shared/token.service';
+import { Angular2TokenService } from 'angular2-token';
 // Primefaces Services
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
@@ -63,9 +66,6 @@ import 'rxjs/add/observable/throw';
 
 import * as $ from 'jquery';
 import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
-import { AuthService } from './shared/auth.service';
-import { TokenService } from './shared/token.service';
-import { Angular2TokenService } from 'angular2-token';
 
 @NgModule({
   declarations: [
@@ -112,8 +112,8 @@ import { Angular2TokenService } from 'angular2-token';
     OrganizationService,
     MessageService,
     ConfirmationService,
-    AuthService,
     Angular2TokenService,
+    AuthService,
     TokenService,
     AuthGuard
   ],
