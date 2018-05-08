@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Angular2TokenService } from 'angular2-token';
+import { TokenService } from './shared/token.service';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +7,14 @@ import { Angular2TokenService } from 'angular2-token';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public constructor(private tokenService: Angular2TokenService) {
+  public constructor(private tokenService: TokenService) {
     this.tokenService.init({
-      apiBase: 'http://api.sycomm.com:3000'
+      apiBase: 'http://api.sycomm.com:3000',
+      globalOptions: {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
     });
   }
 }
