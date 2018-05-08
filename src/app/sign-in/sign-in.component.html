@@ -1,4 +1,4 @@
-<div class="login-box">
+<div class="login-box" *ngIf="!authService.userSignedIn()">
   <div class="login-logo">
     <b>Sycomm</b>
   </div>
