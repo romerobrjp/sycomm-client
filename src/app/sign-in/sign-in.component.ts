@@ -30,8 +30,6 @@ export class SignInComponent {
   public signIn() {
     this.submitted = true;
 
-    console.log('Tentou fazer SignIn');
-
     this.authService.signIn(this.form.get('email').value, this.form.get('password').value)
       .subscribe(
         success => {
