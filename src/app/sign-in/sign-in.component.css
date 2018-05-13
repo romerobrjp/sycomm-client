@@ -1,3 +1,7 @@
 .login-box, .register-box {
   margin: 10% auto;
 }
+
+#login-errors {
+  margin-top: 20px;
+}
