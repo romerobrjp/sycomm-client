@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {FormUtils} from '../shared/form-utils';
 import {AuthService} from '../shared/auth.service';
@@ -9,14 +9,14 @@ import {Router} from '@angular/router';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit {
 
-  public form: FormGroup;
-  public formUtils: FormUtils;
-  public submitted: boolean;
-  public formErrors: Array<string>;
+  form: FormGroup;
+  formUtils: FormUtils;
+  submitted: boolean;
+  formErrors: Array<string>;
 
-  public constructor(
+  constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router
@@ -27,7 +27,11 @@ export class SignInComponent {
     this.formErrors = null;
   }
 
-  public signIn() {
+  ngOnInit() {
+    this.authService.signOut();
+  }
+
+  signIn() {
     this.submitted = true;
 
     this.authService.signIn(this.form.get('email').value, this.form.get('password').value)
@@ -35,6 +39,8 @@ export class SignInComponent {
         success => {
           this.formErrors = null;
           this.router.navigate(['/dashboard']);
+          const currentUser = JSON.parse(success['_body']).data;
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
         },
         error => {
           this.submitted = false;
@@ -47,7 +53,7 @@ export class SignInComponent {
       );
   }
 
-  public setupForm() {
+  setupForm() {
     this.form = this.formBuilder.group(
       {
         email: [null, [Validators.required, Validators.email]],

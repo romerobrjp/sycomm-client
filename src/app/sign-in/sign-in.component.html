@@ -29,6 +29,17 @@
         </div>
         <!-- /.col -->
       </div>
+
+      <div id="login-errors" class="alert alert-danger" *ngIf="formErrors">
+        <strong>
+          <span class="glyphicon glyphicon-warning-sign"></span>
+          Erro no login
+        </strong>
+
+        <ul>
+          <li *ngFor="let error of formErrors">{{  error }}</li>
+        </ul>
+      </div>
     </form>
 
     <a href="#">Esqueci minha senha</a><br>
