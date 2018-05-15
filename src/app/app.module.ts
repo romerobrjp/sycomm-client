@@ -32,6 +32,7 @@ import { RolesComponent } from './roles/roles.component';
 import { OrganizationsComponent } from './organizations/organizations.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { ProfileComponent } from './profile/profile.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -86,7 +87,8 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     AdminsComponent,
     AdminDetailComponent,
     DashboardComponent,
-    SignInComponent
+    SignInComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

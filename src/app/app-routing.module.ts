@@ -11,6 +11,7 @@ import { CustomerDetailComponent } from './customers/customer-detail/customer-de
 import { CustomersComponent } from './customers/customers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { ProfileComponent } from './profile/profile.component';
 
 import { AuthGuard } from './guards/auth.guard';
 
@@ -87,6 +88,11 @@ const ROUTES = RouterModule.forRoot([
   {
     path: 'customers/:id',
     component: CustomerDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
     canActivate: [AuthGuard]
   },
 ]);
