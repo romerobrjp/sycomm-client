@@ -14,6 +14,9 @@ import { ConfirmationService } from 'primeng/api';
 export class UsersComponent implements OnInit {
   users: User[];
   columns: any[];
+  adminColumns: any[];
+  employeeColumns: any[];
+  customerColumns: any[];
   pageSizes = [25, 50, 100];
   paginator = {
     pageNumber: 0,
@@ -26,12 +29,20 @@ export class UsersComponent implements OnInit {
     private userService: UserService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
-  ) {}
+  ) {
+    this.adminColumns = [
+      { field: 'name', header: 'Nome' },
+      { field: 'email', header: 'E-mail' }
+    ];
 
-  ngOnInit() {
-    this.listPaginated();
+    this.employeeColumns = [
+      { field: 'name', header: 'Nome' },
+      { field: 'email', header: 'E-mail' },
+      { field: 'cpf', header: 'CPF' },
+      { field: 'cellphone', header: 'Celular' }
+    ];
 
-    this.columns = [
+    this.customerColumns = [
       { field: 'registration', header: 'Matrícula' },
       { field: 'name', header: 'Nome' },
       { field: 'email', header: 'E-mail' },
@@ -41,13 +52,34 @@ export class UsersComponent implements OnInit {
     ];
   }
 
+  ngOnInit() {
+    this.listPaginated();
+
+    let userType = 'Admin'
+
+    switch (userType) {
+      case 'Admin': {
+        this.columns = this.adminColumns;
+        break;
+      }
+      case 'Employee': {
+        this.columns = this.employeeColumns;
+        break;
+      }
+      case 'Customer': {
+        this.columns = this.customerColumns;
+        break;
+      }
+    }
+  }
+
   listPaginated() {
     this.userService.listPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
       response => {
         this.users = response['data'];
         this.totalCount = response['total_count'];
       },
-      error => alert('Ocorreu um erro ao tentar buscar os usuários:' + error)
+      error => console.error('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );
   }
 
