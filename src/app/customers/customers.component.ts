@@ -47,7 +47,7 @@ export class CustomersComponent implements OnInit {
         this.customers = response['data'];
         this.totalCount = response['total_count'];
       },
-      error => alert('Ocorreu um erro ao tentar buscar os usuários:' + error)
+      error => console.error('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );
   }
 

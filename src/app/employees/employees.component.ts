@@ -44,8 +44,8 @@ export class EmployeesComponent implements OnInit {
       response => {
         this.employees = response['data'];
         this.totalCount = response['totalCount'];
-      },
-      error => alert('Ocorreu um erro ao tentar buscar os usuários:' + error)
+    },
+      error => console.error('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );
   }
 
