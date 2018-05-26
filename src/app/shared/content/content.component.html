@@ -1,5 +1,6 @@
 <div class="content-wrapper">
-  <p-growl [(value)]="msgs" [baseZIndex]="9999"></p-growl>
+  <p-growl id="sticky_growl" [(value)]="msgs" [baseZIndex]="9999"></p-growl>
+  <p-growl id="temporary_growl" [(value)]="msgs" [baseZIndex]="9999" [sticky]="true"></p-growl>
   <!-- <p-messages [(value)]="msgs"></p-messages> -->
 
    <!--Content Header (Page header)-->
