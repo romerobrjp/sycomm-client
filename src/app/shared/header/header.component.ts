@@ -10,19 +10,18 @@ import { TokenService } from '../token.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  currentUser;
 
   constructor(private authService: AuthService,
               private tokenService: TokenService,
               private router: Router,
               private userService: UserService) {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   signOut() {
     this.authService.signOut().subscribe(
-      () => {
-        localStorage.clear();
-        this.router.navigate(['/sign-in']);
-      }
+      () => localStorage.clear()
     );
   }
 
