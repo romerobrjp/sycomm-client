@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
 
 import { User } from './shared/user.model';
 import { UserService } from './shared/user.service';
@@ -21,14 +22,23 @@ export class UsersComponent implements OnInit {
   paginator = {
     pageNumber: 0,
     perPage: this.pageSizes[0],
-    offset: 0
+    offset: 0,
+    userType: ''
   };
   totalCount = 0;
+  userTypesDictionary = {
+    'Admin' : 'Admin',
+    'Employee' : 'Funcionário',
+    'Customer' : 'Cliente'
+  };
+  userListingType: string;
 
   public constructor(
     private userService: UserService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {
     this.adminColumns = [
       { field: 'name', header: 'Nome' },
@@ -50,31 +60,51 @@ export class UsersComponent implements OnInit {
       { field: 'role', header: 'Cargo' },
       { field: 'organization', header: 'Órgão' }
     ];
+
+    router.events.subscribe( (event: Event) => {
+      if (event instanceof NavigationStart) {
+        // console.log('NavigationStart');
+      }
+
+      if (event instanceof NavigationEnd) {
+        // console.log('NavigationEnd');
+
+        this.userListingType = this.activatedRoute.snapshot.queryParamMap.get('userType');
+
+        this.paginator.userType = this.userListingType;
+
+        switch (this.userListingType) {
+          case 'Admin': {
+            this.columns = this.adminColumns;
+            break;
+          }
+          case 'Employee': {
+            this.columns = this.employeeColumns;
+            break;
+          }
+          case 'Customer': {
+            this.columns = this.customerColumns;
+            break;
+          }
+        }
+
+        this.listPaginated();
+      }
+
+      if (event instanceof NavigationError) {
+          // Hide loading indicator
+          // Present error to user
+          console.error(event.error);
+      }
+    });
   }
 
   ngOnInit() {
     this.listPaginated();
-
-    let userType = 'Admin'
-
-    switch (userType) {
-      case 'Admin': {
-        this.columns = this.adminColumns;
-        break;
-      }
-      case 'Employee': {
-        this.columns = this.employeeColumns;
-        break;
-      }
-      case 'Customer': {
-        this.columns = this.customerColumns;
-        break;
-      }
-    }
   }
 
   listPaginated() {
-    this.userService.listPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
+    this.userService.listPaginated(this.paginator.pageNumber, this.paginator.perPage, this.paginator.userType).subscribe(
       response => {
         this.users = response['data'];
         this.totalCount = response['total_count'];
@@ -106,5 +136,27 @@ export class UsersComponent implements OnInit {
         return false;
       }
     });
+  }
+
+  getUsersListTitle() {
+    const userType: string = this.activatedRoute.snapshot.queryParamMap.get('userType');
+    let usersListTitle = '';
+
+    switch (userType) {
+      case 'admin': {
+        usersListTitle = 'Administradores';
+        break;
+      }
+      case 'employee': {
+        usersListTitle = 'Funcionários';
+        break;
+      }
+      case 'customer': {
+        usersListTitle = 'Clientes';
+        break;
+      }
+    }
+
+    return usersListTitle;
   }
 }
