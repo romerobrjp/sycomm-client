@@ -1,5 +1,5 @@
 import {Component, OnInit, OnChanges } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, NavigationExtras } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
@@ -15,7 +15,7 @@ import { Message } from 'primeng/components/common/api';
 
 import { FormUtils} from '../../shared/form-utils';
 
-import * as cpf from '@fnando/cpf';
+import * as cpf_lib from '@fnando/cpf';
 
 @Component({
   selector: 'app-user',
@@ -24,37 +24,54 @@ import * as cpf from '@fnando/cpf';
 })
 
 export class UserDetailComponent implements OnInit {
-  user: User;
+  user;
   roles: Role[];
   organizations: Organization[];
   form: FormGroup;
   formUtils: FormUtils;
   msgs: Message[] = [];
-  userTypes: Array<any> = [
+  userTypes: Array<Object> = [
     { value: 'Admin', text: 'Administrador'},
     { value: 'Employee', text: 'Funcionário' },
     { value: 'Customer', text: 'Cliente' }
   ];
+  attributesDictionary = {
+    'registration' : 'Matrícula',
+    'name' : 'Nome',
+    'email' : 'E-mail',
+    'password' : 'Senha',
+    'password_confirmation' : 'Confirmação de Senha',
+    'cpf' : 'CPF',
+    'landline' : 'Telefone fixo',
+    'cellphone' : 'Celular',
+    'whatsapp' : 'WhatsApp',
+    'simples_adress' : 'Endereço',
+    'type' : 'Tipo de usuário',
+    'organization' : 'Organização',
+    'role' : 'Cargo'
+  };
+  userType: string;
   // masks
   registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
   cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
   phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   constructor(
-    private userService: UserService, private roleService: RoleService, private organizationService: OrganizationService,
-    private route: ActivatedRoute,
+    private userService: UserService,
+    private roleService: RoleService,
+    private organizationService: OrganizationService,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private location: Location,
     private formBuilder: FormBuilder,
     private messageService: MessageService
   ) {
-
     this.user = new User(
       null,
       '',
       '',
-      '',
-      '',
+      null,
+      null,
       '',
       '',
       '',
@@ -78,23 +95,25 @@ export class UserDetailComponent implements OnInit {
     );
 
     this.form = this.formBuilder.group({
-      name: [null, [Validators.required]],
-      email: [null],
-      registration: [null, Validators.required],
-      cpf: [null, [Validators.required]],
-      landline: [null],
-      cellphone: [null, [Validators.required]],
-      whatsapp: [null],
-      simple_address: [null],
+      name: ['', [Validators.required]],
+      email: [''],
+      registration: ['', Validators.required],
+      cpf: ['', [Validators.required]],
+      landline: [''],
+      cellphone: ['', [Validators.required]],
+      whatsapp: [''],
+      simple_address: [''],
       role_id: [null, Validators.required],
-      organization_id: [null, Validators.required]
+      organization_id: [null, Validators.required],
+      type: [null, Validators.required]
     });
 
     this.formUtils = new FormUtils(this.form);
   }
 
   ngOnInit() {
-    this.route.params.switchMap(
+    this.userType = this.activatedRoute.snapshot.queryParamMap.get('userType');
+    this.activatedRoute.params.switchMap(
       (params: Params) => this.userService.getById(+params['id'])
     ).subscribe(
       user => {
@@ -118,45 +137,52 @@ export class UserDetailComponent implements OnInit {
     );
   }
 
-  create() {
+  create(): boolean {
     this.applyFormValues();
+
+    const navigationExtras: NavigationExtras = {
+      queryParams: { 'userType': this.user.type }
+    };
 
     this.userService.create(this.user).subscribe(
-      () => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário criado com sucesso!'}),
-      (error) => this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao tentar criar o usuário.'})
+      () => {
+        this.router.navigate(['/users'], navigationExtras);
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário criado com sucesso!'});
+      },
+      (error) => {
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao tentar criar o usuário.'});
+        return false;
+      }
     );
+
+    return true;
   }
 
-  update() {
+  update(): void {
+    this.messageService.clear();
     this.applyFormValues();
 
-    let errorFound = false;
-
-    if (!cpf.isValid(this.user.cpf)) {
-      this.messageService.add({severity: 'error', summary: 'Erro', detail: 'CPF inválido.'});
-      errorFound = true;
-    }
-
-    if (this.user.landline && this.user.landline.length !== 11) {
-      this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Telefone fixo precisa ter 11 dígitos.'});
-      errorFound = true;
-    }
-
-    if (this.user.landline && this.user.cellphone.length !== 11) {
-      this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Celular precisa ter 11 dígitos.'});
-      errorFound = true;
-    }
-
-    if (this.user.whatsapp && this.user.whatsapp.length !== 11) {
-      this.messageService.add({severity: 'error', summary: 'Erro', detail: 'WhatsApp precisa ter 11 dígitos.'});
-      errorFound = true;
-    }
-
-    if (errorFound) { return false; };
+    const navigationExtras: NavigationExtras = {
+      queryParams: { 'userType': this.user.type }
+    };
 
     this.userService.update(this.user).subscribe(
-      (response) => this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário atualizado!'}),
-      (errorRseponse) => this.messageService.add({severity: 'error', summary: 'Erro', detail: errorRseponse.error.errors.cellphone[0]})
+      (response) => {
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário atualizado!'})
+        this.router.navigate(['/users'], navigationExtras);
+      },
+      (errorRseponse) => {
+        for (const [key, value] of Object.entries(errorRseponse.error.errors)) {
+          for (const [errorKey, errorMessage] of Object.entries(value)) {
+            this.messageService.add({
+              key: 'user_detail_messages',
+              severity: 'error',
+              summary: this.attributesDictionary[key],
+              detail: errorMessage
+            });
+          }
+        }
+      }
     );
   }
 
@@ -166,12 +192,36 @@ export class UserDetailComponent implements OnInit {
     } else {
       this.create();
     }
-
-    this.router.navigate(['/users']);
   }
 
-  public goBack() {
+  goBack() {
     this.location.back();
+  }
+
+  isAdmin(): boolean {
+    return this.userType === 'Admin';
+  }
+
+  isEmployee(): boolean {
+    return this.userType === 'Employee';
+  }
+
+  isCustomer(): boolean {
+    return this.userType === 'Customer';
+  }
+
+  generateBootstrapColsClasses() {
+    if (this.isAdmin()) {
+      return { 'col-lg-3 col-lg-offset-4' : true };
+    } else if (this.isEmployee()) {
+      return { 'col-lg-3 col-lg-offset-4' : true };
+    } else if (this.isAdmin()) {
+      return { 'col-lg-2 col-lg-offset-3' : true };
+    }
+  }
+
+  currentUserIsAdmin() {
+    return JSON.parse(localStorage.getItem('currentUser'))['type'] === 'Admin';
   }
 
   private setUser(user: User): void {
@@ -179,16 +229,42 @@ export class UserDetailComponent implements OnInit {
     this.form.patchValue(user);
   }
 
+  
+  getUserTypeName() {
+    if (this.isAdmin()) {
+      return 'Administrador';
+    }
+    if (this.isEmployee()) {
+      return 'Funcionário';
+    }
+    if (this.isCustomer()) {
+      return 'Cliente';
+    }
+  }
+
   private applyFormValues() {
-    if (this.form.get('name').value) { this.user.name = this.form.get('name').value; }
-    if (this.form.get('email').value) { this.user.email = this.form.get('email').value; }
-    if (this.form.get('registration').value) { this.user.registration = this.form.get('registration').value; }
-    if (this.form.get('cpf').value) { this.user.cpf = cpf.strip(this.form.get('cpf').value).match(/\d+/g).join([]); }
-    if (this.form.get('landline').value) { this.user.landline = this.form.get('landline').value.match(/\d+/g).join([]); }
-    if (this.form.get('cellphone').value) { this.user.cellphone = this.form.get('cellphone').value.match(/\d+/g).join([]); }
-    if (this.form.get('whatsapp').value) { this.user.whatsapp = this.form.get('whatsapp').value.match(/\d+/g).join([]); }
-    if (this.form.get('simple_address').value) { this.user.simple_address = this.form.get('simple_address').value; }
-    if (this.form.get('role_id').value) { this.user.role_id = this.form.get('role_id').value; }
-    if (this.form.get('organization_id').value) { this.user.organization_id = this.form.get('organization_id').value; }
+    this.user.name = this.form.get('name').value;
+    this.user.email = this.form.get('email').value;
+    this.user.registration = this.form.get('registration').value;
+    if (this.form.get('cpf').value) {
+      this.user.cpf = cpf_lib.strip(this.form.get('cpf').value);
+    } else {
+      this.user.cpf = '';
+    }
+    this.user.landline = this.stripPhoneNumbers(this.form.get('landline').value);
+    this.user.cellphone = this.stripPhoneNumbers(this.form.get('cellphone').value);
+    this.user.whatsapp = this.stripPhoneNumbers(this.form.get('whatsapp').value);
+    this.user.simple_address = this.form.get('simple_address').value;
+    this.user.role_id = this.form.get('role_id').value;
+    this.user.organization_id = this.form.get('organization_id').value;
+  }
+
+  private stripPhoneNumbers(phoneNumber: string) {
+    console.log(phoneNumber);
+    if (phoneNumber) {
+      return phoneNumber.replace(/\D/g, '');
+    } else {
+      return '';
+    }
   }
 }

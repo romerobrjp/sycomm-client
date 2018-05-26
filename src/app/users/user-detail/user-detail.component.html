@@ -1,12 +1,11 @@
-<div>
+<div class="container-fluid">
   <h1 class="page-header text-center">
-    <strong *ngIf="user.id"> Edição de usuário </strong>
-    <strong *ngIf="!user.id"> Cadastro de usuário </strong>
+    <strong> {{ user.id ? 'Edição' : 'Cadastro' }} de {{ getUserTypeName() }} </strong>
   </h1>
 
-  <form [formGroup]="form" (ngSubmit)="createOrUpdate()">
+  <form [formGroup]="form" class="text-center" (ngSubmit)="createOrUpdate()">
     <div class="row">
-      <div class="form-group col-lg-3 col-lg-offset-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
+      <div class="form-group col-lg-3 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
         <label for="name" class="control-label">Nome *</label>
         <input
           id="name"
@@ -21,8 +20,9 @@
         </div>
       </div>
 
-      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('email')">
-        <label for="email" class="control-label">E-mail</label>
+      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('email')">
+        <label for="email" class="control-label" *ngIf="isAdmin() || isEmployee()">E-mail *</label>
+        <label for="email" class="control-label" *ngIf="isCustomer()">E-mail</label>
         <input
           id="email"
           formControlName="email"
@@ -31,10 +31,26 @@
           type="text"
         />
       </div>
+
+      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')" *ngIf="isCustomer()">
+        <label for="cpf" class="control-label" *ngIf="isCustomer()">CPF *</label>
+        <input
+          id="cpf"
+          formControlName="cpf"
+          class="form-control"
+          placeholder="000.000.000-00"
+          type="text"
+          [textMask]="{ mask: cpfMask }"
+        />
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('cpf') && isCustomer()">
+          <div *ngIf="form.get('cpf').errors.required"><strong>CPF</strong> é obrigatório</div>
+        </div>
+      </div>
     </div>
 
-    <div class="row">
-      <div class="form-group col-lg-2 col-lg-offset-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('registration')">
+    <div class="row" *ngIf="isCustomer()">
+      <div class="form-group col-lg-2 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('registration')">
         <label for="registration" class="control-label">Matrícula</label>
         <input
           id="registration"
@@ -50,25 +66,7 @@
         </div>
       </div>
 
-      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')">
-        <label for="cpf" class="control-label">CPF *</label>
-        <input
-          id="cpf"
-          formControlName="cpf"
-          class="form-control"
-          placeholder="000.000.000-00"
-          type="text"
-          [textMask]="{ mask: cpfMask }"
-        />
-
-        <div class="text-danger" *ngIf="formUtils.showFieldError('cpf')">
-          <div *ngIf="form.get('cpf').errors.required"><strong>CPF</strong> é obrigatório</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group col-lg-3 col-lg-offset-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('role_id')">
+      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('role_id')">
         <label for="role" class="control-label">Cargo *</label>
         <select
           id="role"
@@ -100,7 +98,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-lg-2 col-lg-offset-3">
+      <div class="form-group col-lg-2 col-lg-offset-2">
         <label for="landline" class="control-label">Telefone fixo</label>
         <input
           id="landline"
@@ -113,7 +111,8 @@
       </div>
 
       <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
-        <label for="cellphone" class="control-label">Celular *</label>
+        <label for="cellphone" class="control-label" *ngIf="isAdmin() || isEmployee()">Celular</label>
+        <label for="cellphone" class="control-label" *ngIf="isCustomer()">Celular *</label>
         <input
           id="cellphone"
           formControlName="cellphone"
@@ -123,7 +122,7 @@
           [textMask]="{ mask: phoneMask }"
         />
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone')" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+        <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone') && isCustomer()" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
           <div *ngIf="form.get('cellphone').errors.required"><strong>Celular</strong> é obrigatório</div>
         </div>
       </div>
@@ -141,8 +140,8 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="form-group col-lg-6 col-lg-offset-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('simple_address')">
+    <div class="row" *ngIf="!isAdmin()">
+      <div class="form-group col-lg-5 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('simple_address')">
         <label for="simple_address" class="control-label">Endereço</label>
         <input
           id="simple_address"
@@ -154,11 +153,37 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="form-group col-lg-2 col-lg-offset-2">
+        <label for="type" class="control-label">Tipo *</label>
+        <select
+          id="type"
+          [disabled]="!currentUserIsAdmin()"
+          class="form-control"
+          formControlName="type"
+        >
+          <option *ngFor="let option of userTypes" [value]="option.value">{{ option.text }}</option>
+        </select>
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('type')">
+          <div *ngIf="form.get('type').errors.required"><strong>Tipo</strong> é obrigatório</div>
+        </div>
+      </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+      <div class="col-lg-6 col-lg-offset-2">
+        <p-messages [(value)]="msgs" key="user_detail_messages"></p-messages>
+      </div>
+    </div>
+
     <br/>
 
     <div class="row text-center">
       <div class="col-lg-12">
-        <button type="submit" class="btn btn-success" [disabled]="form.invalid">{{ user.id ? 'Atualizar' : 'Cadastrar' }}</button>
+        <button type="submit" class="btn btn-success" >{{ user.id ? 'Atualizar' : 'Cadastrar' }}</button>
         <button type="button" class="btn btn-default" (click)="goBack()">Voltar</button>
       </div>
     </div>
