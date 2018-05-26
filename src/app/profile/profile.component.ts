@@ -7,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
   currentUser;
+  userTypesDictionary = {
+    'Admin' : 'Admin',
+    'Employee' : 'Funcionário',
+    'Customer' : 'Cliente'
+  };
 
   constructor() { }
 
