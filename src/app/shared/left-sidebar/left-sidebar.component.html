@@ -29,11 +29,11 @@
 
       <li>
         <a routerLink="/dashboard" routerLinkActive="active">
-          <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
+          <i class="fa fa-tachometer-alt"></i> <span>{{ currentUser.sti_type }}</span>
         </a>
       </li>
 
-      <li class="treeview">
+      <li class="treeview" *ngIf="isAdmin()">
         <a href="#">
           <i class="fa fa-cogs"></i> <span>Administração</span>
           <span class="pull-right-container">
@@ -41,10 +41,15 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a routerLink="/users" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Usuarios</a></li>
-          <li><a routerLink="/admins" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Administradores</a></li>
-          <li><a routerLink="/employees" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Funcionários</a></li>
-          <li><a routerLink="/customers" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Clientes</a></li>
+          <li>
+            <a routerLink="/users" [queryParams]="{ 'userType': 'Admin'}" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Administradores</a>
+          </li>
+          <li>
+            <a routerLink="/users" [queryParams]="{ 'userType': 'Employee'}" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Funcionários</a>
+          </li>
+          <li>
+            <a routerLink="/users" [queryParams]="{ 'userType': 'Customer'}" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Clientes</a>
+          </li>
         </ul>
       </li>
     </ul>
