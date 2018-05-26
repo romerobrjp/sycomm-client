@@ -1,4 +1,4 @@
-<h1 class="text-center page-header">Usuários</h1>
+<h1 class="text-center page-header">{{ getUsersListTitle() }}</h1>
 
 <p-table
   id="users_p-table"
@@ -15,7 +15,7 @@
 >
   <ng-template pTemplate="caption">
     <div style="text-align: right">
-      <a [routerLink]="['/users/new']" class="btn btn-success" style="color: white; margin: 5px;">
+      <a [routerLink]="['/users/new']" [queryParams]="{ 'userType': userListingType}" class="btn btn-success" style="color: white; margin: 5px;">
         Novo
         <span class="fa fa-plus"></span>
       </a>
@@ -42,7 +42,7 @@
       </td>
 
       <td>
-        <a [routerLink]="['/users', user.id]" class="btn btn-info">
+        <a [routerLink]="['/users', user.id]" [queryParams]="{ 'userType': userListingType}" class="btn btn-info">
           Detalhes
           <span class="fa fa-info-circle"></span>
         </a>
