@@ -229,7 +229,6 @@ export class UserDetailComponent implements OnInit {
     this.form.patchValue(user);
   }
 
-  
   getUserTypeName() {
     if (this.isAdmin()) {
       return 'Administrador';
@@ -260,7 +259,6 @@ export class UserDetailComponent implements OnInit {
   }
 
   private stripPhoneNumbers(phoneNumber: string) {
-    console.log(phoneNumber);
     if (phoneNumber) {
       return phoneNumber.replace(/\D/g, '');
     } else {
