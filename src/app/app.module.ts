@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 // 3rd party modules
 import { TextMaskModule } from 'angular2-text-mask';
+import {Ng2BRPipesModule} from 'ng2-brpipes';
 // Primefaces modules
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
@@ -103,7 +104,8 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     MessageModule,
     MessagesModule,
     ConfirmDialogModule,
-    TextMaskModule
+    TextMaskModule,
+    Ng2BRPipesModule
   ],
   providers: [
     UserService,

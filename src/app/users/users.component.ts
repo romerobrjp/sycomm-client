@@ -6,6 +6,7 @@ import { UserService } from './shared/user.service';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
+import { CpfPipe, TelefonePipe } from 'ng2-brpipes';
 
 @Component({
   selector: 'app-users',
@@ -33,6 +34,9 @@ export class UsersComponent implements OnInit {
   };
   userListingType: string;
 
+  private cpfPipe: CpfPipe;
+  private telefonePipe: TelefonePipe;
+
   public constructor(
     private userService: UserService,
     private messageService: MessageService,
@@ -40,6 +44,9 @@ export class UsersComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
+    this.cpfPipe = new CpfPipe();
+    this.telefonePipe = new TelefonePipe();
+
     this.adminColumns = [
       { field: 'name', header: 'Nome' },
       { field: 'email', header: 'E-mail' }
@@ -57,6 +64,7 @@ export class UsersComponent implements OnInit {
       { field: 'name', header: 'Nome' },
       { field: 'email', header: 'E-mail' },
       { field: 'cpf', header: 'CPF' },
+      { field: 'cellphone', header: 'Telefone' },
       { field: 'role', header: 'Cargo' },
       { field: 'organization', header: 'Órgão' }
     ];
@@ -158,5 +166,26 @@ export class UsersComponent implements OnInit {
     }
 
     return usersListTitle;
+  }
+
+  formatColValueWithPipe(colField, colValue): string {
+    let result: string;
+
+    switch (colField) {
+      case 'cpf': {
+        result = this.cpfPipe.transform(colValue);
+        break;
+      }
+      case 'cellphone' || 'landline' || 'whatsapp': {
+        result = this.telefonePipe.transform(colValue);
+        break;
+      }
+      default: {
+        result = colValue;
+        break;
+      }
+    }
+
+    return result;
   }
 }

@@ -38,7 +38,7 @@
   <ng-template pTemplate="body" let-user>
     <tr>
       <td *ngFor="let col of columns" pResizableColumn>
-        {{user[col.field]}}
+        {{ formatColValueWithPipe(col.field, user[col.field]) }}
       </td>
 
       <td>
