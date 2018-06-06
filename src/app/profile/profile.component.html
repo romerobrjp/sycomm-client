@@ -216,7 +216,7 @@
                   <label for="input_cpf" class="col-sm-2 control-label">CPF</label>
 
                   <div class="col-sm-10">
-                    <input type="text" formControlName="cpf" class="form-control" id="input_cpf" placeholder="000.000.000-00">
+                    <input type="text" formControlName="cpf" class="form-control" id="input_cpf" placeholder="000.000.000-00" [textMask]="{ mask: cpfMask }">
                   </div>
                 </div>
 
@@ -224,7 +224,7 @@
                   <label for="input_landline" class="col-sm-2 control-label">Telefone fixo</label>
 
                   <div class="col-sm-10">
-                    <input type="tel" formControlName="landline" class="form-control" id="input_landline" placeholder="(83) 9-1234-5678" />
+                    <input type="tel" formControlName="landline" class="form-control" id="input_landline" placeholder="(83) 9-1234-5678" [textMask]="{ mask: phoneMask }" />
                   </div>
                 </div>
 
@@ -232,7 +232,7 @@
                   <label for="input_cellphone" class="col-sm-2 control-label">Celular</label>
 
                   <div class="col-sm-10">
-                    <input type="tel" formControlName="cellphone" class="form-control" id="input_cellphone" placeholder="(83) 9-1234-5678" />
+                    <input type="tel" formControlName="cellphone" class="form-control" id="input_cellphone" placeholder="(83) 9-1234-5678" [textMask]="{ mask: phoneMask }" />
                   </div>
                 </div>
 
@@ -240,7 +240,7 @@
                   <label for="input_whatsapp" class="col-sm-2 control-label">WhatsApp</label>
 
                   <div class="col-sm-10">
-                    <input type="tel" formControlName="whatsapp" class="form-control" id="input_whatsapp" placeholder="(83) 9-1234-5678" />
+                    <input type="tel" formControlName="whatsapp" class="form-control" id="input_whatsapp" placeholder="(83) 9-1234-5678" [textMask]="{ mask: phoneMask }" />
                   </div>
                 </div>
 
@@ -267,7 +267,7 @@
                     <p-messages [(value)]="msgs" key="user_detail_messages"></p-messages>
                   </div>
                 </div>
-                
+
                 <div class="row">
                   <div class="col-lg-6 col-lg-offset-5">
                     <button type="submit" class="btn btn-success">Salvar</button>

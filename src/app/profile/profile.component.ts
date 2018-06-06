@@ -35,6 +35,10 @@ export class ProfileComponent implements OnInit {
     'organization' : 'Organização',
     'role' : 'Cargo'
   };
+  // masks
+  registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
+  cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
+  phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   constructor(private userService: UserService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) {
     this.form = this.formBuilder.group({
