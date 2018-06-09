@@ -9,6 +9,7 @@ import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeDetailComponent } from './employees/employee-detail/employee-detail.component';
 import { CustomerDetailComponent } from './customers/customer-detail/customer-detail.component';
 import { CustomersComponent } from './customers/customers.component';
+import { ActivitiesComponent } from './activities/activities.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -93,6 +94,11 @@ const ROUTES = RouterModule.forRoot([
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'activities',
+    component: ActivitiesComponent,
     canActivate: [AuthGuard]
   },
 ]);

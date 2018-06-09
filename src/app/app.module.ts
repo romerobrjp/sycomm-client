@@ -12,7 +12,8 @@ import {Ng2BRPipesModule} from 'ng2-brpipes';
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule, MessagesModule} from 'primeng/primeng';
+import { ConfirmDialogModule, MessagesModule, CardModule } from 'primeng/primeng';
+import { DataViewModule } from 'primeng/dataview';
 
 // Components
 import { AppComponent } from './app.component';
@@ -34,6 +35,7 @@ import { OrganizationsComponent } from './organizations/organizations.component'
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ActivitiesComponent } from './activities/activities.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -42,6 +44,7 @@ import { EmployeeService } from './employees/shared/employee.service';
 import { CustomerService } from './customers/shared/customer.service';
 import { RoleService } from './roles/shared/role.service';
 import { OrganizationService } from './organizations/shared/organization.service';
+import { ActivityService } from './activities/shared/activity.service';
 import { AuthService } from './shared/auth.service';
 import { TokenService } from './shared/token.service';
 import { Angular2TokenService } from 'angular2-token';
@@ -89,7 +92,8 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     AdminDetailComponent,
     DashboardComponent,
     SignInComponent,
-    ProfileComponent
+    ProfileComponent,
+    ActivitiesComponent
   ],
   imports: [
     BrowserModule,
@@ -104,6 +108,8 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     MessageModule,
     MessagesModule,
     ConfirmDialogModule,
+    CardModule,
+    DataViewModule,
     TextMaskModule,
     Ng2BRPipesModule
   ],
@@ -114,6 +120,7 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     CustomerService,
     RoleService,
     OrganizationService,
+    ActivityService,
     MessageService,
     ConfirmationService,
     Angular2TokenService,

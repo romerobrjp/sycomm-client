@@ -1,0 +1,42 @@
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">Minhas últimas atividades ({{ userActivities.length }})</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+      </button>
+      <!--<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>-->
+    </div>
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body">
+    <div class="table-responsive">
+      <table class="table no-margin">
+        <thead>
+        <tr>
+          <th>Atividade</th>
+          <th>Descrição</th>
+          <th>Status</th>
+          <th>Cliente</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let activity of userActivities">
+          <td><a href="#">{{ activity.name }}</a></td>
+          <td>{{ activity.description }}</td>
+          <td><span class="label label-success">{{ activityDictionary[activity.status] }}</span></td>
+          <td>{{ activity.user_id }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- /.table-responsive -->
+  </div>
+  <!-- /.box-body -->
+  <div class="box-footer clearfix">
+    <a href="javascript:void(0)" class="btn btn-success btn-flat pull-left">+ Nova atividade</a>
+    <a href="javascript:void(0)" class="btn btn-primary btn-flat pull-right">Ver todas as atividades</a>
+  </div>
+  <!-- /.box-footer -->
+</div>
+<!-- /.box -->
