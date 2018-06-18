@@ -5,10 +5,10 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 
 import { Customer } from '../shared/customer.model';
 import { CustomerService } from '../shared/customer.service';
-import { Role } from '../../roles/shared/role.model';
-import { RoleService } from '../../roles/shared/role.service';
-import { Organization } from '../../organizations/shared/organization.model';
-import { OrganizationService } from '../../organizations/shared/organization.service';
+import { PublicOffice } from '../../public_offices/shared/public_office.model';
+import { PublicOfficeService } from '../../public_offices/shared/public_office.service';
+import { PublicAgency } from '../../public_agencies/shared/public_agency.model';
+import { PublicAgencyService } from '../../public_agencies/shared/public_agency.service';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Message } from 'primeng/components/common/api';
@@ -25,8 +25,8 @@ import * as cpf from '@fnando/cpf';
 
 export class CustomerDetailComponent implements OnInit {
   customer: Customer;
-  roles: Role[];
-  organizations: Organization[];
+  public_offices: PublicOffice[];
+  public_agencies: PublicAgency[];
   form: FormGroup;
   formUtils: FormUtils;
   msgs: Message[] = [];
@@ -41,7 +41,7 @@ export class CustomerDetailComponent implements OnInit {
   phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   constructor(
-    private customerService: CustomerService, private roleService: RoleService, private organizationService: OrganizationService,
+    private customerService: CustomerService, private publicOfficeService: PublicOfficeService, private publicAgencyService: PublicAgencyService,
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
@@ -85,8 +85,8 @@ export class CustomerDetailComponent implements OnInit {
       cellphone: [null, [Validators.required]],
       whatsapp: [null],
       simple_address: [null],
-      role_id: [null, Validators.required],
-      organization_id: [null, Validators.required]
+      public_office_id: [null, Validators.required],
+      public_agency_id: [null, Validators.required]
     });
 
     this.formUtils = new FormUtils(this.form);
@@ -101,12 +101,12 @@ export class CustomerDetailComponent implements OnInit {
           this.setCustomer(customer);
         }
 
-        this.roleService.getAll().subscribe(
-          roles => {
-            this.roles = roles;
+        this.publicOfficeService.getAll().subscribe(
+          public_offices => {
+            this.public_offices = public_offices;
 
-            this.organizationService.getAll().subscribe(
-              organizations => this.organizations = organizations,
+            this.publicAgencyService.getAll().subscribe(
+              public_agencies => this.public_agencies = public_agencies,
               error => console.error('Erro ao carregar : ' + error)
             );
           },
@@ -187,7 +187,7 @@ export class CustomerDetailComponent implements OnInit {
     if (this.form.get('cellphone').value) { this.customer.cellphone = this.form.get('cellphone').value.match(/\d+/g).join([]); }
     if (this.form.get('whatsapp').value) { this.customer.whatsapp = this.form.get('whatsapp').value.match(/\d+/g).join([]); }
     if (this.form.get('simple_address').value) { this.customer.simple_address = this.form.get('simple_address').value; }
-    if (this.form.get('role_id').value) { this.customer.role_id = this.form.get('role_id').value; }
-    if (this.form.get('organization_id').value) { this.customer.organization_id = this.form.get('organization_id').value; }
+    if (this.form.get('public_office_id').value) { this.customer.public_office_id = this.form.get('public_office_id').value; }
+    if (this.form.get('public_agency_id').value) { this.customer.public_agency_id = this.form.get('public_agency_id').value; }
   }
 }

@@ -32,8 +32,8 @@ export class ProfileComponent implements OnInit {
     'whatsapp' : 'WhatsApp',
     'simples_adress' : 'Endereço',
     'type' : 'Tipo de usuário',
-    'organization' : 'Organização',
-    'role' : 'Cargo'
+    'public_agency' : 'Organização',
+    'public_office' : 'Cargo'
   };
   // masks
   registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];

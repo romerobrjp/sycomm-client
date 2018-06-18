@@ -36,8 +36,8 @@ export class CustomersComponent implements OnInit {
       { field: 'name', header: 'Nome' },
       { field: 'email', header: 'E-mail' },
       { field: 'cpf', header: 'CPF' },
-      { field: 'role', header: 'Cargo' },
-      { field: 'organization', header: 'Órgão' }
+      { field: 'public_office', header: 'Cargo' },
+      { field: 'public_agency', header: 'Órgão' }
     ];
   }
 

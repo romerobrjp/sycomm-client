@@ -65,8 +65,8 @@ export class UsersComponent implements OnInit {
       { field: 'email', header: 'E-mail' },
       { field: 'cpf', header: 'CPF' },
       { field: 'cellphone', header: 'Telefone' },
-      { field: 'role', header: 'Cargo' },
-      { field: 'organization', header: 'Órgão' }
+      { field: 'public_office', header: 'Cargo' },
+      { field: 'public_agency', header: 'Órgão' }
     ];
 
     router.events.subscribe( (event: Event) => {

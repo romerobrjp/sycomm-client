@@ -1,4 +1,4 @@
-export class Organization {
+export class PublicAgency {
   public constructor(
     public id: number,
     public name: string,

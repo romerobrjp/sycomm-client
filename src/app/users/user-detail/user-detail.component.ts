@@ -5,10 +5,10 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 
 import { User } from '../shared/user.model';
 import { UserService } from '../shared/user.service';
-import { Role } from '../../roles/shared/role.model';
-import { RoleService } from '../../roles/shared/role.service';
-import { Organization } from '../../organizations/shared/organization.model';
-import { OrganizationService } from '../../organizations/shared/organization.service';
+import { PublicOffice } from '../../public_offices/shared/public_office.model';
+import { PublicOfficeService } from '../../public_offices/shared/public_office.service';
+import { PublicAgency } from '../../public_agencies/shared/public_agency.model';
+import { PublicAgencyService } from '../../public_agencies/shared/public_agency.service';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Message } from 'primeng/components/common/api';
@@ -25,8 +25,8 @@ import * as cpf_lib from '@fnando/cpf';
 
 export class UserDetailComponent implements OnInit {
   user;
-  roles: Role[];
-  organizations: Organization[];
+  publicOffices: PublicOffice[];
+  publicAgencies: PublicAgency[];
   form: FormGroup;
   formUtils: FormUtils;
   msgs: Message[] = [];
@@ -47,8 +47,8 @@ export class UserDetailComponent implements OnInit {
     'whatsapp' : 'WhatsApp',
     'simples_adress' : 'Endereço',
     'type' : 'Tipo de usuário',
-    'organization' : 'Organização',
-    'role' : 'Cargo'
+    'public_agency' : 'Organização',
+    'public_office' : 'Cargo'
   };
   userType: string;
   // masks
@@ -58,8 +58,8 @@ export class UserDetailComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private roleService: RoleService,
-    private organizationService: OrganizationService,
+    private publicOfficeService: PublicOfficeService,
+    private publicAgencyService: PublicAgencyService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private location: Location,
@@ -103,8 +103,8 @@ export class UserDetailComponent implements OnInit {
       cellphone: ['', [Validators.required]],
       whatsapp: [''],
       simple_address: [''],
-      role_id: [null, Validators.required],
-      organization_id: [null, Validators.required],
+      public_office_id: [null, Validators.required],
+      public_agency_id: [null, Validators.required],
       type: [null, Validators.required]
     });
 
@@ -121,12 +121,12 @@ export class UserDetailComponent implements OnInit {
           this.setUser(user);
         }
 
-        this.roleService.getAll().subscribe(
-          roles => {
-            this.roles = roles;
+        this.publicOfficeService.getAll().subscribe(
+          publicOffices => {
+            this.publicOffices = publicOffices;
 
-            this.organizationService.getAll().subscribe(
-              organizations => this.organizations = organizations,
+            this.publicAgencyService.getAll().subscribe(
+              publicAgencies => this.publicAgencies = publicAgencies,
               error => console.error('Erro ao carregar : ' + error)
             );
           },
@@ -254,8 +254,8 @@ export class UserDetailComponent implements OnInit {
     this.user.cellphone = this.stripPhoneNumbers(this.form.get('cellphone').value);
     this.user.whatsapp = this.stripPhoneNumbers(this.form.get('whatsapp').value);
     this.user.simple_address = this.form.get('simple_address').value;
-    this.user.role_id = this.form.get('role_id').value;
-    this.user.organization_id = this.form.get('organization_id').value;
+    this.user.public_office_id = this.form.get('public_office_id').value;
+    this.user.public_agency_id = this.form.get('public_agency_id').value;
   }
 
   private stripPhoneNumbers(phoneNumber: string) {

@@ -66,33 +66,33 @@
         </div>
       </div>
 
-      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('role_id')">
-        <label for="role" class="control-label">Cargo *</label>
+      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('public_office_id')">
+        <label for="public_office" class="control-label">Cargo *</label>
         <select
-          id="role"
+          id="public_office"
           class="form-control"
-          formControlName="role_id"
+          formControlName="public_office_id"
         >
-          <option *ngFor="let option of roles" [value]="option.id">{{ option.name }}</option>
+          <option *ngFor="let option of publicOffices" [value]="option.id">{{ option.name }}</option>
         </select>
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('role_id')">
-          <div *ngIf="form.get('role_id').errors.required"><strong>Cargo</strong> é obrigatório</div>
+        <div class="text-danger" *ngIf="formUtils.showFieldError('public_office_id')">
+          <div *ngIf="form.get('public_office_id').errors.required"><strong>Cargo</strong> é obrigatório</div>
         </div>
       </div>
 
-      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('organization_id')">
-        <label for="organization" class="control-label">Órgão *</label>
+      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('public_agency_id')">
+        <label for="public_agency" class="control-label">Órgão *</label>
         <select
-          id="organization"
+          id="public_agency"
           class="form-control"
-          formControlName="organization_id"
+          formControlName="public_agency_id"
         >
-          <option *ngFor="let option of organizations" [value]="option.id">{{ option.name }}</option>
+          <option *ngFor="let option of publicAgencies" [value]="option.id">{{ option.name }}</option>
         </select>
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('organization_id')">
-          <div *ngIf="form.get('organization_id').errors.required"><strong>Órgão</strong> é obrigatório</div>
+        <div class="text-danger" *ngIf="formUtils.showFieldError('public_agency_id')">
+          <div *ngIf="form.get('public_agency_id').errors.required"><strong>Órgão</strong> é obrigatório</div>
         </div>
       </div>
     </div>
