@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-'import {Activity} from '../activities/shared/activity';
+import {Activity} from '../activities/shared/activity';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {ConfirmationService} from 'primeng/api';
