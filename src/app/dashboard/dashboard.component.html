@@ -1,1 +1,48 @@
-<h1 class="text-center page-header">Dashboard</h1>
+<div class="container-fluid">
+  <h1 class="page-header text-center">
+    <strong> Dashboard </strong>
+  </h1>
+
+  <div class="box box-info" *ngIf="authService.isEmployee()">
+    <div class="box-header with-border">
+      <h3 class="box-title">Minhas últimas atividades ({{ getUserActivitiesLength() }})</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+        <!--<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>-->
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="table-responsive">
+        <table class="table no-margin">
+          <thead>
+          <tr>
+            <th>Atividade</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Cliente</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let activity of userActivities">
+            <td><a [routerLink]="['/activities', activity.id]">{{ activity.name }}</a></td>
+            <td>{{ activity.description }}</td>
+            <td><span class="label label-success">{{ activityDictionary[activity.status] }}</span></td>
+            <td><a href="#">{{ activity.client_name }}</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- /.table-responsive -->
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer clearfix">
+      <!--<a [routerLink]="['/activities/new']" class="btn btn-success btn-flat pull-left">+ Nova atividade</a>-->
+      <a [routerLink]="['/activities']" class="btn btn-primary btn-flat pull-right">Ver todas as atividades</a>
+    </div>
+    <!-- /.box-footer -->
+  </div>
+  <!-- /.box -->
+</div>
