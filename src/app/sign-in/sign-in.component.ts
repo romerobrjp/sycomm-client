@@ -10,7 +10,6 @@ import {Router} from '@angular/router';
   styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
-
   form: FormGroup;
   formUtils: FormUtils;
   submitted: boolean;
@@ -18,7 +17,7 @@ export class SignInComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) {
     this.setupForm();
@@ -34,23 +33,20 @@ export class SignInComponent implements OnInit {
   signIn() {
     this.submitted = true;
 
-    this.authService.signIn(this.form.get('email').value, this.form.get('password').value)
-      .subscribe(
-        success => {
-          this.formErrors = null;
-          this.router.navigate(['/dashboard']);
-          const currentUser = JSON.parse(success['_body']).data;
-          localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        },
-        error => {
-          this.submitted = false;
-          if (error.status === 401) {
-            this.formErrors = JSON.parse(error._body).errors;
-          } else {
-            this.formErrors = ['Ocorreu um erro e não foi possível logar. Tente novamente mais tarde.']
-          }
+    this.authService.signIn(this.form.get('email').value, this.form.get('password').value).subscribe(
+      success => {
+        this.formErrors = null;
+        this.router.navigate(['/dashboard']);
+      },
+      error => {
+        this.submitted = false;
+        if (error.status === 401) {
+          this.formErrors = JSON.parse(error._body).errors;
+        } else {
+          this.formErrors = ['Ocorreu um erro e não foi possível logar. Tente novamente mais tarde.'];
         }
-      );
+      }
+    );
   }
 
   setupForm() {

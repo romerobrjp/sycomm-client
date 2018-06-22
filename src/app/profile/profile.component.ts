@@ -5,6 +5,7 @@ import { FormUtils } from './../shared/form-utils';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import * as cpf_lib from '@fnando/cpf';
+import {AuthService} from '../shared/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -40,7 +41,13 @@ export class ProfileComponent implements OnInit {
   cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
   phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) {
+  constructor(
+    private userService: UserService,
+    public authService: AuthService,
+    private formBuilder: FormBuilder,
+    private messageService: MessageService,
+    private router: Router
+  ) {
     this.form = this.formBuilder.group({
       name: ['', [Validators.required]],
       email: [''],
@@ -56,28 +63,12 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.getById(this.getCurrentUserFromLocalStorage().id).subscribe(
+    this.userService.getById(this.authService.getCurrentUser()['id']).subscribe(
       user => {
         this.currentUser = user;
         this.form.patchValue(this.currentUser);
       }
     );
-  }
-
-  getCurrentUserFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('currentUser'));
-  }
-
-  isAdmin(): boolean {
-    return this.currentUser.type === 'Admin';
-  }
-
-  isEmployee(): boolean {
-    return this.currentUser.type === 'Employee';
-  }
-
-  isCustomer(): boolean {
-    return this.currentUser.type === 'Customer';
   }
 
   update(): void {

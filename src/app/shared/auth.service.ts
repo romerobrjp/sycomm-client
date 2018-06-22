@@ -2,36 +2,62 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {User} from '../users/shared/user.model';
 import {TokenService} from './token.service';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
+  constructor(private tokenService: TokenService) {}
 
-  public constructor(private tokenService: TokenService) {}
-
-  public signUp(user: User): Observable<Response> {
+  signUp(user: User): Observable<Response> {
     return this.tokenService.registerAccount(user as any).catch(this.handleErrors);
   }
 
-  public signIn(uid: string, password: string): Observable<Response> {
+  signIn(uid: string, password: string): Observable<Response> {
     const signInData = {
       email: uid,
       password: password
     };
 
-    return this.tokenService.signIn(signInData).catch(this.handleErrors);
+    return this.tokenService.signIn(signInData).pipe(
+      tap(
+        responseSuccess => {
+          const currentUser = JSON.parse(responseSuccess['_body']).data;
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        },
+        responseError => {
+          this.handleErrors(responseError);
+        }
+      )
+    ).catch(this.handleErrors);
   }
 
-  public signOut(): Observable<Response> {
+  signOut(): Observable<Response> {
     return this.tokenService.signOut().catch(this.handleErrors);
   }
 
-  public userSignedIn(): boolean {
+  userSignedIn(): boolean {
     return this.tokenService.userSignedIn();
   }
 
-  public handleErrors(error: Response) {
+  handleErrors(error: Response) {
     console.log('AuthService.handleErrors: ', error);
     return Observable.throw(error);
+  }
+
+  getCurrentUser(): User {
+    return JSON.parse(localStorage.getItem('currentUser'));
+  }
+
+  isAdmin(): boolean {
+    return this.getCurrentUser().type === 'Admin';
+  }
+
+  isEmployee(): boolean {
+    return this.getCurrentUser().type === 'Employee';
+  }
+
+  isCustomer(): boolean {
+    return this.getCurrentUser().type === 'Customer';
   }
 
 }

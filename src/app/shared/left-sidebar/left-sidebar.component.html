@@ -27,15 +27,13 @@
 
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
-      <li class="header">Menu</li>
-
       <li>
         <a routerLink="/dashboard" routerLinkActive="active">
           <i class="fa fa-tachometer"></i> <span>Dashboard</span>
         </a>
       </li>
 
-      <li class="treeview" *ngIf="isAdmin()">
+      <li class="treeview" *ngIf="authService.isAdmin()">
         <a href="#">
           <i class="fa fa-cogs"></i> <span>Administração</span>
           <span class="pull-right-container">
@@ -55,7 +53,7 @@
         </ul>
       </li>
 
-      <li *ngIf="isEmployee()">
+      <li *ngIf="authService.isEmployee()">
         <a routerLink="/activities">
           <i class="fa fa-tasks"></i> <span>Minhas atividades</span>
         </a>
