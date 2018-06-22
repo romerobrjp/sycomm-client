@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { AuthGuard } from './guards/auth.guard';
+
 import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { AdminsComponent } from './admins/admins.component';
@@ -13,8 +15,7 @@ import { ActivitiesComponent } from './activities/activities.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ProfileComponent } from './profile/profile.component';
-
-import { AuthGuard } from './guards/auth.guard';
+import { ActivityDetailComponent } from './activities/activity-detail/activity-detail.component';
 
 const ROUTES = RouterModule.forRoot([
   {
@@ -99,6 +100,11 @@ const ROUTES = RouterModule.forRoot([
   {
     path: 'activities',
     component: ActivitiesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'activities/:id',
+    component: ActivityDetailComponent,
     canActivate: [AuthGuard]
   },
 ]);

@@ -1,0 +1,85 @@
+<div class="container-fluid">
+  <h1 class="page-header text-center">
+    <strong> {{ entity.id ? 'Edição' : 'Cadastro' }} de Atividade </strong>
+  </h1>
+
+  <form [formGroup]="form" class="text-center" (ngSubmit)="createOrUpdate()">
+    <div class="row">
+      <div class="form-group col-lg-3 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
+        <label for="name" class="control-label">Nome *</label>
+        <input
+          id="name"
+          formControlName="name"
+          class="form-control"
+          placeholder=""
+          type="text"
+          disabled="isEmployee()"
+        />
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
+          <div *ngIf="form.get('name').errors.required"><strong>Nome</strong> é obrigatório</div>
+        </div>
+
+        <br />
+
+        <label for="activity_type" class="control-label">Tipo *</label>
+        <select
+          id="activity_type"
+          class="form-control"
+          formControlName="activity_type"
+          disabled="isEmployee()"
+        >
+          <option *ngFor="let option of actTypes" [value]="option.id">{{ option.name }}</option>
+        </select>
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('activity_type')">
+          <div *ngIf="form.get('activity_type').errors.required"><strong>Tipo</strong> é obrigatório</div>
+        </div>
+
+        <br />
+
+        <label for="activity_status" class="control-label">Status *</label>
+        <select
+          id="activity_status"
+          class="form-control"
+          formControlName="status"
+        >
+          <option *ngFor="let option of actStatuses" [value]="option.id">{{ option.name }}</option>
+        </select>
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('status')">
+          <div *ngIf="form.get('status').errors.required"><strong>Status</strong> é obrigatório</div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-4" [ngClass]="formUtils.fieldClassForErrorOrSuccess('annotations')">
+        <label for="annotations" class="control-label">Anotações *</label>
+        <textarea
+          id="annotations"
+          formControlName="annotations"
+          class="form-control"
+          placeholder="Anotações da atividade aqui..."
+          rows="9"
+          type="text"
+        ></textarea>
+      </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+      <div class="col-lg-6 col-lg-offset-2">
+        <p-messages [(value)]="msgs" key="user_detail_messages"></p-messages>
+      </div>
+    </div>
+
+    <br/>
+
+    <div class="row text-center">
+      <div class="col-lg-12">
+        <button type="submit" class="btn btn-success" >{{ entity.id ? 'Atualizar' : 'Cadastrar' }}</button>
+        <button type="button" class="btn btn-default" (click)="goBack()">Voltar</button>
+      </div>
+    </div>
+  </form>
+</div>

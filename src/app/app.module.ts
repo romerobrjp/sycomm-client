@@ -36,6 +36,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ActivitiesComponent } from './activities/activities.component';
+import { ActivityDetailComponent } from './activities/activity-detail/activity-detail.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -93,7 +94,8 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     DashboardComponent,
     SignInComponent,
     ProfileComponent,
-    ActivitiesComponent
+    ActivitiesComponent,
+    ActivityDetailComponent,
   ],
   imports: [
     BrowserModule,
