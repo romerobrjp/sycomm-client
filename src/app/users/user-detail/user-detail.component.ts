@@ -16,6 +16,7 @@ import { Message } from 'primeng/components/common/api';
 import { FormUtils} from '../../shared/form-utils';
 
 import * as cpf_lib from '@fnando/cpf';
+import {AuthService} from '../../shared/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -64,7 +65,8 @@ export class UserDetailComponent implements OnInit {
     private router: Router,
     private location: Location,
     private formBuilder: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+    public authService: AuthService
   ) {
     this.user = new User(
       null,
@@ -168,8 +170,8 @@ export class UserDetailComponent implements OnInit {
 
     this.userService.update(this.user).subscribe(
       (response) => {
-        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário atualizado!'})
-        this.router.navigate(['/users'], navigationExtras);
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário atualizado!'});
+        // this.router.navigate(['/users'], navigationExtras);
       },
       (errorRseponse) => {
         for (const [key, value] of Object.entries(errorRseponse.error.errors)) {
@@ -198,30 +200,14 @@ export class UserDetailComponent implements OnInit {
     this.location.back();
   }
 
-  isAdmin(): boolean {
-    return this.userType === 'Admin';
-  }
-
-  isEmployee(): boolean {
-    return this.userType === 'Employee';
-  }
-
-  isCustomer(): boolean {
-    return this.userType === 'Customer';
-  }
-
   generateBootstrapColsClasses() {
-    if (this.isAdmin()) {
+    if (this.authService.isAdmin()) {
       return { 'col-lg-3 col-lg-offset-4' : true };
-    } else if (this.isEmployee()) {
+    } else if (this.authService.isEmployee()) {
       return { 'col-lg-3 col-lg-offset-4' : true };
-    } else if (this.isAdmin()) {
+    } else if (this.authService.isAdmin()) {
       return { 'col-lg-2 col-lg-offset-3' : true };
     }
-  }
-
-  currentUserIsAdmin() {
-    return JSON.parse(localStorage.getItem('currentUser'))['type'] === 'Admin';
   }
 
   private setUser(user: User): void {
@@ -230,13 +216,13 @@ export class UserDetailComponent implements OnInit {
   }
 
   getUserTypeName() {
-    if (this.isAdmin()) {
+    if (this.authService.isAdmin()) {
       return 'Administrador';
     }
-    if (this.isEmployee()) {
+    if (this.authService.isEmployee()) {
       return 'Funcionário';
     }
-    if (this.isCustomer()) {
+    if (this.authService.isCustomer()) {
       return 'Cliente';
     }
   }
