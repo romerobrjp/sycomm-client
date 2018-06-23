@@ -60,4 +60,7 @@ export class AuthService {
     return this.getCurrentUser().type === 'Customer';
   }
 
+  updateCurrentUser(u: User): void {
+    localStorage.setItem('currentUser', JSON.stringify(u));
+  }
 }
