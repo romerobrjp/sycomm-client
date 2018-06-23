@@ -1,11 +1,12 @@
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { UserService } from './../users/shared/user.service';
-import { FormUtils } from './../shared/form-utils';
+import { UserService } from '../users/shared/user.service';
+import { FormUtils } from '../shared/form-utils';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import * as cpf_lib from '@fnando/cpf';
 import {AuthService} from '../shared/auth.service';
+import {User} from '../users/shared/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +14,7 @@ import {AuthService} from '../shared/auth.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  currentUser;
+  userProfile: User;
   form: FormGroup;
   formUtils: FormUtils;
   userTypesDictionary = {
@@ -37,9 +38,9 @@ export class ProfileComponent implements OnInit {
     'public_office' : 'Cargo'
   };
   // masks
-  registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
-  cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
-  phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  registrationMask = FormUtils.registrationMask;
+  cpfMask = FormUtils.cpfMask;
+  phoneMask = FormUtils.phoneMask;
 
   constructor(
     private userService: UserService,
@@ -64,9 +65,9 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getById(this.authService.getCurrentUser()['id']).subscribe(
-      user => {
-        this.currentUser = user;
-        this.form.patchValue(this.currentUser);
+      retrievedUser => {
+        this.userProfile = retrievedUser;
+        this.form.patchValue(this.userProfile);
       }
     );
   }
@@ -75,11 +76,14 @@ export class ProfileComponent implements OnInit {
     this.messageService.clear();
     this.applyFormValues();
 
-    this.userService.update(this.currentUser).subscribe(
-      (response) => {
+    this.userService.update(this.authService.getCurrentUser()).subscribe(
+      () => {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Perfil atualizado!'});
-        this.currentUser = this.userService.getById(this.currentUser.id).subscribe(
-          user => this.currentUser = user
+        this.userService.getById(this.userProfile.id).subscribe(
+          retrievedUser => {
+            this.userProfile = retrievedUser;
+            this.authService.updateCurrentUser(retrievedUser);
+          }
         );
       },
       (errorRseponse) => {
@@ -98,18 +102,18 @@ export class ProfileComponent implements OnInit {
   }
 
   private applyFormValues() {
-    this.currentUser.name = this.form.get('name').value;
-    this.currentUser.email = this.form.get('email').value;
-    this.currentUser.registration = this.form.get('registration').value;
+    this.userProfile.name = this.form.get('name').value;
+    this.userProfile.email = this.form.get('email').value;
+    this.userProfile.registration = this.form.get('registration').value;
     if (this.form.get('cpf').value) {
-      this.currentUser.cpf = cpf_lib.strip(this.form.get('cpf').value);
+      this.userProfile.cpf = cpf_lib.strip(this.form.get('cpf').value);
     } else {
-      this.currentUser.cpf = '';
+      this.userProfile.cpf = '';
     }
-    this.currentUser.landline = this.stripPhoneNumbers(this.form.get('landline').value);
-    this.currentUser.cellphone = this.stripPhoneNumbers(this.form.get('cellphone').value);
-    this.currentUser.whatsapp = this.stripPhoneNumbers(this.form.get('whatsapp').value);
-    this.currentUser.simple_address = this.form.get('simple_address').value;
+    this.userProfile.landline = this.stripPhoneNumbers(this.form.get('landline').value);
+    this.userProfile.cellphone = this.stripPhoneNumbers(this.form.get('cellphone').value);
+    this.userProfile.whatsapp = this.stripPhoneNumbers(this.form.get('whatsapp').value);
+    this.userProfile.simple_address = this.form.get('simple_address').value;
   }
 
   private stripPhoneNumbers(phoneNumber: string) {

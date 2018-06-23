@@ -23,31 +23,31 @@
           <div class="box-body box-profile">
             <img class="profile-user-img img-responsive img-circle" src="../../../assets/images/user.svg" alt="User profile picture">
 
-            <h3 class="profile-username text-center">{{ currentUser.name }}</h3>
+            <h3 class="profile-username text-center">{{ userProfile.name }}</h3>
 
-            <p class="text-muted text-center">{{ userTypesDictionary[currentUser.type] }}</p>
+            <p class="text-muted text-center">{{ userTypesDictionary[userProfile.type] }}</p>
 
             <ul class="list-group list-group-unbordered">
               <li class="list-group-item">
-                <b>E-mail</b> <a class="pull-right">{{ currentUser.email }}</a>
+                <b>E-mail</b> <a class="pull-right">{{ userProfile.email }}</a>
               </li>
               <li class="list-group-item" *ngIf="!authService.isAdmin()">
-                <b>CPF</b> <a class="pull-right">{{ currentUser.cpf | cpf }}</a>
+                <b>CPF</b> <a class="pull-right">{{ userProfile.cpf | cpf }}</a>
               </li>
               <li class="list-group-item" *ngIf="authService.isCustomer()">
-                <b>Matrícula</b> <a class="pull-right">{{ currentUser.registration }}</a>
+                <b>Matrícula</b> <a class="pull-right">{{ userProfile.registration }}</a>
               </li>
               <li class="list-group-item">
-                <b>Telefone fixo</b> <a class="pull-right">{{ currentUser.landline | telefone}}</a>
+                <b>Telefone fixo</b> <a class="pull-right">{{ userProfile.landline | telefone}}</a>
               </li>
               <li class="list-group-item">
-                <b>Celular</b> <a class="pull-right">{{ currentUser.cellphone | telefone }}</a>
+                <b>Celular</b> <a class="pull-right">{{ userProfile.cellphone | telefone }}</a>
               </li>
               <li class="list-group-item">
-                <b>WhatsApp</b> <a class="pull-right">{{ currentUser.whatsapp | telefone }}</a>
+                <b>WhatsApp</b> <a class="pull-right">{{ userProfile.whatsapp | telefone }}</a>
               </li>
               <li class="list-group-item">
-                <b>Endereço</b> <a class="pull-right">{{ currentUser.simple_address }}</a>
+                <b>Endereço</b> <a class="pull-right">{{ userProfile.simple_address }}</a>
               </li>
             </ul>
 
@@ -61,7 +61,7 @@
       <div class="col-md-7">
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs">
-            <li class="active"><a href="#activity" data-toggle="tab">Agendas</a></li>
+            <li><a href="#activity" data-toggle="tab">Agendas</a></li>
             <li><a href="#timeline" data-toggle="tab">Atividades</a></li>
             <li><a href="#settings" data-toggle="tab">Editar</a></li>
           </ul>
