@@ -31,15 +31,10 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.min.js",
-        "../node_modules/fastclick/lib/fastclick.js",
-        "../node_modules/admin-lte/dist/js/adminlte.min.js",
-        "../node_modules/jquery-sparkline/jquery.sparkline.min.js",
-        "../node_modules/jvectormap/jquery-jvectormap.min.js",
         "../node_modules/jquery-slimscroll/jquery.slimscroll.js",
-        "../node_modules/chart.js/Chart.min.js",
-        "../node_modules/admin-lte/dist/js/pages/dashboard2.js"
-
+        "../node_modules/jquery-sparkline/jquery.sparkline.min.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+        "../node_modules/admin-lte/dist/js/adminlte.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
