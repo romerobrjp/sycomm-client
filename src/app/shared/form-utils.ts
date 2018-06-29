@@ -1,6 +1,11 @@
 import { FormGroup } from '@angular/forms';
 
 export class FormUtils {
+  // masks
+  static registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
+  static cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
+  static phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+
   public constructor(private form: FormGroup) {}
 
   public fieldClassForErrorOrSuccess(fieldName: string) {
