@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Activity} from '../activities/shared/activity';
+import {Activity} from '../activities/shared/activity.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {ConfirmationService} from 'primeng/api';
@@ -28,11 +28,11 @@ export class DashboardComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.list();
+    this.listEmployeeLastActivities();
   }
 
-  list() {
-    this.activityService.listUserActivities(this.authService.getCurrentUser().id).subscribe(
+  listEmployeeLastActivities() {
+    this.activityService.listLastUserActivities(this.authService.getCurrentUser().id, 5).subscribe(
       successResponse => {
         this.userActivities = successResponse;
       },
