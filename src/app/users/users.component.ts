@@ -114,8 +114,8 @@ export class UsersComponent implements OnInit {
   listPaginated() {
     this.userService.listPaginated(this.paginator.pageNumber, this.paginator.perPage, this.paginator.userType).subscribe(
       response => {
-        this.users = response['data'];
-        this.totalCount = response['total_count'];
+        this.users = response.json()['data'];
+        this.totalCount = response.json()['total_count'];
       },
       error => console.error('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );

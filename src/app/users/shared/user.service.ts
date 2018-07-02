@@ -1,46 +1,42 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-
-import { catchError, tap } from 'rxjs/operators';
-
 import { User } from './user.model';
+import { TokenService } from '../../shared/token.service';
 
 @Injectable()
 export class UserService {
-  public baseUrl = 'http://api.sycomm.com:3000/users';
-  private headers = new HttpHeaders({'Content-Type': 'application/json', 'Accept': 'application/vnd.sycomm.v1'});
+  urlResource = 'users';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: TokenService) {}
 
-  public listPaginated(page_number: number, per_page: number, userType: string): Observable<User[]> {
-    const url = `${this.baseUrl}/list_paginated?page_number=${page_number}&per_page=${per_page}&user_type=${userType}`;
+  listPaginated(page_number: number, per_page: number, userType: string): Observable<Response> {
+    const url = `${this.urlResource}/list_paginated?page_number=${page_number}&per_page=${per_page}&user_type=${userType}`;
 
-    return this.http.get<User[]>(url);
+    return this.http.get(url).catch(this.handleErrors);
   }
 
-  public getById(id: number): Observable<User> {
-    const url = `${this.baseUrl}/${id}`;
+  getById(id: number): Observable<User> {
+    const url = `${this.urlResource}/${id}`;
 
-    return this.http.get<User>(url);
+    return this.http.get(url).catch(this.handleErrors).map((response: Response) => UserService.responseToModel(response));
   }
 
-  public create(user: User): Observable<User> {
-    const url = `${this.baseUrl}`;
+  create(user: User): Observable<User> {
+    const url = `${this.urlResource}`;
 
-    return this.http.post<User>(url, user, { headers: this.headers });
+    return this.http.post(url, user).catch(this.handleErrors).map((response: Response) => UserService.responseToModel(response));
   }
 
-  public update(user: User): Observable<User> {
-    const url = `${this.baseUrl}/${user.id}`;
+  update(user: User): Observable<User> {
+    const url = `${this.urlResource}/${user.id}`;
 
-    return this.http.put<User>(url, user, { headers: this.headers });
+    return this.http.put(url, user).catch(this.handleErrors).map((response: Response) => UserService.responseToModel(response));
   }
 
-  public delete(id: number): Observable<{}  > {
-    const url = `${this.baseUrl}/${id}`;
+  delete(id: number): Observable<null> {
+    const url = `${this.urlResource}/${id}`;
 
-    return this.http.delete(url, { headers: this.headers});
+    return this.http.delete(url).catch(this.handleErrors).map(() => null);
   }
 
   // PRIVATE METHODS -----------------------------------------------------------
@@ -48,5 +44,78 @@ export class UserService {
   private handleErrors(error: Response) {
     console.error('Erro em UserService: ' + error);
     return Observable.throw(error);
+  }
+
+  static responseToModel(response: Response): User {
+    const userJson = response.json();
+
+    return new User(
+      userJson['id'],
+      userJson['name'],
+      userJson['type'],
+      userJson['created_at'],
+      userJson['updated_at'],
+      userJson['auth_token'],
+      userJson['email'],
+      userJson['cpf'],
+      userJson['landline'],
+      userJson['cellphone'],
+      userJson['whatsapp'],
+      userJson['simple_address'],
+      userJson['registration'],
+      userJson['password'],
+      userJson['password_confirmation'],
+      userJson['public_agency_id'],
+      userJson['public_office_id'],
+      userJson['address_id'],
+      userJson['encrypted_password'],
+      userJson['reset_password_token'],
+      userJson['reset_password_sent_at'],
+      userJson['sign_in_count'],
+      userJson['current_sign_in_at'],
+      userJson['last_sign_in_at'],
+      userJson['current_sign_in_ip'],
+      userJson['last_sign_in_ip'],
+    );
+  }
+
+  private responseToModels(response: Response): User[] {
+    let collection = response.json()['data'] as Array<any>;
+    let users: User[] = [];
+
+    collection.forEach(jsonEntity => {
+      let user = new User(
+        jsonEntity['id'],
+        jsonEntity['name'],
+        jsonEntity['type'],
+        jsonEntity['created_at'],
+        jsonEntity['updated_at'],
+        jsonEntity['auth_token'],
+        jsonEntity['email'],
+        jsonEntity['cpf'],
+        jsonEntity['landline'],
+        jsonEntity['cellphone'],
+        jsonEntity['whatsapp'],
+        jsonEntity['simple_address'],
+        jsonEntity['registration'],
+        jsonEntity['password'],
+        jsonEntity['password_confirmation'],
+        jsonEntity['public_agency_id'],
+        jsonEntity['public_office_id'],
+        jsonEntity['address_id'],
+        jsonEntity['encrypted_password'],
+        jsonEntity['reset_password_token'],
+        jsonEntity['reset_password_sent_at'],
+        jsonEntity['sign_in_count'],
+        jsonEntity['current_sign_in_at'],
+        jsonEntity['last_sign_in_at'],
+        jsonEntity['current_sign_in_ip'],
+        jsonEntity['last_sign_in_ip'],
+      );
+
+      users.push(user);
+    });
+
+    return users;
   }
 }
