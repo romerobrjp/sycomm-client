@@ -49,6 +49,8 @@ import { ActivityService } from './activities/shared/activity.service';
 import { AuthService } from './shared/auth.service';
 import { TokenService } from './shared/token.service';
 import { Angular2TokenService } from 'angular2-token';
+import { Dictionary } from './shared/dictionary';
+import { ErrorHandlerService } from './shared/error-handler.service';
 // Primefaces Services
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
@@ -128,7 +130,9 @@ import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
     Angular2TokenService,
     AuthService,
     TokenService,
-    AuthGuard
+    AuthGuard,
+    Dictionary,
+    ErrorHandlerService
   ],
   bootstrap: [ AppComponent ]
 })

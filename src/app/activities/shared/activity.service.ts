@@ -1,31 +1,87 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Activity} from './activity';
-import {User} from '../../users/shared/user.model';
+import {Activity} from './activity.model';
+import {TokenService} from '../../shared/token.service';
 
 @Injectable()
 export class ActivityService {
-  public baseUrl = 'http://api.sycomm.com:3000/activities';
-  private headers = new HttpHeaders({'Content-Type': 'application/json', 'Accept': 'application/vnd.sycomm.v1'});
+  urlResource = 'activities';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: TokenService) { }
 
-  public listUserActivities(userId): Observable<Activity[]> {
-    const url = `${this.baseUrl}`;
+  listLastUserActivities(userId, quant): Observable<Activity[]> {
+    const url = `${this.urlResource}`;
 
-    return this.http.get<Activity[]>(`${url}/list_user_activities?user_id=${userId}`);
+    return this.http.get(`${url}/list_last_user_activities?user_id=${userId}&quant=${quant}`)
+      .catch(this.handleErrors)
+      .map((response: Response) => this.responseToModels(response));
   }
 
-  public listUserActivitiesPaginated(userId: number, page_number: number, per_page: number): Observable<Activity[]> {
-    const url = `${this.baseUrl}/list_user_activities_paginated?user_id=${userId}&page_number=${page_number}&per_page=${per_page}`;
+  listUserActivitiesPaginated(userId: number, page_number: number, per_page: number): Observable<Response> {
+    const url = `${this.urlResource}/list_user_activities_paginated?user_id=${userId}&page_number=${page_number}&per_page=${per_page}`;
 
-    return this.http.get<Activity[]>(url);
+    return this.http.get(url).catch(this.handleErrors);
   }
 
-  public getById(id: number): Observable<Activity> {
-    const url = `${this.baseUrl}/${id}`;
+  getById(id: number): Observable<Activity> {
+    const url = `${this.urlResource}/${id}`;
 
-    return this.http.get<Activity>(url);
+    return this.http.get(url)
+      .catch(this.handleErrors)
+      .map((response: Response) => this.responseToModel(response));
+  }
+
+  update(act: Activity): Observable<Activity> {
+    const url = `${this.urlResource}/${act.id}`;
+
+    return this.http.put(url, act)
+      .catch(this.handleErrors)
+      .map((response: Response) => this.responseToModel(response));
+  }
+
+  private responseToModel(response: Response): Activity {
+    const jsonEntity = response.json();
+
+    return new Activity(
+      jsonEntity['id'],
+      jsonEntity['name'],
+      jsonEntity['annotations'],
+      jsonEntity['status'],
+      jsonEntity['activity_type'],
+      jsonEntity['user_id'],
+      jsonEntity['client_id'],
+      jsonEntity['client_name'],
+      jsonEntity['created_at'],
+      jsonEntity['updated_at'],
+    );
+  }
+
+  private responseToModels(response: Response): Array<Activity> {
+    const collection = response.json()['data'] as Array<any>;
+    const items: Activity[] = [];
+
+    collection.forEach(jsonEntity => {
+      const item = new Activity(
+        jsonEntity['id'],
+        jsonEntity['name'],
+        jsonEntity['annotations'],
+        jsonEntity['status'],
+        jsonEntity['activity_type'],
+        jsonEntity['user_id'],
+        jsonEntity['client_id'],
+        jsonEntity['client_name'],
+        jsonEntity['created_at'],
+        jsonEntity['updated_at'],
+      );
+
+      items.push(item);
+    });
+
+    return items;
+  }
+
+  private handleErrors(error: Response) {
+    console.error('Erro em UserService: ' + error);
+    return Observable.throw(error);
   }
 }

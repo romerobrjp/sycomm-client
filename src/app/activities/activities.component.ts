@@ -3,8 +3,9 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ActivatedRoute , Router} from '@angular/router';
 import { ActivityService } from './shared/activity.service';
-import { Activity } from './shared/activity';
+import { Activity } from './shared/activity.model';
 import { AuthService } from '../shared/auth.service';
+import {Dictionary} from '../shared/dictionary';
 
 @Component({
   selector: 'app-activities',
@@ -22,25 +23,14 @@ export class ActivitiesComponent implements OnInit {
   };
   totalCount = 0;
 
-  activityStatusDictionary = {
-    'not_started' : 'Não iniciada',
-    'in_progress' : 'Em progresso',
-    'finished' : 'Finalizada',
-    'closed' : 'Fechada'
-  };
-
-  activityTypesDictionary = {
-    'attendance' : 'Atendimento',
-    'offer' : 'Proposta',
-  };
-
   constructor(
     private activityService: ActivityService,
     public authService: AuthService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public dictionary: Dictionary
   ) {
     this.columns = [
       { field: 'name', header: 'Nome' },
@@ -56,11 +46,14 @@ export class ActivitiesComponent implements OnInit {
 
   listUserActivitiesPaginated() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // var currentUser;
+    // this.authService.currentUser().subscribe((r : Response) => currentUser = r.json()['data']);
 
     this.activityService.listUserActivitiesPaginated(currentUser['id'], this.paginator.pageNumber, this.paginator.perPage).subscribe(
       successResponse => {
-        this.userActivities = successResponse['data'];
-        this.totalCount = successResponse['total_count'];
+        this.userActivities = successResponse.json()['data'];
+        console.log(this.userActivities);
+        this.totalCount = successResponse.json()['total_count'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as atividades deste usuário:' + errorResponse);

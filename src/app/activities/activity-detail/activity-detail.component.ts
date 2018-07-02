@@ -3,10 +3,12 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Message} from 'primeng/components/common/api';
 import {FormUtils} from '../../shared/form-utils';
 import {Location} from '@angular/common';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Params, Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
-import {Activity} from '../shared/activity';
+import {Activity} from '../shared/activity.model';
 import {ActivityService} from '../shared/activity.service';
+import {AuthService} from '../../shared/auth.service';
+import {Dictionary} from '../../shared/dictionary';
 
 @Component({
   selector: 'app-activity-detail',
@@ -18,25 +20,16 @@ export class ActivityDetailComponent implements OnInit {
   form: FormGroup;
   formUtils: FormUtils;
   msgs: Message[] = [];
-  actTypes: Array<Object> = [
-    { id: '0', name: 'Atendimento'},
-    { id: '1', name: 'Proposta' },
-  ];
-  actStatuses: Array<Object> = [
-    { id: '0', name: 'Não iniciado'},
-    { id: '1', name: 'Em andamento' },
-    { id: '2', name: 'Finalizado' },
-    { id: '3', name: 'Fechado' },
-  ];
-  currentUser;
 
   constructor(
+    public authService: AuthService,
     private activityService: ActivityService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private location: Location,
     private formBuilder: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+    public dictionary: Dictionary
   ) {
     this.entity = new Activity(
       null,
@@ -66,7 +59,7 @@ export class ActivityDetailComponent implements OnInit {
       (params: Params) => this.activityService.getById(+params['id'])
     ).subscribe(
       responseSuccess => {
-        this.setActivity(responseSuccess);
+        this.setEntity(responseSuccess);
       },
       responseError => {
         console.error('Erro ao tentar carrgera atividade: ' + responseError);
@@ -74,12 +67,52 @@ export class ActivityDetailComponent implements OnInit {
     );
   }
 
-  setActivity(act: Activity) {
-    this.entity = act;
-    this.form.patchValue(act);
+  setEntity(e: Activity) {
+    this.entity = e;
+    this.form.patchValue(e);
   }
 
   goBack() {
     this.location.back();
+  }
+
+  private create() {};
+
+  private update(): void {
+    this.messageService.clear();
+    this.applyFormValues();
+
+    this.activityService.update(this.entity).subscribe(
+      (response) => {
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade atualizada'});
+      },
+      (errorRseponse) => {
+        for (const [key, value] of Object.entries(errorRseponse.error.errors)) {
+          for (const [errorKey, errorMessage] of Object.entries(value)) {
+            this.messageService.add({
+              key: 'activity_detail_messages',
+              severity: 'error',
+              summary: Activity.attributesDictionary[key],
+              detail: errorMessage
+            });
+          }
+        }
+      }
+    );
+  }
+
+  private createOrUpdate() {
+    if (this.entity.id) {
+      this.update();
+    } else {
+      this.create();
+    }
+  }
+
+  private applyFormValues() {
+    this.entity.name = this.form.get('name').value;
+    this.entity.annotations = this.form.get('annotations').value;
+    this.entity.status = +this.form.get('status').value;
+    this.entity.activity_type = +this.form.get('activity_type').value;
   }
 }

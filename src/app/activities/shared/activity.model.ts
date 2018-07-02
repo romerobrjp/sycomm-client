@@ -11,4 +11,14 @@ export class Activity {
     public created_at: Date,
     public updated_at: Date
   ) {}
+
+  static attributesDictionary = {
+    'name' : 'Nome',
+    'annotations' : 'Anotaçoes',
+    'status' : 'Status',
+    'activity_type' : 'Tipo',
+    'user_id' : 'Dono',
+    'client_id' : 'Cliente ID',
+    'client_name' : 'Nome do cliente',
+  };
 }

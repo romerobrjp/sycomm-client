@@ -38,8 +38,8 @@
     <tr>
       <td>{{ activity.name }}</td>
       <td>{{ activity.annotations }}</td>
-      <td>{{ activityTypesDictionary[activity.activity_type] }}</td>
-      <td>{{ activityStatusDictionary[activity.status] }}</td>
+      <td>{{ dictionary.activityTypes[activity.activity_type] }}</td>
+      <td>{{ dictionary.activityStatuses[activity.status] }}</td>
 
       <td>
         <a [routerLink]="['/activities', activity.id]" class="btn btn-info">

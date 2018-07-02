@@ -13,7 +13,7 @@
           class="form-control"
           placeholder=""
           type="text"
-          disabled="isEmployee()"
+          disabled="!authService.isAdmin()"
         />
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
@@ -27,9 +27,9 @@
           id="activity_type"
           class="form-control"
           formControlName="activity_type"
-          disabled="isEmployee()"
+          disabled="!authService.isAdmin()"
         >
-          <option *ngFor="let option of actTypes" [value]="option.id">{{ option.name }}</option>
+          <option *ngFor="let option of dictionary.activitytTypesSelect" [value]="option.value">{{ option.text }}</option>
         </select>
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('activity_type')">
@@ -44,7 +44,7 @@
           class="form-control"
           formControlName="status"
         >
-          <option *ngFor="let option of actStatuses" [value]="option.id">{{ option.name }}</option>
+          <option *ngFor="let option of dictionary.activitytStatusesSelect" [value]="option.value">{{ option.text }}</option>
         </select>
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('status')">
@@ -59,9 +59,17 @@
           formControlName="annotations"
           class="form-control"
           placeholder="Anotações da atividade aqui..."
-          rows="9"
-          type="text"
+          rows="5"
         ></textarea>
+
+        <br />
+
+        <label for="customer" class="control-label">Cliente</label> <br>
+        <a id="customer"
+           class="control-label"
+           [routerLink]="['/users', entity.client_id]"
+           [queryParams]="{ 'userType': 'Customer'}"
+        ><strong>{{ entity.client_name }}</strong></a>
       </div>
     </div>
 
@@ -69,7 +77,7 @@
 
     <div class="row">
       <div class="col-lg-6 col-lg-offset-2">
-        <p-messages [(value)]="msgs" key="user_detail_messages"></p-messages>
+        <p-messages [(value)]="msgs" key="activity_detail_messages"></p-messages>
       </div>
     </div>
 
