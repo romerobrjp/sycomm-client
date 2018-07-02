@@ -46,12 +46,15 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.currentUser().subscribe(
-      retrievedCurrentUser => {
-        this.userProfile = retrievedCurrentUser;
-        this.form.patchValue(this.userProfile);
-      }
-    );
+    // this.authService.getCurrentUser().subscribe(
+    //   retrievedCurrentUser => {
+    //     this.userProfile = retrievedCurrentUser;
+    //     this.form.patchValue(this.userProfile);
+    //   }
+    // );
+
+    this.userProfile = this.authService.getCurrentUser();
+    this.form.patchValue(this.userProfile);
   }
 
   update(): void {
@@ -64,7 +67,6 @@ export class ProfileComponent implements OnInit {
         this.userService.getById(this.userProfile.id).subscribe(
           retrievedUser => {
             this.userProfile = retrievedUser;
-            this.authService.updateCurrentUser(retrievedUser);
           }
         );
       },

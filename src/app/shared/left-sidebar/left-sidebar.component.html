@@ -1,5 +1,5 @@
 <!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar" *ngIf="authService.userSignedIn()">
+<aside class="main-sidebar" *ngIf="authService.userSignedIn() && authService.getCurrentUser()">
   <!-- sidebar: style can be found in sidebar.less -->
   <section class="sidebar">
     <!-- Sidebar user panel -->

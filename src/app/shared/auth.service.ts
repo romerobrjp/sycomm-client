@@ -3,10 +3,16 @@ import {Observable} from 'rxjs/Observable';
 import {User} from '../users/shared/user.model';
 import {TokenService} from './token.service';
 import {ErrorHandlerService} from './error-handler.service';
+import {SignInData} from 'angular2-token';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
-  constructor(private tokenService: TokenService, private errorHandlerService: ErrorHandlerService) {}
+  private currentUser: User;
+
+  constructor(private tokenService: TokenService, private errorHandlerService: ErrorHandlerService) {
+    this.refreshCurrentUser();
+  }
 
   signUp(user: User): Observable<Response> {
     return this.tokenService.registerAccount(user as any).catch(ErrorHandlerService.handleResponseErrors);
@@ -18,7 +24,9 @@ export class AuthService {
       password: password
     };
 
-    return this.tokenService.signIn(signInData).catch(ErrorHandlerService.handleResponseErrors);
+    return this.tokenService.signIn(signInData).map(
+      res => (this.currentUser = res.json()['data'] as User)
+    ).catch(ErrorHandlerService.handleResponseErrors);
   }
 
   signOut(): Observable<Response> {
@@ -29,34 +37,37 @@ export class AuthService {
     return this.tokenService.userSignedIn();
   }
 
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('currentUser'));
+  getCurrentUser(): User {
+    if (this.currentUser === null || this.currentUser === undefined) {
+      this.refreshCurrentUser();
+    }
+    return this.currentUser;
   }
 
-  isAdmin(): boolean {
-    return this.getCurrentUser().type === 'Admin';
-  }
-
-  isEmployee(): boolean {
-    return this.getCurrentUser().type === 'Employee';
-  }
-
-  isCustomer(): boolean {
-    return this.getCurrentUser().type === 'Customer';
-  }
-
-  updateCurrentUser(u: User): void {
-    localStorage.setItem('currentUser', JSON.stringify(u));
-  }
-
-  currentUser(): Observable<User> {
+  // vai buscar no servidor via validateToken()
+  fetchCurrentUser(): Observable<User> {
     return this.tokenService.validateToken().map(
       res => res.json()['data'] as User
     );
   }
 
-  handleErrors(error: Response) {
-    console.log('AuthService.handleErrors: ', error);
-    return Observable.throw(error);
+  refreshCurrentUser(): void {
+    this.fetchCurrentUser().subscribe(
+      retrievedCurrentUser => {
+        this.currentUser = retrievedCurrentUser;
+      }
+    );
+  }
+
+  isAdmin(): boolean {
+    return this.getCurrentUser()['type'] === 'Admin';
+  }
+
+  isEmployee(): boolean {
+    return this.getCurrentUser()['type'] === 'Employee';
+  }
+
+  isCustomer(): boolean {
+    return this.getCurrentUser()['type'] === 'Customer';
   }
 }

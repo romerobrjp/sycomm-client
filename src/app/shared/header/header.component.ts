@@ -12,20 +12,9 @@ import { TokenService } from '../token.service';
 export class HeaderComponent {
   currentUser;
 
-  constructor(private authService: AuthService,
-              private tokenService: TokenService,
-              private router: Router,
-              private userService: UserService) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  }
+  constructor(public authService: AuthService) {}
 
   signOut() {
-    this.authService.signOut().subscribe(
-      () => localStorage.clear()
-    );
-  }
-
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('currentUser'));
+    this.authService.signOut();
   }
 }

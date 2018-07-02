@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   }
 
   listEmployeeLastActivities() {
-    this.activityService.listLastUserActivities(this.authService.getCurrentUser().id, 5).subscribe(
+    this.activityService.listLastUserActivities(this.authService.getCurrentUser()['id'], 5).subscribe(
       successResponse => {
         this.userActivities = successResponse;
       },

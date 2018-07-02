@@ -45,11 +45,7 @@ export class ActivitiesComponent implements OnInit {
   }
 
   listUserActivitiesPaginated() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    // var currentUser;
-    // this.authService.currentUser().subscribe((r : Response) => currentUser = r.json()['data']);
-
-    this.activityService.listUserActivitiesPaginated(currentUser['id'], this.paginator.pageNumber, this.paginator.perPage).subscribe(
+    this.activityService.listUserActivitiesPaginated(this.authService.getCurrentUser()['id'], this.paginator.pageNumber, this.paginator.perPage).subscribe(
       successResponse => {
         this.userActivities = successResponse.json()['data'];
         console.log(this.userActivities);

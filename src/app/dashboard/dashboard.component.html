@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="authService.getCurrentUser()">
   <h1 class="page-header text-center">
     <strong> Dashboard </strong>
   </h1>
