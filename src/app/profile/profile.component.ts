@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import * as cpf_lib from '@fnando/cpf';
 import {AuthService} from '../shared/auth.service';
 import {User} from '../users/shared/user.model';
+import {Dictionary} from '../shared/dictionary';
 
 @Component({
   selector: 'app-profile',
@@ -17,26 +18,6 @@ export class ProfileComponent implements OnInit {
   userProfile: User;
   form: FormGroup;
   formUtils: FormUtils;
-  userTypesDictionary = {
-    'Admin' : 'Admin',
-    'Employee' : 'Funcionário',
-    'Customer' : 'Cliente'
-  };
-  attributesDictionary = {
-    'registration' : 'Matrícula',
-    'name' : 'Nome',
-    'email' : 'E-mail',
-    'password' : 'Senha',
-    'password_confirmation' : 'Confirmação de Senha',
-    'cpf' : 'CPF',
-    'landline' : 'Telefone fixo',
-    'cellphone' : 'Celular',
-    'whatsapp' : 'WhatsApp',
-    'simples_adress' : 'Endereço',
-    'type' : 'Tipo de usuário',
-    'public_agency' : 'Organização',
-    'public_office' : 'Cargo'
-  };
   // masks
   registrationMask = FormUtils.registrationMask;
   cpfMask = FormUtils.cpfMask;
@@ -47,7 +28,8 @@ export class ProfileComponent implements OnInit {
     public authService: AuthService,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    public dictionary: Dictionary
   ) {
     this.form = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -64,9 +46,9 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.getById(this.authService.getCurrentUser()['id']).subscribe(
-      retrievedUser => {
-        this.userProfile = retrievedUser;
+    this.authService.currentUser().subscribe(
+      retrievedCurrentUser => {
+        this.userProfile = retrievedCurrentUser;
         this.form.patchValue(this.userProfile);
       }
     );
@@ -92,7 +74,7 @@ export class ProfileComponent implements OnInit {
             this.messageService.add({
               key: 'user_detail_messages',
               severity: 'error',
-              summary: this.attributesDictionary[key],
+              summary: this.dictionary.userTypes[key],
               detail: errorMessage
             });
           }
