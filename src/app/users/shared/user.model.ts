@@ -17,7 +17,6 @@ export class User {
     public password_confirmation?: string,
     public public_agency_id?: number,
     public public_office_id?: number,
-    public public_office?: Object,
     public address_id?: number,
     public encrypted_password?: string,
     public reset_password_token?: string,
@@ -28,4 +27,20 @@ export class User {
     public current_sign_in_ip?: string,
     public last_sign_in_ip?: string
   ) {}
+
+  static attributesDictionary = {
+    'registration' : 'Matrícula',
+    'name' : 'Nome',
+    'email' : 'E-mail',
+    'password' : 'Senha',
+    'password_confirmation' : 'Confirmação de Senha',
+    'cpf' : 'CPF',
+    'landline' : 'Telefone fixo',
+    'cellphone' : 'Celular',
+    'whatsapp' : 'WhatsApp',
+    'simples_adress' : 'Endereço',
+    'type' : 'Tipo de usuário',
+    'public_agency' : 'Organização',
+    'public_office' : 'Cargo'
+  };
 }
