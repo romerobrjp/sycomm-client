@@ -3,20 +3,20 @@ import { ActivatedRoute, Params, Router, NavigationExtras } from '@angular/route
 import { Location } from '@angular/common';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
-import { User } from '../shared/user.model';
-import { UserService } from '../shared/user.service';
-import { PublicOffice } from '../../public_offices/shared/public_office.model';
-import { PublicOfficeService } from '../../public_offices/shared/public_office.service';
-import { PublicAgency } from '../../public_agencies/shared/public_agency.model';
-import { PublicAgencyService } from '../../public_agencies/shared/public_agency.service';
-
+import { AuthService } from '../../shared/auth.service';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { PublicAgencyService } from '../../public_agencies/shared/public_agency.service';
+import { PublicOfficeService } from '../../public_offices/shared/public_office.service';
+import { UserService } from '../shared/user.service';
+
+import { User } from '../shared/user.model';
+import { PublicOffice } from '../../public_offices/shared/public_office.model';
+import { PublicAgency } from '../../public_agencies/shared/public_agency.model';
+
 import { Message } from 'primeng/components/common/api';
-
+import { Dictionary } from '../../shared/dictionary';
 import { FormUtils} from '../../shared/form-utils';
-
 import * as cpf_lib from '@fnando/cpf';
-import {AuthService} from '../../shared/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -31,33 +31,14 @@ export class UserDetailComponent implements OnInit {
   form: FormGroup;
   formUtils: FormUtils;
   msgs: Message[] = [];
-  userTypes: Array<Object> = [
-    { value: 'Admin', text: 'Administrador'},
-    { value: 'Employee', text: 'Funcionário' },
-    { value: 'Customer', text: 'Cliente' }
-  ];
-  attributesDictionary = {
-    'registration' : 'Matrícula',
-    'name' : 'Nome',
-    'email' : 'E-mail',
-    'password' : 'Senha',
-    'password_confirmation' : 'Confirmação de Senha',
-    'cpf' : 'CPF',
-    'landline' : 'Telefone fixo',
-    'cellphone' : 'Celular',
-    'whatsapp' : 'WhatsApp',
-    'simples_adress' : 'Endereço',
-    'type' : 'Tipo de usuário',
-    'public_agency' : 'Organização',
-    'public_office' : 'Cargo'
-  };
   userType: string;
   // masks
-  registrationMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
-  cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
-  phoneMask = ['(', /\d/, /\d/, ')', ' ', /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  registrationMask = FormUtils.registrationMask;
+  cpfMask = FormUtils.cpfMask;
+  phoneMask = FormUtils.phoneMask;
 
   constructor(
+    public dictionary: Dictionary,
     private userService: UserService,
     private publicOfficeService: PublicOfficeService,
     private publicAgencyService: PublicAgencyService,
@@ -66,7 +47,7 @@ export class UserDetailComponent implements OnInit {
     private location: Location,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    public authService: AuthService
+    public authService: AuthService,
   ) {
     this.user = new User(
       null,
@@ -173,13 +154,13 @@ export class UserDetailComponent implements OnInit {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário atualizado!'});
         // this.router.navigate(['/users'], navigationExtras);
       },
-      (errorRseponse) => {
-        for (const [key, value] of Object.entries(errorRseponse.error.errors)) {
+      (errorResponse) => {
+        for (const [key, value] of Object.entries(errorResponse.json().errors)) {
           for (const [errorKey, errorMessage] of Object.entries(value)) {
             this.messageService.add({
               key: 'user_detail_messages',
               severity: 'error',
-              summary: this.attributesDictionary[key],
+              summary: User.attributesDictionary[key],
               detail: errorMessage
             });
           }
@@ -215,16 +196,8 @@ export class UserDetailComponent implements OnInit {
     this.form.patchValue(user);
   }
 
-  getUserTypeName() {
-    if (this.authService.isAdmin()) {
-      return 'Administrador';
-    }
-    if (this.authService.isEmployee()) {
-      return 'Funcionário';
-    }
-    if (this.authService.isCustomer()) {
-      return 'Cliente';
-    }
+  getCurrentUserTypeName(): string {
+    return this.dictionary.userTypes[this.user.type];
   }
 
   private applyFormValues() {
@@ -250,5 +223,17 @@ export class UserDetailComponent implements OnInit {
     } else {
       return '';
     }
+  }
+
+  private isAdmin(): boolean {
+    return this.userType === 'Admin';
+  }
+
+  private isEmployee(): boolean {
+    return this.userType === 'Employee';
+  }
+
+  private isCustomer(): boolean {
+    return this.userType === 'Customer';
   }
 }

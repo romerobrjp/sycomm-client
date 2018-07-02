@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <h1 class="page-header text-center">
-    <strong> {{ user.id ? 'Edição' : 'Cadastro' }} de {{ getUserTypeName() }} </strong>
+    <strong> {{ user.id ? 'Edição' : 'Cadastro' }} de {{ dictionary.userTypes[userType] }} </strong>
   </h1>
 
   <form [formGroup]="form" class="text-center" (ngSubmit)="createOrUpdate()">
@@ -21,8 +21,8 @@
       </div>
 
       <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('email')">
-        <label for="email" class="control-label" *ngIf="authService.isAdmin() || authService.isEmployee()">E-mail *</label>
-        <label for="email" class="control-label" *ngIf="authService.isCustomer()">E-mail</label>
+        <label for="email" class="control-label" *ngIf="isAdmin() || isEmployee()">E-mail *</label>
+        <label for="email" class="control-label" *ngIf="isCustomer()">E-mail</label>
         <input
           id="email"
           formControlName="email"
@@ -32,8 +32,8 @@
         />
       </div>
 
-      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')" *ngIf="authService.isCustomer()">
-        <label for="cpf" class="control-label" *ngIf="authService.isCustomer()">CPF *</label>
+      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')" *ngIf="isCustomer()">
+        <label for="cpf" class="control-label" *ngIf="isCustomer()">CPF *</label>
         <input
           id="cpf"
           formControlName="cpf"
@@ -43,13 +43,13 @@
           [textMask]="{ mask: cpfMask }"
         />
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('cpf') && authService.isCustomer()">
+        <div class="text-danger" *ngIf="formUtils.showFieldError('cpf') && isCustomer()">
           <div *ngIf="form.get('cpf').errors.required"><strong>CPF</strong> é obrigatório</div>
         </div>
       </div>
     </div>
 
-    <div class="row" *ngIf="authService.isCustomer()">
+    <div class="row" *ngIf="userType === 'Customer'">
       <div class="form-group col-lg-2 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('registration')">
         <label for="registration" class="control-label">Matrícula</label>
         <input
@@ -111,8 +111,8 @@
       </div>
 
       <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
-        <label for="cellphone" class="control-label" *ngIf="authService.isAdmin() || authService.isEmployee()">Celular</label>
-        <label for="cellphone" class="control-label" *ngIf="authService.isCustomer()">Celular *</label>
+        <label for="cellphone" class="control-label" *ngIf="isAdmin() || isEmployee()">Celular</label>
+        <label for="cellphone" class="control-label" *ngIf="isCustomer()">Celular *</label>
         <input
           id="cellphone"
           formControlName="cellphone"
@@ -122,7 +122,7 @@
           [textMask]="{ mask: phoneMask }"
         />
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone') && authService.isCustomer()" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+        <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone')" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
           <div *ngIf="form.get('cellphone').errors.required"><strong>Celular</strong> é obrigatório</div>
         </div>
       </div>
@@ -158,11 +158,11 @@
         <label for="type" class="control-label">Tipo *</label>
         <select
           id="type"
-          [disabled]="!authService.isAdmin()"
+          [disabled] ="!authService.isAdmin()"
           class="form-control"
           formControlName="type"
         >
-          <option *ngFor="let option of userTypes" [value]="option.value">{{ option.text }}</option>
+          <option *ngFor="let option of dictionary.userTypesSelect" [value]="option.value">{{ option.text }}</option>
         </select>
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('type')">
