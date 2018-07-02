@@ -12,7 +12,8 @@ export class AppComponent {
       apiBase: 'http://api.sycomm.com:3000',
       globalOptions: {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.sycomm.v1'
         }
       }
     });
