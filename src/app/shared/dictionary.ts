@@ -1,4 +1,4 @@
-1import {Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class Dictionary {
@@ -16,14 +16,14 @@ export class Dictionary {
   };
 
   activitytTypesSelect: Array<Object> = [
-    { value: '0', text: 'Atendimento'},
-    { value: '1', text: 'Proposta' },
+    { value: 'attendance', text: 'Atendimento'},
+    { value: 'offer', text: 'Proposta' },
   ];
   activitytStatusesSelect: Array<Object> = [
-    { value: '0', text: 'Não iniciado'},
-    { value: '1', text: 'Em andamento' },
-    { value: '2', text: 'Finalizado' },
-    { value: '3', text: 'Fechado' },
+    { value: 'not_started', text: 'Não iniciado'},
+    { value: 'in_progress', text: 'Em andamento' },
+    { value: 'finished', text: 'Finalizado' },
+    { value: 'closed', text: 'Fechado' },
   ];
 
   // USER
