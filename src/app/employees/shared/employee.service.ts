@@ -8,37 +8,37 @@ import { Employee } from './employee.model';
 
 @Injectable()
 export class EmployeeService {
-  public baseUrl = 'http://api.sycomm.com:3000/employees';
+  public resourceUrl = '/employees';
   private headers = new HttpHeaders({'Content-Type': 'application/json', 'Accept': 'application/vnd.sycomm.v1'});
 
   constructor(private http: HttpClient) { }
 
   public listPaginated(page_number: number, per_page: number): Observable<Employee[]> {
-    const url = `${this.baseUrl}/list_paginated?page_number=${page_number}&per_page=${per_page}`;
+    const url = `${this.resourceUrl}/list_paginated?page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get<Employee[]>(url);
   }
 
   public getById(id: number): Observable<Employee> {
-    const url = `${this.baseUrl}/${id}`;
+    const url = `${this.resourceUrl}/${id}`;
 
     return this.http.get<Employee>(url);
   }
 
   public create(employee: Employee): Observable<Employee> {
-    const url = `${this.baseUrl}`;
+    const url = `${this.resourceUrl}`;
 
     return this.http.post<Employee>(url, employee, { headers: this.headers });
   }
 
   public update(employee: Employee): Observable<Employee> {
-    const url = `${this.baseUrl}/${employee.id}`;
+    const url = `${this.resourceUrl}/${employee.id}`;
 
     return this.http.put<Employee>(url, employee, { headers: this.headers });
   }
 
   public delete(id: number): Observable<{}  > {
-    const url = `${this.baseUrl}/${id}`;
+    const url = `${this.resourceUrl}/${id}`;
 
     return this.http.delete(url, { headers: this.headers});
   }
