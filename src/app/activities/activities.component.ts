@@ -48,7 +48,6 @@ export class ActivitiesComponent implements OnInit {
     this.activityService.listUserActivitiesPaginated(this.authService.getCurrentUser()['id'], this.paginator.pageNumber, this.paginator.perPage).subscribe(
       successResponse => {
         this.userActivities = successResponse.json()['data'];
-        console.log(this.userActivities);
         this.totalCount = successResponse.json()['total_count'];
       },
       errorResponse => {
