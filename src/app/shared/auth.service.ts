@@ -3,8 +3,6 @@ import {Observable} from 'rxjs/Observable';
 import {User} from '../users/shared/user.model';
 import {TokenService} from './token.service';
 import {ErrorHandlerService} from './error-handler.service';
-import {SignInData} from 'angular2-token';
-import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
