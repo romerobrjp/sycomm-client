@@ -65,10 +65,11 @@
         <br />
 
         <label for="customer" class="control-label">Cliente</label> <br>
-        <a id="customer"
-           class="control-label"
-           [routerLink]="['/users', entity.client_id]"
-           [queryParams]="{ 'userType': 'Customer'}"
+        <a
+          id="customer"
+          class="control-label"
+          [routerLink]="['/users', entity?.client_id || 0]"
+          [queryParams]="{ 'userType': 'Customer'}"
         ><strong>{{ entity.client_name }}</strong></a>
       </div>
     </div>
