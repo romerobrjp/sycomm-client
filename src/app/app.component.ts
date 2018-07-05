@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TokenService } from './shared/token.service';
+import { AuthService } from './shared/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { TokenService } from './shared/token.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public constructor(private tokenService: TokenService) {
+  constructor(private tokenService: TokenService, private authService: AuthService) {
     this.tokenService.init({
       apiBase: 'http://api.sycomm.com:3000',
       globalOptions: {
@@ -17,5 +18,7 @@ export class AppComponent {
         }
       }
     });
+
+    this.authService.refreshCurrentUser();
   }
 }
