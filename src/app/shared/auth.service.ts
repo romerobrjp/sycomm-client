@@ -8,9 +8,7 @@ import {ErrorHandlerService} from './error-handler.service';
 export class AuthService {
   private currentUser: User;
 
-  constructor(private tokenService: TokenService, private errorHandlerService: ErrorHandlerService) {
-    this.refreshCurrentUser();
-  }
+  constructor(private tokenService: TokenService, private errorHandlerService: ErrorHandlerService) {}
 
   signUp(user: User): Observable<Response> {
     return this.tokenService.registerAccount(user as any).catch(ErrorHandlerService.handleResponseErrors);
