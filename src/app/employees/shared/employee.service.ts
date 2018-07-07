@@ -1,6 +1,7 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 
 import { catchError, tap } from 'rxjs/operators';
 
@@ -47,6 +48,6 @@ export class EmployeeService {
 
   private handleErrors(error: Response) {
     console.error('Erro em EmployeeService: ' + error);
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 }

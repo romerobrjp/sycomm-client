@@ -1,32 +1,39 @@
+
+import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {User} from '../users/shared/user.model';
 import {TokenService} from './token.service';
 import {ErrorHandlerService} from './error-handler.service';
+import {Response} from '@angular/http';
 
 @Injectable()
 export class AuthService {
   private currentUser: User;
 
-  constructor(private tokenService: TokenService, private errorHandlerService: ErrorHandlerService) {}
+  constructor(private tokenService: TokenService) {}
 
   signUp(user: User): Observable<Response> {
-    return this.tokenService.registerAccount(user as any).catch(ErrorHandlerService.handleResponseErrors);
+    return this.tokenService.registerAccount(user as any).pipe(catchError(ErrorHandlerService.handleResponseErrors));
   }
 
-  signIn(uid: string, password: string): Observable<Response> {
+  signIn(uid: string, password: string): Observable<User> {
     const signInData = {
       email: uid,
       password: password
     };
 
-    return this.tokenService.signIn(signInData).map(
-      res => (this.currentUser = res.json()['data'] as User)
-    ).catch(ErrorHandlerService.handleResponseErrors);
+    return this.tokenService.signIn(signInData).pipe(
+      map(res => {
+        // console.log(`signIn res.json(): ${JSON.stringify(res.json())}`);
+        return (this.currentUser = res.json()['data'] as User)
+      }),
+      catchError(ErrorHandlerService.handleResponseErrors)
+    );
   }
 
   signOut(): Observable<Response> {
-    return this.tokenService.signOut().catch(ErrorHandlerService.handleResponseErrors);
+    return this.tokenService.signOut().pipe(catchError(ErrorHandlerService.handleResponseErrors));
   }
 
   userSignedIn(): boolean {
@@ -34,36 +41,48 @@ export class AuthService {
   }
 
   getCurrentUser(): User {
-    if (this.currentUser === null || this.currentUser === undefined) {
-      this.refreshCurrentUser();
+    // return this.currentUser;
+    if (this.currentUser) {
+      console.log(`this.currentUser ja existe: ${JSON.stringify(this.currentUser)}`);
+      return this.currentUser;
     }
-    return this.currentUser;
+    else {
+      this.tokenService.validateToken().subscribe(
+        (success) => {
+          console.log(`response.json()['data']: ${success.json()['data']}`);
+          this.currentUser = success.json()['data'] as User;
+          return this.currentUser;
+        },
+        (error) => {
+          console.log(`error.json(): ${error.json()}`);
+        }
+      );
+    }
   }
 
-  // vai buscar no servidor via validateToken()
-  fetchCurrentUser(): Observable<User> {
-    return this.tokenService.validateToken().map(
-      res => res.json()['data'] as User
-    );
-  }
-
-  refreshCurrentUser(): void {
-    this.fetchCurrentUser().subscribe(
-      retrievedCurrentUser => {
-        this.currentUser = retrievedCurrentUser;
-      }
-    );
-  }
+  // refreshCurrentUser(): void {
+  //   this.tokenService.validateToken().pipe(
+  //     map(
+  //       res => {
+  //         console.log(`refreshCurrentUser response.json()['data']: ${res.json()['data']}`);
+  //         this.currentUser = res.json()['data'] as User;
+  //       }
+  //     )
+  //   );
+  // }
 
   isAdmin(): boolean {
-    return this.getCurrentUser()['type'] === 'Admin';
+    console.log(`this.isAdmin: ${JSON.stringify(this.getCurrentUser())}`);
+    return this.getCurrentUser().type === 'Admin';
   }
 
   isEmployee(): boolean {
-    return this.getCurrentUser()['type'] === 'Employee';
+    console.log(`this.isEmployee: ${JSON.stringify(this.getCurrentUser())}`);
+    return this.getCurrentUser().type === 'Employee';
   }
 
   isCustomer(): boolean {
-    return this.getCurrentUser()['type'] === 'Customer';
+    console.log(`this.isCustomer: ${JSON.stringify(this.getCurrentUser())}`);
+    return this.getCurrentUser().type === 'Customer';
   }
 }

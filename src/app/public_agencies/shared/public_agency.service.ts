@@ -1,5 +1,7 @@
+
+import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {PublicAgency} from './public_agency.model';
 import {TokenService} from '../../shared/token.service';
 
@@ -10,7 +12,7 @@ export class PublicAgencyService {
   constructor(private http: TokenService) { }
 
   public getAll(): Observable<PublicAgency[]> {
-    return this.http.get(this.resourceUrl).catch(null).map((response: Response) => this.responseToModels(response));
+    return this.http.get(this.resourceUrl).pipe(catchError(null),map((response: Response) => this.responseToModels(response)),);
   }
 
   private responseToModels(response: Response): Array<PublicAgency> {

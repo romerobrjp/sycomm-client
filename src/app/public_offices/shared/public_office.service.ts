@@ -1,5 +1,7 @@
+
+import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {PublicOffice} from './public_office.model';
 import {TokenService} from '../../shared/token.service';
 
@@ -10,7 +12,7 @@ export class PublicOfficeService {
   constructor(private http: TokenService) { }
 
   public getAll(): Observable<PublicOffice[]> {
-    return this.http.get(this.resourceUrl).catch(null).map((response: Response) => this.responseToModels(response));
+    return this.http.get(this.resourceUrl).pipe(catchError(null),map((response: Response) => this.responseToModels(response)),);
   }
 
   private responseToModels(response: Response): Array<PublicOffice> {

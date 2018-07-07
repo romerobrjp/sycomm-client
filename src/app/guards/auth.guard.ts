@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 // domestic imports
 import { AuthService } from './../shared/auth.service';
 

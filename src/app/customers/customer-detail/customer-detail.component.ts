@@ -1,3 +1,5 @@
+
+import {switchMap} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -93,9 +95,9 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.switchMap(
+    this.route.params.pipe(switchMap(
       (params: Params) => this.customerService.getById(+params['id'])
-    ).subscribe(
+    )).subscribe(
       customer => {
         if (customer) {
           this.setCustomer(customer);

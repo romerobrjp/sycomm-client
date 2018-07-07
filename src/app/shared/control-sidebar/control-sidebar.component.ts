@@ -8,7 +8,7 @@ import { AuthService } from './../auth.service';
 })
 export class ControlSidebarComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit() {
   }

@@ -1,7 +1,11 @@
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
+
+import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
 import {Activity} from './activity.model';
 import {TokenService} from '../../shared/token.service';
+import {Response} from '@angular/http';
 
 @Injectable()
 export class ActivityService {
@@ -12,31 +16,34 @@ export class ActivityService {
   listLastUserActivities(userId, quant): Observable<Activity[]> {
     const url = `${this.urlResource}`;
 
-    return this.http.get(`${url}/list_last_user_activities?user_id=${userId}&quant=${quant}`)
-      .catch(this.handleErrors)
-      .map((response: Response) => this.responseToModels(response));
+    return this.http.get(`${url}/list_last_user_activities?user_id=${userId}&quant=${quant}`).pipe(
+      catchError(this.handleErrors),
+      map((response: Response) => this.responseToModels(response)),
+    );
   }
 
   listUserActivitiesPaginated(userId: number, page_number: number, per_page: number): Observable<Response> {
     const url = `${this.urlResource}/list_user_activities_paginated?user_id=${userId}&page_number=${page_number}&per_page=${per_page}`;
 
-    return this.http.get(url).catch(this.handleErrors);
+    return this.http.get(url).pipe(catchError(this.handleErrors));
   }
 
   getById(id: number): Observable<Activity> {
     const url = `${this.urlResource}/${id}`;
 
-    return this.http.get(url)
-      .catch(this.handleErrors)
-      .map((response: Response) => this.responseToModel(response));
+    return this.http.get(url).pipe(
+      catchError(this.handleErrors),
+      map((response: Response) => this.responseToModel(response))
+    );
   }
 
   update(act: Activity): Observable<Activity> {
     const url = `${this.urlResource}/${act.id}`;
 
-    return this.http.put(url, act)
-      .catch(this.handleErrors)
-      .map((response: Response) => this.responseToModel(response));
+    return this.http.put(url, act).pipe(
+      catchError(this.handleErrors),
+      map((response: Response) => this.responseToModel(response))
+    );
   }
 
   private responseToModel(response: Response): Activity {
@@ -82,6 +89,6 @@ export class ActivityService {
 
   private handleErrors(error: Response) {
     console.error('Erro em UserService: ' + error);
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 }

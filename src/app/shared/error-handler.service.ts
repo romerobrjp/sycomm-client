@@ -1,6 +1,7 @@
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {MessageService} from 'primeng/components/common/messageservice';
-import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ErrorHandlerService {
@@ -14,6 +15,6 @@ export class ErrorHandlerService {
     //   summary: '',
     //   detail: error
     // });
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 }

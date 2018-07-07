@@ -1,6 +1,7 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Admin } from './admin.model';
 
 @Injectable()
@@ -44,6 +45,6 @@ export class AdminService {
 
   private handleErrors(error: Response) {
     console.error('Erro em AdminService: ' + error);
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 }

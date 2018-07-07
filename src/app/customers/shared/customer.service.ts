@@ -1,6 +1,7 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 
 import { Customer } from './customer.model';
 
@@ -45,6 +46,6 @@ export class CustomerService {
 
   private handleErrors(error: Response) {
     console.error('Erro em CustomerService: ' + error);
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 }

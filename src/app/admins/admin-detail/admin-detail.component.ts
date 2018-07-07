@@ -1,3 +1,5 @@
+
+import {switchMap} from 'rxjs/operators';
 import {Component, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -68,8 +70,10 @@ export class AdminDetailComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.route.params.switchMap(
+    this.route.params.pipe(
+      switchMap(
       (params: Params) => this.adminService.getById(+params['id'])
+      )
     ).subscribe(
       admin => {
         if (admin) {

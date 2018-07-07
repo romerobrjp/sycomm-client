@@ -62,15 +62,15 @@ import { AuthGuard } from './guards/auth.guard';
 import { AppRoutingModule } from './app-routing.module';
 
 // rxjs operators: são usados no subscribe
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
+
+
+
+
+
+
 // rxjs extensions
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
+
+
 
 import * as $ from 'jquery';
 import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';

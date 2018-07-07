@@ -19,6 +19,6 @@ export class AppComponent {
       }
     });
 
-    this.authService.refreshCurrentUser();
+    // this.authService.refreshCurrentUser();
   }
 }

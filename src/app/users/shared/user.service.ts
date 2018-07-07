@@ -1,5 +1,8 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+
+import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { User } from './user.model';
 import { TokenService } from '../../shared/token.service';
 
@@ -12,38 +15,53 @@ export class UserService {
   listPaginated(page_number: number, per_page: number, userType: string): Observable<Response> {
     const url = `${this.urlResource}/list_paginated?page_number=${page_number}&per_page=${per_page}&user_type=${userType}`;
 
-    return this.http.get(url).catch(this.handleErrors);
+    return this.http.get(url).pipe(
+      map((response: Response) => response),
+      catchError(this.handleErrors)
+    );
   }
 
   getById(id: number): Observable<User> {
     const url = `${this.urlResource}/${id}`;
 
-    return this.http.get(url).catch(this.handleErrors).map((response: Response) => UserService.responseToModel(response));
+    return this.http.get(url).pipe(
+      map((response: Response) => UserService.responseToModel(response)),
+      catchError(this.handleErrors),
+    );
   }
 
   create(user: User): Observable<User> {
     const url = `${this.urlResource}`;
 
-    return this.http.post(url, user).catch(this.handleErrors).map((response: Response) => UserService.responseToModel(response));
+    return this.http.post(url, user).pipe(
+      map((response: Response) => UserService.responseToModel(response)),
+      catchError(this.handleErrors),
+    );
   }
 
   update(user: User): Observable<User> {
     const url = `${this.urlResource}/${user.id}`;
 
-    return this.http.put(url, user).catch(this.handleErrors).map((response: Response) => UserService.responseToModel(response));
+    return this.http.put(url, user).pipe(
+      catchError(this.handleErrors),
+      map((response: Response) => UserService.responseToModel(response)),
+    );
   }
 
   delete(id: number): Observable<null> {
     const url = `${this.urlResource}/${id}`;
 
-    return this.http.delete(url).catch(this.handleErrors).map(() => null);
+    return this.http.delete(url).pipe(
+      catchError(this.handleErrors),
+      map(() => null),
+    );
   }
 
   // PRIVATE METHODS -----------------------------------------------------------
 
   private handleErrors(error: Response) {
     console.error('Erro em UserService: ' + error);
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 
   static responseToModel(response: Response): User {

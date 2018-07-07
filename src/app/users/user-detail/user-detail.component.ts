@@ -1,3 +1,5 @@
+
+import {switchMap} from 'rxjs/operators';
 import {Component, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Params, Router, NavigationExtras } from '@angular/router';
 import { Location } from '@angular/common';
@@ -96,9 +98,9 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     this.userType = this.activatedRoute.snapshot.queryParamMap.get('userType');
-    this.activatedRoute.params.switchMap(
+    this.activatedRoute.params.pipe(switchMap(
       (params: Params) => this.userService.getById(+params['id'])
-    ).subscribe(
+    )).subscribe(
       user => {
         if (user) {
           this.setUser(user);

@@ -1,3 +1,5 @@
+
+import {switchMap} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Message} from 'primeng/components/common/api';
@@ -55,9 +57,9 @@ export class ActivityDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.switchMap(
+    this.activatedRoute.params.pipe(switchMap(
       (params: Params) => this.activityService.getById(+params['id'])
-    ).subscribe(
+    )).subscribe(
       responseSuccess => {
         this.setEntity(responseSuccess);
       },
