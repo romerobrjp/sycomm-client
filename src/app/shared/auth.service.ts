@@ -43,18 +43,18 @@ export class AuthService {
   getCurrentUser(): User {
     // return this.currentUser;
     if (this.currentUser) {
-      console.log(`this.currentUser ja existe: ${JSON.stringify(this.currentUser)}`);
+      // console.log(`this.currentUser ja existe: ${JSON.stringify(this.currentUser)}`);
       return this.currentUser;
     }
     else {
       this.tokenService.validateToken().subscribe(
         (success) => {
-          console.log(`response.json()['data']: ${success.json()['data']}`);
+          // console.log(`response.json()['data']: ${success.json()['data']}`);
           this.currentUser = success.json()['data'] as User;
           return this.currentUser;
         },
         (error) => {
-          console.log(`error.json(): ${error.json()}`);
+          console.log(`getCurrentUser -> error.json(): ${error.json()}`);
         }
       );
     }
@@ -72,17 +72,17 @@ export class AuthService {
   // }
 
   isAdmin(): boolean {
-    console.log(`this.isAdmin: ${JSON.stringify(this.getCurrentUser())}`);
+    // console.log(`this.isAdmin: ${JSON.stringify(this.getCurrentUser())}`);
     return this.getCurrentUser().type === 'Admin';
   }
 
   isEmployee(): boolean {
-    console.log(`this.isEmployee: ${JSON.stringify(this.getCurrentUser())}`);
+    // console.log(`this.isEmployee: ${JSON.stringify(this.getCurrentUser())}`);
     return this.getCurrentUser().type === 'Employee';
   }
 
   isCustomer(): boolean {
-    console.log(`this.isCustomer: ${JSON.stringify(this.getCurrentUser())}`);
+    // console.log(`this.isCustomer: ${JSON.stringify(this.getCurrentUser())}`);
     return this.getCurrentUser().type === 'Customer';
   }
 }
