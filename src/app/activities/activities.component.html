@@ -12,9 +12,8 @@
   (onLazyLoad)="loadDataOnChange($event)"
 >
   <ng-template pTemplate="caption">
-    Minhas atividades
     <div style="text-align: right" *ngIf="authService.isAdmin()">
-      <a [routerLink]="['/activities/new']" class="btn btn-success" style="color: white; margin: 5px;">
+      <a routerLink="/activities/new" class="btn btn-success" style="color: white; margin: 5px;">
         Novo
         <span class="fa fa-plus"></span>
       </a>
@@ -37,9 +36,10 @@
   <ng-template pTemplate="body" let-activity>
     <tr>
       <td>{{ activity.name }}</td>
-      <td>{{ activity.annotations }}</td>
+      <td>{{ activity.description }}</td>
       <td>{{ dictionary.activityTypes[activity.activity_type] }}</td>
       <td>{{ dictionary.activityStatuses[activity.status] }}</td>
+      <td>{{ activity.annotations }}</td>
 
       <td>
         <a [routerLink]="['/activities', activity.id]" class="btn btn-info">

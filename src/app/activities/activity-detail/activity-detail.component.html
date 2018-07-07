@@ -13,7 +13,6 @@
           class="form-control"
           placeholder=""
           type="text"
-          disabled="!authService.isAdmin()"
         />
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
@@ -27,7 +26,6 @@
           id="activity_type"
           class="form-control"
           formControlName="activity_type"
-          disabled="!authService.isAdmin()"
         >
           <option *ngFor="let option of dictionary.activitytTypesSelect" [value]="option.value">{{ option.text }}</option>
         </select>
@@ -50,16 +48,42 @@
         <div class="text-danger" *ngIf="formUtils.showFieldError('status')">
           <div *ngIf="form.get('status').errors.required"><strong>Status</strong> é obrigatório</div>
         </div>
+
+        <br>
+
+        <label for="responsible" class="control-label">Atribuido a *</label>
+        <select
+          id="responsible"
+          class="form-control"
+          formControlName="user_id"
+        >
+          <option *ngFor="let option of employees" [value]="option.id">{{ option.name }}</option>
+        </select>
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('user_id')">
+          <div *ngIf="form.get('user_id').errors.required"><strong>Responsavel</strong> é obrigatório</div>
+        </div>
       </div>
 
-      <div class="form-group col-lg-4" [ngClass]="formUtils.fieldClassForErrorOrSuccess('annotations')">
+      <div class="form-group col-lg-4">
+        <label for="annotations" class="control-label">Descriçao *</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          class="form-control"
+          placeholder="Descreva a atividade aqui..."
+          rows="3"
+        ></textarea>
+
+        <br>
+
         <label for="annotations" class="control-label">Anotações *</label>
         <textarea
           id="annotations"
           formControlName="annotations"
           class="form-control"
           placeholder="Anotações da atividade aqui..."
-          rows="5"
+          rows="4"
         ></textarea>
 
         <br />

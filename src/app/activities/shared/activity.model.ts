@@ -2,6 +2,7 @@ export class Activity {
   public constructor(
     public id: number,
     public name: string,
+    public description: string,
     public annotations: string,
     public status: number,
     public activity_type: number,

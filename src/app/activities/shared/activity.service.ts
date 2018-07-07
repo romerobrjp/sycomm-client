@@ -37,6 +37,15 @@ export class ActivityService {
     );
   }
 
+  create(entity: Activity): Observable<Activity> {
+    const url = `${this.urlResource}`;
+
+    return this.http.post(url, entity).pipe(
+      map((response: Response) => this.responseToModel(response)),
+      catchError(this.handleErrors),
+    );
+  }
+
   update(act: Activity): Observable<Activity> {
     const url = `${this.urlResource}/${act.id}`;
 
@@ -52,6 +61,7 @@ export class ActivityService {
     return new Activity(
       jsonEntity['id'],
       jsonEntity['name'],
+      jsonEntity['description'],
       jsonEntity['annotations'],
       jsonEntity['status'],
       jsonEntity['activity_type'],
@@ -71,6 +81,7 @@ export class ActivityService {
       const item = new Activity(
         jsonEntity['id'],
         jsonEntity['name'],
+        jsonEntity['description'],
         jsonEntity['annotations'],
         jsonEntity['status'],
         jsonEntity['activity_type'],

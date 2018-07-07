@@ -72,17 +72,14 @@ export class AuthService {
   // }
 
   isAdmin(): boolean {
-    // console.log(`this.isAdmin: ${JSON.stringify(this.getCurrentUser())}`);
     return this.getCurrentUser().type === 'Admin';
   }
 
   isEmployee(): boolean {
-    // console.log(`this.isEmployee: ${JSON.stringify(this.getCurrentUser())}`);
     return this.getCurrentUser().type === 'Employee';
   }
 
   isCustomer(): boolean {
-    // console.log(`this.isCustomer: ${JSON.stringify(this.getCurrentUser())}`);
     return this.getCurrentUser().type === 'Customer';
   }
 }

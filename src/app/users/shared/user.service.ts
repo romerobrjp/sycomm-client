@@ -21,6 +21,15 @@ export class UserService {
     );
   }
 
+  listBytype(userType: string): Observable<User[]> {
+    const url = `${this.urlResource}/list_by_type?user_type=${userType}`;
+
+    return this.http.get(url).pipe(
+      map((response: Response) => UserService.responseToModels(response)),
+      catchError(this.handleErrors)
+    );
+  }
+
   getById(id: number): Observable<User> {
     const url = `${this.urlResource}/${id}`;
 
@@ -97,8 +106,8 @@ export class UserService {
     );
   }
 
-  private responseToModels(response: Response): User[] {
-    let collection = response.json()['data'] as Array<any>;
+  static responseToModels(response: Response): User[] {
+    let collection = response.json() as Array<any>;
     let users: User[] = [];
 
     collection.forEach(jsonEntity => {

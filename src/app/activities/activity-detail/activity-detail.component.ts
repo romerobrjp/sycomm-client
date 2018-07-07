@@ -11,6 +11,9 @@ import {Activity} from '../shared/activity.model';
 import {ActivityService} from '../shared/activity.service';
 import {AuthService} from '../../shared/auth.service';
 import {Dictionary} from '../../shared/dictionary';
+import {UserService} from '../../users/shared/user.service';
+import {ErrorHandlerService} from '../../shared/error-handler.service';
+import {User} from '../../users/shared/user.model';
 
 @Component({
   selector: 'app-activity-detail',
@@ -22,6 +25,7 @@ export class ActivityDetailComponent implements OnInit {
   form: FormGroup;
   formUtils: FormUtils;
   msgs: Message[] = [];
+  employees: User[];
 
   constructor(
     public authService: AuthService,
@@ -31,10 +35,12 @@ export class ActivityDetailComponent implements OnInit {
     private location: Location,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    public dictionary: Dictionary
+    public dictionary: Dictionary,
+    private userService: UserService
   ) {
     this.entity = new Activity(
       null,
+      '',
       '',
       '',
       null,
@@ -47,10 +53,12 @@ export class ActivityDetailComponent implements OnInit {
     );
 
     this.form = this.formBuilder.group({
-      name: ['', [Validators.required]],
+      name: [{value : '', disabled: !this.authService.isAdmin()}, Validators.required],
+      description: [{value : '', disabled: !this.authService.isAdmin()}],
       annotations: [''],
-      activity_type: ['', Validators.required],
-      status: ['', [Validators.required]]
+      activity_type: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
+      status: [null, [Validators.required]],
+      user_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
     });
 
     this.formUtils = new FormUtils(this.form);
@@ -67,6 +75,16 @@ export class ActivityDetailComponent implements OnInit {
         console.error('Erro ao tentar carrgera atividade: ' + responseError);
       }
     );
+
+    this.userService.listBytype('Employee').subscribe(
+      (success: Response) => {
+        this.employees = success;
+        console.log(this.employees);
+      },
+      (error) => {
+        ErrorHandlerService.handleResponseErrors(error);
+      }
+    );
   }
 
   setEntity(e: Activity) {
@@ -78,7 +96,22 @@ export class ActivityDetailComponent implements OnInit {
     this.location.back();
   }
 
-  private create() {};
+  private create(): boolean {
+    this.applyFormValues();
+
+    this.activityService.create(this.entity).subscribe(
+      () => {
+        this.router.navigate(['/activities']);
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade criada'});
+      },
+      (error) => {
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao tentar criar a atividade.'});
+        return false;
+      }
+    );
+
+    return true;
+  };
 
   private update(): void {
     this.messageService.clear();
@@ -113,8 +146,10 @@ export class ActivityDetailComponent implements OnInit {
 
   private applyFormValues() {
     this.entity.name = this.form.get('name').value;
+    this.entity.description = this.form.get('annotations').value;
     this.entity.annotations = this.form.get('annotations').value;
-    this.entity.status = +this.form.get('status').value;
-    this.entity.activity_type = +this.form.get('activity_type').value;
+    this.entity.status = this.form.get('status').value;
+    this.entity.activity_type = this.form.get('activity_type').value;
+    this.entity.user_id = +this.form.get('user_id').value;
   }
 }
