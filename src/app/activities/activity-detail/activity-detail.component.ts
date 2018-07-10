@@ -59,6 +59,8 @@ export class ActivityDetailComponent implements OnInit {
       activity_type: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
       status: [null, [Validators.required]],
       user_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
+      customer_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
+      customer_name: [{value : '', disabled: !this.authService.isAdmin()}, Validators.required],
     });
 
     this.formUtils = new FormUtils(this.form);
@@ -69,7 +71,10 @@ export class ActivityDetailComponent implements OnInit {
       (params: Params) => this.activityService.getById(+params['id'])
     )).subscribe(
       responseSuccess => {
-        this.setEntity(responseSuccess);
+        if (responseSuccess) {
+          console.log(JSON.stringify(responseSuccess));
+          this.setEntity(responseSuccess);
+        }
       },
       responseError => {
         console.error('Erro ao tentar carrgera atividade: ' + responseError);
@@ -77,7 +82,7 @@ export class ActivityDetailComponent implements OnInit {
     );
 
     this.userService.listBytype('Employee').subscribe(
-      (success: Response) => {
+      (success) => {
         this.employees = success;
         console.log(this.employees);
       },
@@ -151,5 +156,7 @@ export class ActivityDetailComponent implements OnInit {
     this.entity.status = this.form.get('status').value;
     this.entity.activity_type = this.form.get('activity_type').value;
     this.entity.user_id = +this.form.get('user_id').value;
+    this.entity.customer_id = +this.form.get('customer_id').value;
+    this.entity.customer_name = this.form.get('customer_name').value;
   }
 }

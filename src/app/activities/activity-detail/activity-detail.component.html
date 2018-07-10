@@ -92,9 +92,9 @@
         <a
           id="customer"
           class="control-label"
-          [routerLink]="['/users', entity?.client_id || 0]"
+          [routerLink]="['/users', entity?.customer_id || 0]"
           [queryParams]="{ 'userType': 'Customer'}"
-        ><strong>{{ entity.client_name }}</strong></a>
+        ><strong>{{ entity.customer_name }}</strong></a>
       </div>
     </div>
 
