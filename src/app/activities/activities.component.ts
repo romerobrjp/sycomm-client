@@ -42,7 +42,27 @@ export class ActivitiesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.listUserActivitiesPaginated();
+    this.listPaginated();
+  }
+
+  listPaginated() {
+    if (this.authService.isAdmin()) {
+      this.listAllPaginated();
+    } else {
+      this.listUserActivitiesPaginated();
+    }
+  }
+
+  listAllPaginated() {
+    this.activityService.listAllPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
+      successResponse => {
+        this.userActivities = successResponse.json()['data'];
+        this.totalCount = successResponse.json()['total_count'];
+      },
+      errorResponse => {
+        console.error('Ocorreu um erro ao tentar buscar as atividades: ' + errorResponse);
+      }
+    );
   }
 
   listUserActivitiesPaginated() {
@@ -62,6 +82,6 @@ export class ActivitiesComponent implements OnInit {
     this.paginator.perPage = event.rows;
     this.paginator.pageNumber = Math.ceil(this.paginator.offset / this.paginator.perPage) + 1;
 
-    this.listUserActivitiesPaginated();
+    this.listPaginated();
   }
 }

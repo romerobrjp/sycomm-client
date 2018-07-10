@@ -22,6 +22,12 @@ export class ActivityService {
     );
   }
 
+  listAllPaginated(page_number: number, per_page: number): Observable<Response> {
+    const url = `${this.urlResource}/list_all_paginated?page_number=${page_number}&per_page=${per_page}`;
+
+    return this.http.get(url).pipe(catchError(this.handleErrors));
+  }
+
   listUserActivitiesPaginated(userId: number, page_number: number, per_page: number): Observable<Response> {
     const url = `${this.urlResource}/list_user_activities_paginated?user_id=${userId}&page_number=${page_number}&per_page=${per_page}`;
 
