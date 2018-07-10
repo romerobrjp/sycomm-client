@@ -1,5 +1,5 @@
 
-import {throwError as observableThrowError,  Observable } from 'rxjs';
+import {throwError as observableThrowError, Observable, from} from 'rxjs';
 
 import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -107,7 +107,7 @@ export class UserService {
   }
 
   static responseToModels(response: Response): User[] {
-    let collection = response.json() as Array<any>;
+    let collection =  from(response.json());
     let users: User[] = [];
 
     collection.forEach(jsonEntity => {
