@@ -12,7 +12,7 @@ import {Ng2BRPipesModule} from 'ng2-brpipes';
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule, MessagesModule, CardModule } from 'primeng/primeng';
+import {ConfirmDialogModule, MessagesModule, CardModule} from 'primeng/primeng';
 import { DataViewModule } from 'primeng/dataview';
 
 // Components
@@ -60,20 +60,6 @@ import { AuthGuard } from './guards/auth.guard';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
-
-// rxjs operators: são usados no subscribe
-
-
-
-
-
-
-// rxjs extensions
-
-
-
-import * as $ from 'jquery';
-import * as datetimepicker from 'eonasdan-bootstrap-datetimepicker';
 
 @NgModule({
   declarations: [
