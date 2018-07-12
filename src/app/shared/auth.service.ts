@@ -1,7 +1,7 @@
 
 import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {User} from '../users/shared/user.model';
 import {TokenService} from './token.service';
 import {ErrorHandlerService} from './error-handler.service';
@@ -25,8 +25,9 @@ export class AuthService {
 
     return this.tokenService.signIn(signInData).pipe(
       map(res => {
-        // console.log(`signIn res.json(): ${JSON.stringify(res.json())}`);
-        return (this.currentUser = res.json()['data'] as User)
+        console.log(`signIn res.json(): ${JSON.stringify(res.json()['data'])}`);
+        this.currentUser = res.json()['data'] as User;
+        return res.json()['data'] as User;
       }),
       catchError(ErrorHandlerService.handleResponseErrors)
     );
@@ -40,46 +41,32 @@ export class AuthService {
     return this.tokenService.userSignedIn();
   }
 
-  getCurrentUser(): User {
-    // return this.currentUser;
+  getCurrentUser() {
     if (this.currentUser) {
-      // console.log(`this.currentUser ja existe: ${JSON.stringify(this.currentUser)}`);
+      console.log(`this.currentUser ja existe: ${JSON.stringify(this.currentUser)}`);
       return this.currentUser;
     }
     else {
-      this.tokenService.validateToken().subscribe(
+      return this.tokenService.validateToken().subscribe(
         (success) => {
-          // console.log(`response.json()['data']: ${success.json()['data']}`);
+          console.log(`this.currentUser nao existe, recupera do back: ${JSON.stringify(success.json()['data'])}`);
           this.currentUser = success.json()['data'] as User;
-          return this.currentUser;
+          return success.json()['data'];
         },
-        (error) => {
-          console.log(`getCurrentUser -> error.json(): ${error.json()}`);
-        }
+        (error) => console.error(`Deu merda no getCurrenUser: ${error}`)
       );
     }
   }
 
-  // refreshCurrentUser(): void {
-  //   this.tokenService.validateToken().pipe(
-  //     map(
-  //       res => {
-  //         console.log(`refreshCurrentUser response.json()['data']: ${res.json()['data']}`);
-  //         this.currentUser = res.json()['data'] as User;
-  //       }
-  //     )
-  //   );
-  // }
-
   isAdmin(): boolean {
-    return this.getCurrentUser().type === 'Admin';
+    return this.getCurrentUser()['type'] === 'Admin';
   }
 
   isEmployee(): boolean {
-    return this.getCurrentUser().type === 'Employee';
+    return this.getCurrentUser()['type'] === 'Employee';
   }
 
   isCustomer(): boolean {
-    return this.getCurrentUser().type === 'Customer';
+    return this.getCurrentUser()['type'] === 'Customer';
   }
 }

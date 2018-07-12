@@ -3,19 +3,20 @@ import { RouterModule } from '@angular/router';
 
 import { AuthGuard } from './guards/auth.guard';
 
-import { UsersComponent } from './users/users.component';
-import { UserDetailComponent } from './users/user-detail/user-detail.component';
-import { AdminsComponent } from './admins/admins.component';
-import { AdminDetailComponent } from './admins/admin-detail/admin-detail.component';
-import { EmployeesComponent } from './employees/employees.component';
-import { EmployeeDetailComponent } from './employees/employee-detail/employee-detail.component';
-import { CustomerDetailComponent } from './customers/customer-detail/customer-detail.component';
-import { CustomersComponent } from './customers/customers.component';
-import { ActivitiesComponent } from './activities/activities.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { ProfileComponent } from './profile/profile.component';
-import { ActivityDetailComponent } from './activities/activity-detail/activity-detail.component';
+import {UsersComponent} from './users/users.component';
+import {UserDetailComponent} from './users/user-detail/user-detail.component';
+import {AdminsComponent} from './admins/admins.component';
+import {AdminDetailComponent} from './admins/admin-detail/admin-detail.component';
+import {EmployeesComponent} from './employees/employees.component';
+import {EmployeeDetailComponent} from './employees/employee-detail/employee-detail.component';
+import {CustomerDetailComponent} from './customers/customer-detail/customer-detail.component';
+import {CustomersComponent} from './customers/customers.component';
+import {ActivitiesComponent} from './activities/activities.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {SignInComponent} from './sign-in/sign-in.component';
+import {ProfileComponent} from './profile/profile.component';
+import {ActivityDetailComponent} from './activities/activity-detail/activity-detail.component';
+import {AgendasComponent} from './agendas/agendas.component';
 
 const ROUTES = RouterModule.forRoot([
   {
@@ -97,6 +98,16 @@ const ROUTES = RouterModule.forRoot([
     component: ProfileComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'agendas',
+    component: AgendasComponent,
+    canActivate: [AuthGuard]
+  },
+  // {
+  //   path: 'agendas/:id',
+  //   component: AgendaDetailComponent,
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: 'activities',
     component: ActivitiesComponent,

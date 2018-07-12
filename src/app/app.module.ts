@@ -37,6 +37,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ActivitiesComponent } from './activities/activities.component';
 import { ActivityDetailComponent } from './activities/activity-detail/activity-detail.component';
+import { AgendasComponent } from './agendas/agendas.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -46,6 +47,7 @@ import { CustomerService } from './customers/shared/customer.service';
 import { PublicOfficeService } from './public_offices/shared/public_office.service';
 import { PublicAgencyService } from './public_agencies/shared/public_agency.service';
 import { ActivityService } from './activities/shared/activity.service';
+import { AgendaService } from './agendas/shared/agenda.service';
 import { AuthService } from './shared/auth.service';
 import { TokenService } from './shared/token.service';
 import { Angular2TokenService } from 'angular2-token';
@@ -84,6 +86,7 @@ import { AppRoutingModule } from './app-routing.module';
     ProfileComponent,
     ActivitiesComponent,
     ActivityDetailComponent,
+    AgendasComponent,
   ],
   imports: [
     BrowserModule,
@@ -111,6 +114,7 @@ import { AppRoutingModule } from './app-routing.module';
     PublicOfficeService,
     PublicAgencyService,
     ActivityService,
+    AgendaService,
     MessageService,
     ConfirmationService,
     Angular2TokenService,

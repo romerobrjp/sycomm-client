@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userProfile = this.authService.getCurrentUser();
+    this.userProfile = this.authService.getCurrentUser() as User;
     this.form.patchValue(this.userProfile);
   }
 
@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
     this.messageService.clear();
     this.applyFormValues();
 
-    this.userService.update(this.authService.getCurrentUser()).subscribe(
+    this.userService.update(this.authService.getCurrentUser() as User).subscribe(
       () => {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Perfil atualizado!'});
         this.userService.getById(this.userProfile.id).subscribe(
