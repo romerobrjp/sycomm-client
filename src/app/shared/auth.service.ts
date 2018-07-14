@@ -25,15 +25,18 @@ export class AuthService {
 
     return this.tokenService.signIn(signInData).pipe(
       map(res => {
-        console.log(`signIn res.json(): ${JSON.stringify(res.json()['data'])}`);
-        this.currentUser = res.json()['data'] as User;
-        return res.json()['data'] as User;
+        let user: User = res.json()['data'] as User;
+
+        this.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        return user;
       }),
       catchError(ErrorHandlerService.handleResponseErrors)
     );
   }
 
   signOut(): Observable<Response> {
+    localStorage.removeItem('currentUser');
     return this.tokenService.signOut().pipe(catchError(ErrorHandlerService.handleResponseErrors));
   }
 
@@ -42,20 +45,35 @@ export class AuthService {
   }
 
   getCurrentUser() {
-    if (this.currentUser) {
-      console.log(`this.currentUser ja existe: ${JSON.stringify(this.currentUser)}`);
-      return this.currentUser;
+    if (!this.currentUser) {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
-    else {
-      return this.tokenService.validateToken().subscribe(
-        (success) => {
-          console.log(`this.currentUser nao existe, recupera do back: ${JSON.stringify(success.json()['data'])}`);
-          this.currentUser = success.json()['data'] as User;
-          return success.json()['data'];
-        },
-        (error) => console.error(`Deu merda no getCurrenUser: ${error}`)
-      );
-    }
+    return this.currentUser;
+    // else {
+    //   return this.tokenService.validateToken().subscribe(
+    //     (success) => {
+    //       console.log(`this.currentUser nao existe, recupera do back: ${JSON.stringify(success.json()['data'])}`);
+    //       this.currentUser = success.json()['data'] as User;
+    //       return success.json()['data'];
+    //     },
+    //     (error) => console.error(`Deu merda no getCurrenUser: ${error}`)
+    //   );
+    // }
+  }
+
+  updateCurrentUser(currentUser) {
+    this.currentUser = currentUser;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  }
+
+  refreshCurrentUser() {
+    this.tokenService.validateToken().subscribe(
+      (success) => {
+        this.currentUser = success.json()['data'] as User;
+        this.updateCurrentUser(this.currentUser);
+      },
+      (error) => console.error(`Deu erro no refreshCurrenUser(): ${error}`)
+    );
   }
 
   isAdmin(): boolean {
