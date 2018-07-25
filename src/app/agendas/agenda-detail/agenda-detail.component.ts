@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Message} from 'primeng/components/common/api';
 import {FormUtils} from '../../shared/form-utils';
 import {Location} from '@angular/common';
-import {ActivatedRoute, NavigationExtras, Params, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {Agenda} from '../shared/agenda.model';
 import {AgendaService} from '../shared/agenda.service';
@@ -28,7 +28,6 @@ export class AgendaDetailComponent implements OnInit {
   employee: User;
   customersCpf: Array<string> = [];
   employees: User[] = [];
-  //employees: SelectItem[] = [];
   cpfMask = FormUtils.cpfMask;
 
   constructor(
@@ -69,8 +68,9 @@ export class AgendaDetailComponent implements OnInit {
     )).subscribe(
       responseSuccess => {
         if (responseSuccess) {
-          console.log(`responseSuccess: ${JSON.stringify(responseSuccess)}`);
           this.setEntity(responseSuccess);
+        } else {
+          console.error('Erro ao tentar carrgera agenda: ' + responseSuccess);
         }
       },
       responseError => {
@@ -79,13 +79,7 @@ export class AgendaDetailComponent implements OnInit {
     );
 
     this.userService.listBytype('Employee').subscribe(
-      (success) => {
-        /*this.employees = success.map(e => {
-          return { label: e.name, value: e.id };
-        });*/
-        this.employees = success;
-        console.log(JSON.stringify(this.employees));
-      },
+      (success) => this.employees = success,
       (error) => {
         ErrorHandlerService.handleResponseErrors(error);
       }
@@ -179,7 +173,6 @@ export class AgendaDetailComponent implements OnInit {
   }
 
   private removeCpf(event, cpf) {
-    console.log(`removeCpf event: ${cpf}`);
     this.customersCpf.splice(this.customersCpf.indexOf(cpf), 1);
   }
 }
