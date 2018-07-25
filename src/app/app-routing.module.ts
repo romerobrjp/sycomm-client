@@ -17,6 +17,7 @@ import {SignInComponent} from './sign-in/sign-in.component';
 import {ProfileComponent} from './profile/profile.component';
 import {ActivityDetailComponent} from './activities/activity-detail/activity-detail.component';
 import {AgendasComponent} from './agendas/agendas.component';
+import {AgendaDetailComponent} from './agendas/agenda-detail/agenda-detail.component';
 
 const ROUTES = RouterModule.forRoot([
   {
@@ -103,11 +104,11 @@ const ROUTES = RouterModule.forRoot([
     component: AgendasComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'agendas/:id',
-  //   component: AgendaDetailComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'agendas/:id',
+    component: AgendaDetailComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'activities',
     component: ActivitiesComponent,

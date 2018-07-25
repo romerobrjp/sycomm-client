@@ -12,7 +12,7 @@ import {Ng2BRPipesModule} from 'ng2-brpipes';
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageModule } from 'primeng/message';
-import {ConfirmDialogModule, MessagesModule, CardModule} from 'primeng/primeng';
+import {ConfirmDialogModule, MessagesModule, CardModule, DropdownModule} from 'primeng/primeng';
 import { DataViewModule } from 'primeng/dataview';
 
 // Components
@@ -38,6 +38,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ActivitiesComponent } from './activities/activities.component';
 import { ActivityDetailComponent } from './activities/activity-detail/activity-detail.component';
 import { AgendasComponent } from './agendas/agendas.component';
+import { AgendaDetailComponent } from './agendas/agenda-detail/agenda-detail.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -87,6 +88,7 @@ import { AppRoutingModule } from './app-routing.module';
     ActivitiesComponent,
     ActivityDetailComponent,
     AgendasComponent,
+    AgendaDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -104,7 +106,7 @@ import { AppRoutingModule } from './app-routing.module';
     CardModule,
     DataViewModule,
     TextMaskModule,
-    Ng2BRPipesModule
+    Ng2BRPipesModule,
   ],
   providers: [
     UserService,
