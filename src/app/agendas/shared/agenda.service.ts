@@ -68,8 +68,8 @@ export class AgendaService {
       jsonEntity['id'],
       jsonEntity['name'],
       jsonEntity['start_date'],
-      jsonEntity['user_id'],
-      jsonEntity['user_name'],
+      jsonEntity['employee_id'],
+      jsonEntity['customers_cpf'],
       jsonEntity['created_at'],
       jsonEntity['updated_at'],
     );
@@ -84,8 +84,8 @@ export class AgendaService {
         jsonEntity['id'],
         jsonEntity['name'],
         jsonEntity['start_date'],
-        jsonEntity['user_id'],
-        jsonEntity['user_name'],
+        jsonEntity['employee_id'],
+        jsonEntity['customers_cpf'],
         jsonEntity['created_at'],
         jsonEntity['updated_at'],
       );

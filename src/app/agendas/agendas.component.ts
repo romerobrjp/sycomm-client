@@ -35,7 +35,7 @@ export class AgendasComponent implements OnInit {
     this.columns = [
       { field: 'name', header: 'Nome' },
       { field: 'start_date', header: 'Data de inicio' },
-      { field: 'user_name', header: 'Envolvido' },
+      { field: 'employee_name', header: 'Atribuido a' },
     ];
   }
 
