@@ -44,9 +44,9 @@ export class AuthService {
     return this.tokenService.userSignedIn();
   }
 
-  getCurrentUser() {
+  getCurrentUser(): User {
     if (!this.currentUser) {
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser')) as User;
     }
     return this.currentUser;
     // else {
