@@ -43,4 +43,16 @@ export class User {
     'public_agency' : 'Organização',
     'public_office' : 'Cargo'
   };
+
+  isAdmin(): boolean {
+    return this.type === 'Admin';
+  }
+
+  isEmployee(): boolean {
+    return this.type === 'Employee';
+  }
+
+  isCustomer(): boolean {
+    return this.type === 'Customer';
+  }
 }
