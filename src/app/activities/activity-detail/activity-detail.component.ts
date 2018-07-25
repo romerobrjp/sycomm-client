@@ -46,8 +46,8 @@ export class ActivityDetailComponent implements OnInit {
       null,
       null,
       null,
-      null,
       '',
+      null,
       null,
       null
     );
@@ -58,7 +58,7 @@ export class ActivityDetailComponent implements OnInit {
       annotations: [''],
       activity_type: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
       status: [null, [Validators.required]],
-      user_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
+      employee_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
       customer_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
       customer_name: [{value : '', disabled: !this.authService.isAdmin()}, Validators.required],
     });
@@ -72,7 +72,7 @@ export class ActivityDetailComponent implements OnInit {
     )).subscribe(
       responseSuccess => {
         if (responseSuccess) {
-          console.log(JSON.stringify(responseSuccess));
+          // console.log(JSON.stringify(responseSuccess));
           this.setEntity(responseSuccess);
         }
       },
@@ -84,7 +84,7 @@ export class ActivityDetailComponent implements OnInit {
     this.userService.listBytype('Employee').subscribe(
       (success) => {
         this.employees = success;
-        console.log(this.employees);
+        // console.log(JSON.stringify(this.employees));
       },
       (error) => {
         ErrorHandlerService.handleResponseErrors(error);
@@ -155,7 +155,7 @@ export class ActivityDetailComponent implements OnInit {
     this.entity.annotations = this.form.get('annotations').value;
     this.entity.status = this.form.get('status').value;
     this.entity.activity_type = this.form.get('activity_type').value;
-    this.entity.user_id = +this.form.get('user_id').value;
+    this.entity.employee_id = +this.form.get('employee_id').value;
     this.entity.customer_id = +this.form.get('customer_id').value;
     this.entity.customer_name = this.form.get('customer_name').value;
   }

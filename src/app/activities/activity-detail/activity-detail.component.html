@@ -16,7 +16,7 @@
         />
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
-          <div *ngIf="form.get('name').errors.required"><strong>Nome</strong> é obrigatório</div>
+          <div *ngIf="form.get('name')['errors']['required']"><strong>Nome</strong> é obrigatório</div>
         </div>
 
         <br />
@@ -27,11 +27,11 @@
           class="form-control"
           formControlName="activity_type"
         >
-          <option *ngFor="let option of dictionary.activitytTypesSelect" [value]="option.value">{{ option.text }}</option>
+          <option *ngFor="let option of dictionary.activitytTypesSelect" [value]="option['value']">{{ option['text'] }}</option>
         </select>
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('activity_type')">
-          <div *ngIf="form.get('activity_type').errors.required"><strong>Tipo</strong> é obrigatório</div>
+          <div *ngIf="form.get('activity_type')['errors']['required']"><strong>Tipo</strong> é obrigatório</div>
         </div>
 
         <br />
@@ -42,26 +42,26 @@
           class="form-control"
           formControlName="status"
         >
-          <option *ngFor="let option of dictionary.activitytStatusesSelect" [value]="option.value">{{ option.text }}</option>
+          <option *ngFor="let option of dictionary.activitytStatusesSelect" [value]="option['value']">{{ option['text'] }}</option>
         </select>
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('status')">
-          <div *ngIf="form.get('status').errors.required"><strong>Status</strong> é obrigatório</div>
+          <div *ngIf="form.get('status')['errors']['required']"><strong>Status</strong> é obrigatório</div>
         </div>
 
         <br>
 
-        <label for="responsible" class="control-label">Atribuido a *</label>
+        <label for="responsible" class="control-label">Atribuído a *</label>
         <select
           id="responsible"
           class="form-control"
-          formControlName="user_id"
+          formControlName="employee_id"
         >
-          <option *ngFor="let option of employees" [value]="option.id">{{ option.name }}</option>
+          <option *ngFor="let option of employees" [value]="option['id']">{{ option['name'] }}</option>
         </select>
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('user_id')">
-          <div *ngIf="form.get('user_id').errors.required"><strong>Responsavel</strong> é obrigatório</div>
+        <div class="text-danger" *ngIf="formUtils.showFieldError('employee_id')">
+          <div *ngIf="form.get('employee_id')['errors']['required']">Campo<strong> 'Atribuído a' </strong> é obrigatório</div>
         </div>
       </div>
 
