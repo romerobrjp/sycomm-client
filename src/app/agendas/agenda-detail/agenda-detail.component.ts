@@ -50,6 +50,7 @@ export class AgendaDetailComponent implements OnInit {
       '',
       null,
       null,
+      null,
       [],
       [],
       null,
@@ -205,12 +206,15 @@ export class AgendaDetailComponent implements OnInit {
 
   getNameAndSurname(fullName: string) {
     let nameSurname: string;
-    let splittedFullname: string[] = fullName.split(' ');
 
-    if (splittedFullname.length > 1) {
-      nameSurname = splittedFullname[0] + ' ' + splittedFullname[splittedFullname.length - 1];
-    } else {
-      nameSurname = fullName;
+    if (fullName) {
+      let splittedFullname: string[] = fullName.split(' ');
+
+      if (splittedFullname.length > 1) {
+        nameSurname = splittedFullname[0] + ' ' + splittedFullname[splittedFullname.length - 1];
+      } else {
+        nameSurname = fullName;
+      }
     }
 
     return nameSurname;
