@@ -34,10 +34,10 @@ export class ActivitiesComponent implements OnInit {
   ) {
     this.columns = [
       { field: 'name', header: 'Nome' },
-      { field: 'description', header: 'Anotaçoes' },
+      { field: 'description', header: 'Descrição' },
       { field: 'activity_type', header: 'Tipo' },
       { field: 'status', header: 'Status' },
-      { field: 'annotations', header: 'Anotaçoes' },
+      { field: 'annotations', header: 'Anotações' },
     ];
   }
 

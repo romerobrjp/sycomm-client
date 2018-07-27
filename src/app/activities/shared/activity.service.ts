@@ -13,10 +13,10 @@ export class ActivityService {
 
   constructor(private http: TokenService) { }
 
-  listLastUserActivities(userId, quant): Observable<Activity[]> {
+  listLastUserActivities(employee_id, quant): Observable<Activity[]> {
     const url = `${this.urlResource}`;
 
-    return this.http.get(`${url}/list_last_user_activities?user_id=${userId}&quant=${quant}`).pipe(
+    return this.http.get(`${url}/list_last_user_activities?employee_id=${employee_id}&quant=${quant}`).pipe(
       catchError(this.handleErrors),
       map((response: Response) => this.responseToModels(response)),
     );
@@ -28,8 +28,8 @@ export class ActivityService {
     return this.http.get(url).pipe(catchError(this.handleErrors));
   }
 
-  listUserActivitiesPaginated(userId: number, page_number: number, per_page: number): Observable<Response> {
-    const url = `${this.urlResource}/list_user_activities_paginated?user_id=${userId}&page_number=${page_number}&per_page=${per_page}`;
+  listUserActivitiesPaginated(employee_id: number, page_number: number, per_page: number): Observable<Response> {
+    const url = `${this.urlResource}/list_user_activities_paginated?employee_id=${employee_id}&page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
   }
