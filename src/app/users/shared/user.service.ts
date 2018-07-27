@@ -8,7 +8,7 @@ import { TokenService } from '../../shared/token.service';
 
 @Injectable()
 export class UserService {
-  urlResource = 'users';
+  urlResource: string = 'users';
 
   constructor(private http: TokenService) {}
 
@@ -32,6 +32,15 @@ export class UserService {
 
   getById(id: number): Observable<User> {
     const url = `${this.urlResource}/${id}`;
+
+    return this.http.get(url).pipe(
+      map((response: Response) => UserService.responseToModel(response)),
+      catchError(this.handleErrors),
+    );
+  }
+
+  getByCpf(cpf: string): Observable<User> {
+    const url = `${this.urlResource}/get_customer_by_cpf/${cpf}`;
 
     return this.http.get(url).pipe(
       map((response: Response) => UserService.responseToModel(response)),
