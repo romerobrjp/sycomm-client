@@ -13,7 +13,9 @@ import {Dictionary} from '../../shared/dictionary';
 import {User} from '../../users/shared/user.model';
 import {ErrorHandlerService} from '../../shared/error-handler.service';
 import {UserService} from '../../users/shared/user.service';
+import {ConfirmationService} from 'primeng/api';
 import * as cpf_lib from '@fnando/cpf';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-agenda-detail',
@@ -27,7 +29,8 @@ export class AgendaDetailComponent implements OnInit {
   msgs: Message[] = [];
   employee: User;
   customersCpf: Array<string> = [];
-  employees: User[] = [];
+  customers: Array<User> = [];
+  employees: Array<User> = [];
   cpfMask = FormUtils.cpfMask;
 
   constructor(
@@ -40,13 +43,15 @@ export class AgendaDetailComponent implements OnInit {
     private messageService: MessageService,
     private userService: UserService,
     public dictionary: Dictionary,
+    private confirmationService: ConfirmationService
   ) {
     this.entity = new Agenda(
       null,
       '',
       null,
       null,
-      null,
+      [],
+      [],
       null,
       null
     );
@@ -69,6 +74,8 @@ export class AgendaDetailComponent implements OnInit {
       responseSuccess => {
         if (responseSuccess) {
           this.setEntity(responseSuccess);
+          this.customers = this.entity.customers;
+          this.customersCpf = this.customers.map( c => c.cpf);
         } else {
           console.error('Erro ao tentar carrgera agenda: ' + responseSuccess);
         }
@@ -151,18 +158,33 @@ export class AgendaDetailComponent implements OnInit {
   }
 
   private addCpf() {
-    let currentCpf: string = this.form.get('currentCpf').value;
+    let currentCpf: string = cpf_lib.strip(this.form.get('currentCpf').value);
 
     if (!cpf_lib.isValid(currentCpf)) {
-      alert('Por favor, informe um CPF valido!');
+      swal('Erro', 'Por favor, informe um CPF válido!', 'error');
       return false;
     }
     else if (this.customersCpf.includes(currentCpf)) {
-      alert('Este CPF ja foi incluido, escolha outro.');
+      swal('Ops...', 'Este CPF já foi incluído, escolha outro.', 'warning');
       return false;
     }
-    else if (currentCpf && cpf_lib.strip(currentCpf).length === 11) {
-      this.customersCpf.push(currentCpf);
+    else if (currentCpf && currentCpf.length === 11) {
+      let user: User;
+
+      this.userService.getByCpf(currentCpf).subscribe(
+        (retrievedUser) => {
+          user = retrievedUser;
+          this.customers.push(user);
+          this.customersCpf.push(user.cpf);
+          this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Cliente adicionado'});
+        },
+        (reponseError) => {
+          if (reponseError.status === 404) {
+            swal('Erro', 'Nenhum cliente cadastrado com este CPF.', 'error');
+          }
+          console.error('Erro ao buscar usuário por CPF');
+        }
+      );
     }
 
     this.form.get('currentCpf').reset();
@@ -170,9 +192,42 @@ export class AgendaDetailComponent implements OnInit {
 
   private clearCpfs() {
     this.customersCpf = [];
+    this.customers = [];
+    this.entity.customers = [];
+    this.entity.customers_cpf = [];
   }
 
   private removeCpf(event, cpf) {
     this.customersCpf.splice(this.customersCpf.indexOf(cpf), 1);
+    let customerWithCpf: User = this.customers.filter((c: User) => (c.cpf === cpf))[0];
+    this.customers.splice(this.customers.indexOf(customerWithCpf), 1);
+  }
+
+  getNameAndSurname(fullName: string) {
+    let nameSurname: string;
+    let splittedFullname: string[] = fullName.split(' ');
+
+    if (splittedFullname.length > 1) {
+      nameSurname = splittedFullname[0] + ' ' + splittedFullname[splittedFullname.length - 1];
+    } else {
+      nameSurname = fullName;
+    }
+
+    return nameSurname;
+  }
+
+  goToCustomerConfirmation(event, customerId) {
+    event.preventDefault();
+    this.confirmationService.confirm({
+      header: 'Confirmação',
+      message: 'As alteraçoes feitas nao foram salvas, se sair desta pagina os dados serao perdidos. Continuar?',
+      icon: 'fa fa-question-circle',
+      accept: () => {
+        this.router.navigate(['/users', customerId]);
+      },
+      reject: () => {
+        return false;
+      }
+    });
   }
 }

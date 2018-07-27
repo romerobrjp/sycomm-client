@@ -64,12 +64,15 @@ export class AgendaService {
   private responseToModel(response: Response): Agenda {
     const jsonEntity = response.json();
 
+    let customersCpf: Array<string> = jsonEntity['customers'].map(c => c.cpf);
+
     return new Agenda(
       jsonEntity['id'],
       jsonEntity['name'],
       jsonEntity['start_date'],
       jsonEntity['employee_id'],
-      jsonEntity['customers_cpf'],
+      jsonEntity['customers'],
+      customersCpf,
       jsonEntity['created_at'],
       jsonEntity['updated_at'],
     );
@@ -80,12 +83,15 @@ export class AgendaService {
     const items: Agenda[] = [];
 
     collection.forEach(jsonEntity => {
+      let customersCpf: Array<string> = jsonEntity['customers'].map(c => c.cpf);
+
       const item = new Agenda(
         jsonEntity['id'],
         jsonEntity['name'],
         jsonEntity['start_date'],
         jsonEntity['employee_id'],
-        jsonEntity['customers_cpf'],
+        jsonEntity['customers'],
+        customersCpf,
         jsonEntity['created_at'],
         jsonEntity['updated_at'],
       );

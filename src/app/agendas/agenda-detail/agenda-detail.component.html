@@ -50,33 +50,37 @@
         </div>
       </div>
 
-      <div class="form-group col-lg-3">
+      <div class="form-group col-lg-4">
         <label class="control-label">Clientes</label>
 
         <div class="box box-solid">
           <div class="box-body" style="height: 138px; overflow-y: scroll;">
-            <ol *ngIf="customersCpf.length > 0">
-              <li *ngFor="let cpf of customersCpf" style="margin-bottom: 2px;">
-                <span style="border: 1px solid #cacaca; border-radius: 5px; padding: 5px 15px; margin-right: 10px;">{{ cpf }}</span>
-                <i class="fa fa-times" style="color: red; cursor: pointer;" (click)="removeCpf($event, cpf)"></i>
+            <ol *ngIf="customers.length > 0">
+              <li *ngFor="let customer of customers" class="cpf-item">
+                <a
+                  (click)="goToCustomerConfirmation($event, customer?.id || 0)"
+                  pTooltip="{{ customer.name }}"
+                >
+                  {{ customer.cpf | cpf }} / {{ getNameAndSurname(customer.name) }}
+                </a>
+                <i class="fa fa-times removeCpfButton" (click)="removeCpf($event, customer.cpf)"></i>
               </li>
-
             </ol>
-            <span *ngIf="customersCpf.length === 0">Nenhum cliente registrado para esta agenda</span>
+            <span *ngIf="customers.length === 0">Nenhum cliente registrado para esta agenda</span>
           </div>
         </div>
 
         <div class="ui-inputgroup">
           <input
-            id="customers_cpf_add_input"
-            class="form-control"
+            id="customers_cpf_input"
+            class="form-control margin-r-5"
             formControlName="currentCpf"
             placeholder="000.000.000-00"
             type="text"
             [textMask]="{ mask: cpfMask }"
             (keyup.enter)="addCpf()"
           />
-          <button class="btn btn-sm btn-primary" type="button" (click)="addCpf()">Incluir</button>
+          <button class="btn btn-sm btn-primary margin-r-5" type="button" (click)="addCpf()">Incluir</button>
           <button class="btn btn-sm btn-danger" type="button" (click)="clearCpfs()">
             Limpar lista
           </button>
@@ -100,3 +104,10 @@
     </div>
   </form>
 </div>
+
+<p-confirmDialog #goToCustomerConfirmationDialog header="Confirmaçao" icon="pi pi-exclamation-triangle" width="425">
+  <p-footer>
+    <button type="button" pButton icon="pi pi-times" label="Nao" (click)="goToCustomerConfirmationDialog.reject()"></button>
+    <button type="button" pButton icon="pi pi-check" label="Sim" (click)="goToCustomerConfirmationDialog.accept()"></button>
+  </p-footer>
+</p-confirmDialog>

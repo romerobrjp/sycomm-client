@@ -1,0 +1,19 @@
+.cpf-item {
+  border: 1px solid #EFEFEF;
+  border-radius: 2px;
+  margin-left: -25px;
+  margin-bottom: 5px;
+  padding: 3px;
+  text-align: left;
+}
+
+.cpf-item a:hover {
+  cursor: pointer;
+}
+
+.removeCpfButton {
+  color: red;
+  cursor: pointer;
+  margin: 2px 5px 0 0;
+  float: right;
+}
