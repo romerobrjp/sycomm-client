@@ -37,6 +37,7 @@ export class ActivitiesComponent implements OnInit {
       { field: 'description', header: 'Descrição' },
       { field: 'activity_type', header: 'Tipo' },
       { field: 'status', header: 'Status' },
+      { field: 'customer_name', header: 'Cliente' },
       { field: 'annotations', header: 'Anotações' },
     ];
   }
