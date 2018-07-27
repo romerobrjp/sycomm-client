@@ -42,13 +42,11 @@
       </td>
 
       <td>
-        <a [routerLink]="['/users', user.id]" [queryParams]="{ 'userType': userListingType}" class="btn btn-info">
-          Detalhes
+        <a [routerLink]="['/users', user.id]" [queryParams]="{ 'userType': userListingType}" class="btn btn-info mr-10" title="Detalhes">
           <span class="fa fa-info-circle"></span>
         </a>
 
-        <button class="btn btn-danger" (click)="delete(user)">
-          Excluir
+        <button class="btn btn-danger" (click)="delete(user)" title="Excluir">
           <span class="fa fa-trash"></span>
         </button>
       </td>

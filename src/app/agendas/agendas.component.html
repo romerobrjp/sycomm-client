@@ -40,14 +40,12 @@
       <td>{{ agenda.employee.name }}</td>
 
       <td>
-        <a [routerLink]="['/agendas', agenda.id]" class="btn btn-info">
-          Detalhes
-          <span class="fa fa-info-circle"></span>
+        <a [routerLink]="['/agendas', agenda.id]" class="btn btn-info mr-10" title="Detalhes">
+          <i class="fa fa-info-circle"></i>
         </a>
 
-        <button class="btn btn-danger" (click)="delete(agenda)" *ngIf="authService.isAdmin()">
-          Excluir
-          <span class="fa fa-trash"></span>
+        <button class="btn btn-danger" (click)="delete(agenda)" *ngIf="authService.isAdmin()" title="Excluir">
+          <i class="fa fa-trash"></i>
         </button>
       </td>
     </tr>
