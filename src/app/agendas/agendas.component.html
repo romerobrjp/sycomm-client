@@ -36,8 +36,8 @@
   <ng-template pTemplate="body" let-agenda>
     <tr>
       <td>{{ agenda.name }}</td>
-      <td>{{ agenda.start_date }}</td>
-      <td>{{ agenda.user_name }}</td>
+      <td>{{ agenda.start_date | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ agenda.employee.name }}</td>
 
       <td>
         <a [routerLink]="['/agendas', agenda.id]" class="btn btn-info">
