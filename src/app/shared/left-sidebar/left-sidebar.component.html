@@ -33,7 +33,7 @@
         </a>
       </li>
 
-      <li class="treeview" *ngIf="authService.isAdmin()">
+      <li class="treeview" *ngIf="shouldShowAdminParentMenu()">
         <a href="#">
           <i class="fa fa-cogs"></i> <span>Administração</span>
           <span class="pull-right-container">
@@ -42,20 +42,53 @@
         </a>
         <ul class="treeview-menu">
           <li>
-            <a routerLink="/users" [queryParams]="{ 'userType': 'Admin'}" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Administradores</a>
+            <a
+              routerLink="/users"
+              [queryParams]="{ 'userType': 'Admin'}"
+              routerLinkActive="active"
+              class="nav-link"
+              *ngIf="shouldShowAdminsSubmenu()"
+            >
+              <i class="fa fa-circle-o"></i>Administradores
+            </a>
           </li>
+
           <li>
-            <a routerLink="/users" [queryParams]="{ 'userType': 'Employee'}" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Funcionários</a>
+            <a
+              routerLink="/users"
+              [queryParams]="{ 'userType': 'Employee'}"
+              routerLinkActive="active"
+              class="nav-link"
+              *ngIf="shouldShowEmployeesSubmenu()"
+            >
+              <i class="fa fa-circle-o"></i>Funcionários
+            </a>
           </li>
+
           <li>
-            <a routerLink="/users" [queryParams]="{ 'userType': 'Customer'}" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Clientes</a>
+            <a
+              routerLink="/users"
+              [queryParams]="{ 'userType': 'Customer'}"
+              routerLinkActive="active"
+              class="nav-link"
+              *ngIf="shouldShowCustomersSubmenu()"
+            >
+              <i class="fa fa-circle-o"></i>Clientes
+            </a>
           </li>
+
           <li>
-            <a routerLink="/agendas" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Agendas</a>
+            <a routerLink="/agendas" routerLinkActive="active" class="nav-link" *ngIf="shouldShowAgendasMenu()">
+              <i class="fa fa-circle-o"></i>Agendas
+            </a>
           </li>
+
           <li>
-            <a routerLink="/activities" routerLinkActive="active" class="nav-link"><i class="fa fa-circle-o"></i>Atividades</a>
+            <a routerLink="/activities" routerLinkActive="active" class="nav-link" *ngIf="shouldShowActivitiesMenu()">
+              <i class="fa fa-circle-o"></i>Atividades
+            </a>
           </li>
+
         </ul>
       </li>
 

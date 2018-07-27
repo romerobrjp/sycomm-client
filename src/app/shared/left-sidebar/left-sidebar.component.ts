@@ -11,4 +11,29 @@ import {User} from '../../users/shared/user.model';
 })
 export class LeftSidebarComponent {
   constructor(private router: Router, public authService: AuthService) {}
+
+  shouldShowAdminParentMenu() {
+    return this.authService.isAdmin() || this.authService.isEmployee();
+  }
+
+  shouldShowAdminsSubmenu() {
+    return this.authService.isAdmin();
+  }
+
+  shouldShowEmployeesSubmenu() {
+    return this.authService.isAdmin();
+  }
+
+  shouldShowCustomersSubmenu() {
+    return this.authService.isAdmin() || this.authService.isEmployee();
+  }
+
+  shouldShowAgendasMenu() {
+    return this.authService.isAdmin();
+  }
+
+  shouldShowActivitiesMenu() {
+    return this.authService.isAdmin();
+  }
+
 }
