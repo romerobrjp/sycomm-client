@@ -12,7 +12,7 @@ import {Ng2BRPipesModule} from 'ng2-brpipes';
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageModule } from 'primeng/message';
-import {ConfirmDialogModule, MessagesModule, CardModule, DropdownModule} from 'primeng/primeng';
+import {ConfirmDialogModule, MessagesModule, CardModule, TooltipModule} from 'primeng/primeng';
 import { DataViewModule } from 'primeng/dataview';
 
 // Components
@@ -104,6 +104,7 @@ import { AppRoutingModule } from './app-routing.module';
     MessagesModule,
     ConfirmDialogModule,
     CardModule,
+    TooltipModule,
     DataViewModule,
     TextMaskModule,
     Ng2BRPipesModule,
