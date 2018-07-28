@@ -20,8 +20,8 @@ export class ProfileComponent implements OnInit {
   form: FormGroup;
   formUtils: FormUtils;
   // masks
-  registrationMask = FormUtils.registrationMask;
   cpfMask = FormUtils.cpfMask;
+  landlineMask = FormUtils.landlineMask;
   phoneMask = FormUtils.phoneMask;
 
   constructor(
