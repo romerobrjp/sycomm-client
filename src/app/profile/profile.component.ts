@@ -8,6 +8,7 @@ import * as cpf_lib from '@fnando/cpf';
 import {AuthService} from '../shared/auth.service';
 import {User} from '../users/shared/user.model';
 import {Dictionary} from '../shared/dictionary';
+import {GeneralUtils} from '../shared/general-utils';
 
 @Component({
   selector: 'app-profile',
@@ -54,7 +55,7 @@ export class ProfileComponent implements OnInit {
     this.messageService.clear();
     this.applyFormValues();
 
-    this.userService.update(this.authService.getCurrentUser() as User).subscribe(
+    this.userService.update(this.userProfile).subscribe(
       () => {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Perfil atualizado!'});
         this.userService.getById(this.userProfile.id).subscribe(
@@ -87,17 +88,9 @@ export class ProfileComponent implements OnInit {
     } else {
       this.userProfile.cpf = '';
     }
-    this.userProfile.landline = this.stripPhoneNumbers(this.form.get('landline').value);
-    this.userProfile.cellphone = this.stripPhoneNumbers(this.form.get('cellphone').value);
-    this.userProfile.whatsapp = this.stripPhoneNumbers(this.form.get('whatsapp').value);
+    this.userProfile.landline = GeneralUtils.stripPhoneNumbers(this.form.get('landline').value);
+    this.userProfile.cellphone = GeneralUtils.stripPhoneNumbers(this.form.get('cellphone').value);
+    this.userProfile.whatsapp = GeneralUtils.stripPhoneNumbers(this.form.get('whatsapp').value);
     this.userProfile.simple_address = this.form.get('simple_address').value;
-  }
-
-  private stripPhoneNumbers(phoneNumber: string) {
-    if (phoneNumber) {
-      return phoneNumber.replace(/\D/g, '');
-    } else {
-      return '';
-    }
   }
 }
