@@ -34,6 +34,7 @@ export class ActivitiesComponent implements OnInit {
   ) {
     this.columns = [
       { field: 'name', header: 'Nome' },
+      { field: 'agenda.start_date', header: 'Data' },
       { field: 'description', header: 'Descrição' },
       { field: 'activity_type', header: 'Tipo' },
       { field: 'status', header: 'Status' },

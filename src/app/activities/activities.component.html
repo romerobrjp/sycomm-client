@@ -36,6 +36,7 @@
   <ng-template pTemplate="body" let-activity>
     <tr>
       <td>{{ activity.name }}</td>
+      <td>{{ activity.agenda.start_date | date: 'dd/MM/yyyy'}}</td>
       <td>{{ activity.description }}</td>
       <td>{{ dictionary.activityTypes[activity.activity_type] }}</td>
       <td>{{ dictionary.activityStatuses[activity.status] }}</td>

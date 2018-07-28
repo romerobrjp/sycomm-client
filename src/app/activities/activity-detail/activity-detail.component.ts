@@ -46,7 +46,9 @@ export class ActivityDetailComponent implements OnInit {
       null,
       null,
       null,
+      null,
       '',
+      null,
       null,
       null,
       null
@@ -57,7 +59,7 @@ export class ActivityDetailComponent implements OnInit {
       description: [{value : '', disabled: !this.authService.isAdmin()}],
       annotations: [''],
       activity_type: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
-      status: [null, [Validators.required]],
+      status: [{value: null, disabled: !this.authService.isAdmin() || (!this.authService.isAdmin() && this.entity.status === 1)}, [Validators.required]],
       employee_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
       customer_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
       customer_name: [{value : '', disabled: !this.authService.isAdmin()}, Validators.required],
@@ -151,7 +153,7 @@ export class ActivityDetailComponent implements OnInit {
 
   private applyFormValues() {
     this.entity.name = this.form.get('name').value;
-    this.entity.description = this.form.get('annotations').value;
+    this.entity.description = this.form.get('description').value;
     this.entity.annotations = this.form.get('annotations').value;
     this.entity.status = this.form.get('status').value;
     this.entity.activity_type = this.form.get('activity_type').value;

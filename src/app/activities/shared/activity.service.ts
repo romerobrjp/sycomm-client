@@ -13,10 +13,10 @@ export class ActivityService {
 
   constructor(private http: TokenService) { }
 
-  listLastUserActivities(employee_id, quant): Observable<Activity[]> {
+  listYesterdayEmployeeActivities(employeeId, quant): Observable<Activity[]> {
     const url = `${this.urlResource}`;
 
-    return this.http.get(`${url}/list_last_user_activities?employee_id=${employee_id}&quant=${quant}`).pipe(
+    return this.http.get(`${url}/list_employee_yesterday_activities?employee_id=${employeeId}&quant=${quant}`).pipe(
       catchError(this.handleErrors),
       map((response: Response) => this.responseToModels(response)),
     );
@@ -32,6 +32,15 @@ export class ActivityService {
     const url = `${this.urlResource}/list_user_activities_paginated?employee_id=${employee_id}&page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
+  }
+
+  listEmployeeDayActivities(employeeId: number) {
+    const url = `${this.urlResource}`;
+
+    return this.http.get(`${url}/list_employee_day_activities?employee_id=${employeeId}`).pipe(
+      catchError(this.handleErrors),
+      map((response: Response) => this.responseToModels(response)),
+    );
   }
 
   getById(id: number): Observable<Activity> {
@@ -71,11 +80,13 @@ export class ActivityService {
       jsonEntity['annotations'],
       jsonEntity['status'],
       jsonEntity['activity_type'],
+      jsonEntity['employee_id'],
       jsonEntity['customer_id'],
       jsonEntity['customer_name'],
-      jsonEntity['employee_id'],
       jsonEntity['created_at'],
       jsonEntity['updated_at'],
+      jsonEntity['agenda'],
+      jsonEntity['employee'],
     );
   }
 
@@ -96,6 +107,8 @@ export class ActivityService {
         jsonEntity['customer_name'],
         jsonEntity['created_at'],
         jsonEntity['updated_at'],
+        jsonEntity['agenda'],
+        jsonEntity['employee'],
       );
 
       items.push(item);
