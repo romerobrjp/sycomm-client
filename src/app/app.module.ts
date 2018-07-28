@@ -24,12 +24,6 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { ControlSidebarComponent } from './shared/control-sidebar/control-sidebar.component';
 import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
-import { AdminsComponent } from './admins/admins.component';
-import { AdminDetailComponent } from './admins/admin-detail/admin-detail.component';
-import { EmployeesComponent } from './employees/employees.component';
-import { EmployeeDetailComponent } from './employees/employee-detail/employee-detail.component';
-import { CustomersComponent } from './customers/customers.component';
-import { CustomerDetailComponent } from './customers/customer-detail/customer-detail.component';
 import { PublicOfficesComponent } from './public_offices/public_offices.component';
 import { PublicAgenciesComponent } from './public_agencies/public_agencies.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -42,9 +36,6 @@ import { AgendaDetailComponent } from './agendas/agenda-detail/agenda-detail.com
 
 // Services
 import { UserService } from './users/shared/user.service';
-import { AdminService } from './admins/shared/admin.service';
-import { EmployeeService } from './employees/shared/employee.service';
-import { CustomerService } from './customers/shared/customer.service';
 import { PublicOfficeService } from './public_offices/shared/public_office.service';
 import { PublicAgencyService } from './public_agencies/shared/public_agency.service';
 import { ActivityService } from './activities/shared/activity.service';
@@ -74,14 +65,8 @@ import { AppRoutingModule } from './app-routing.module';
     ControlSidebarComponent,
     UsersComponent,
     UserDetailComponent,
-    EmployeesComponent,
     PublicOfficesComponent,
     PublicAgenciesComponent,
-    EmployeeDetailComponent,
-    CustomersComponent,
-    CustomerDetailComponent,
-    AdminsComponent,
-    AdminDetailComponent,
     DashboardComponent,
     SignInComponent,
     ProfileComponent,
@@ -111,9 +96,6 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   providers: [
     UserService,
-    AdminService,
-    EmployeeService,
-    CustomerService,
     PublicOfficeService,
     PublicAgencyService,
     ActivityService,
