@@ -59,7 +59,6 @@ export class ProfileComponent implements OnInit {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Perfil atualizado!'});
         this.userService.getById(this.userProfile.id).subscribe(
           retrievedUser => {
-            alert(JSON.stringify(retrievedUser));
             this.userProfile = retrievedUser;
           }
         );
