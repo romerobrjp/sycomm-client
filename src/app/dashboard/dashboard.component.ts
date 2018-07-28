@@ -12,12 +12,18 @@ import {AuthService} from '../shared/auth.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  userActivities: Array<Activity>;
+  employeeLastActivities: Array<Activity>;
+  employeeDayActivities: Array<Activity>;
   activityDictionary = {
     'not_started' : 'Não iniciada',
     'in_progress' : 'Em progresso',
     'finished' : 'Finalizada',
     'closed' : 'Fechada'
+  };
+
+  activityTypesDictionary = {
+    'attendance' : 'Atendimento',
+    'offer' : 'Oferta',
   };
 
   constructor(private activityService: ActivityService,
@@ -28,13 +34,25 @@ export class DashboardComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
+    this.listEmployeeDayActivities();
     this.listEmployeeLastActivities();
   }
 
   listEmployeeLastActivities() {
-    this.activityService.listLastUserActivities(this.authService.getCurrentUser()['id'], 5).subscribe(
+    this.activityService.listYesterdayEmployeeActivities(this.authService.getCurrentUser()['id'], 5).subscribe(
       successResponse => {
-        this.userActivities = successResponse;
+        this.employeeLastActivities = successResponse;
+      },
+      errorResponse => {
+        console.error('Ocorreu um erro ao tentar buscar as atividades deste usuário:' + errorResponse);
+      }
+    );
+  }
+
+  listEmployeeDayActivities() {
+    this.activityService.listEmployeeDayActivities(this.authService.getCurrentUser()['id']).subscribe(
+      successResponse => {
+        this.employeeDayActivities = successResponse;
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as atividades deste usuário:' + errorResponse);
@@ -43,9 +61,18 @@ export class DashboardComponent implements OnInit {
   }
 
   getUserActivitiesLength(): number {
-    if (this.userActivities) {
-      return this.userActivities.length;
+    if (this.employeeLastActivities) {
+      return this.employeeLastActivities.length;
     }
   }
 
+  getEmployeeDayActivitiesLength(): number {
+    if (this.employeeDayActivities) {
+      return this.employeeDayActivities.length;
+    }
+  }
+
+  getClassForActivitStatus(status: string) {
+
+  }
 }

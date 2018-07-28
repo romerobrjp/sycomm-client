@@ -3,9 +3,10 @@
     <strong> Dashboard </strong>
   </h1>
 
+  <!-- EMPLOYEE DAY ACTIVITIES -->
   <div class="box box-info" *ngIf="authService.isEmployee()">
     <div class="box-header with-border">
-      <h3 class="box-title">Minhas últimas atividades ({{ getUserActivitiesLength() }})</h3>
+      <h3 class="box-title">Atividades de HOJE ({{ employeeDayActivities?.length > 0 ? employeeDayActivities?.length : '0' }})</h3>
 
       <div class="box-tools pull-right">
         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -18,19 +19,95 @@
       <div class="table-responsive">
         <table class="table no-margin">
           <thead>
+            <tr>
+              <th>Atividade</th>
+              <th>Tipo</th>
+              <th>Data</th>
+              <th>Descrição</th>
+              <th>Status</th>
+              <th>Cliente</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let activity of employeeDayActivities">
+              <td><a [routerLink]="['/activities', activity.id]">{{ activity.name }}</a></td>
+              <td>{{ activityTypesDictionary[activity.activity_type] }}</td>
+              <td>{{ activity.agenda.start_date | date: 'dd/MM/yyyy'}}</td>
+              <td>{{ activity.description }}</td>
+              <td>
+                <span
+                  class="label"
+                  [class.activity-not-started]="activity['status'] === 'not_started'"
+                  [class.activity-in-progress]="activity['status'] === 'in_progress'"
+                  [class.activity-finished]="activity['status'] === 'finished'"
+                >
+                  {{ activityDictionary[activity.status] }}
+                </span>
+              </td>
+              <td><a [routerLink]="['/users', activity.customer_id]" [queryParams]="{ 'userType': 'Customer'}">{{ activity.customer_name }}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- /.table-responsive -->
+    </div>
+
+    <div class="box-body" class="text-center" *ngIf="employeeDayActivities?.length == 0">
+      <p>Nenhuma atividade para hoje. Va descansar um pouco <i class="fa fa-smile-o"></i></p>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer clearfix">
+      <!--<a [routerLink]="['/activities/new']" class="btn btn-success btn-flat pull-left">+ Nova atividade</a>-->
+      <a [routerLink]="['/activities']" class="btn btn-primary btn-flat pull-right">Ver todas as atividades</a>
+    </div>
+    <!-- /.box-footer -->
+  </div>
+  <!-- /.box -->
+
+  <!-- EMPLOYEE LAST ACTIVITIES -->
+  <div class="box box-info" *ngIf="authService.isEmployee()">
+    <div class="box-header with-border">
+      <h3 class="box-title">Atividades de ONTEM ({{ employeeLastActivities?.length > 0 ? employeeLastActivities?.length : '0' }})</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+        <!--<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>-->
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" *ngIf="employeeLastActivities?.length > 0">
+      <div class="table-responsive">
+        <table class="table no-margin">
+          <thead>
           <tr>
             <th>Atividade</th>
+            <th>Tipo</th>
+            <th>Data</th>
             <th>Descrição</th>
             <th>Status</th>
             <th>Cliente</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let activity of userActivities">
-            <td><a [routerLink]="['/activities', activity.id]">{{ activity.name }}</a></td>
+          <tr *ngFor="let activity of employeeLastActivities">
+            <td>
+              <a [routerLink]="['/activities', activity.id]">{{ activity.name }}</a>
+            </td>
+            <td>{{ activityTypesDictionary[activity.activity_type] }}</td>
+            <td>{{ activity.agenda.start_date | date: 'dd/MM/yyyy'}}</td>
             <td>{{ activity.description }}</td>
-            <td><span class="label label-success">{{ activityDictionary[activity.status] }}</span></td>
-            <td><a [routerLink]="['/users', activity.client_id]" [queryParams]="{ 'userType': 'Customer'}">{{ activity.client_name }}</a></td>
+            <td><span
+                  class="label"
+                  [class.activity-not-started]="activity['status'] === 'not_started'"
+                  [class.activity-in-progress]="activity['status'] === 'in_progress'"
+                  [class.activity-finished]="activity['status'] === 'finished'"
+                >
+                  {{ activityDictionary[activity.status] }}
+                </span>
+            </td>
+            <td><a [routerLink]="['/users', activity.customer_id]" [queryParams]="{ 'userType': 'Customer'}">{{ activity.customer_name }}</a></td>
           </tr>
           </tbody>
         </table>
@@ -38,6 +115,10 @@
       <!-- /.table-responsive -->
     </div>
     <!-- /.box-body -->
+    <div class="box-body" class="text-center" *ngIf="employeeLastActivities?.length == 0">
+      <p>Nenhuma atividade ontem.</p>
+    </div>
+
     <div class="box-footer clearfix">
       <!--<a [routerLink]="['/activities/new']" class="btn btn-success btn-flat pull-left">+ Nova atividade</a>-->
       <a [routerLink]="['/activities']" class="btn btn-primary btn-flat pull-right">Ver todas as atividades</a>
