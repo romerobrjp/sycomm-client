@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Message} from 'primeng/components/common/api';
 import {FormUtils} from '../../shared/form-utils';
 import {Location} from '@angular/common';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Params, Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {Agenda} from '../shared/agenda.model';
 import {AgendaService} from '../shared/agenda.service';
@@ -227,7 +227,10 @@ export class AgendaDetailComponent implements OnInit {
       message: 'As alteraçoes feitas nao foram salvas, se sair desta pagina os dados serao perdidos. Continuar?',
       icon: 'fa fa-question-circle',
       accept: () => {
-        this.router.navigate(['/users', customerId]);
+        const navigationExtras: NavigationExtras = {
+          queryParams: { 'userType': 'Customer' }
+        };
+        this.router.navigate(['/users', customerId], navigationExtras);
       },
       reject: () => {
         return false;
