@@ -32,6 +32,10 @@ export class LeftSidebarComponent {
     return this.authService.isAdmin();
   }
 
+  shouldShowMinhasAgendasMenu() {
+    return this.authService.isEmployee();
+  }
+
   shouldShowActivitiesMenu() {
     return this.authService.isAdmin();
   }

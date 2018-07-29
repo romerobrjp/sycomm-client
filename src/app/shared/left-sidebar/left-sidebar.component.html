@@ -97,6 +97,12 @@
           <i class="fa fa-tasks"></i> <span>Minhas atividades</span>
         </a>
       </li>
+
+      <li *ngIf="shouldShowMinhasAgendasMenu()">
+        <a routerLink="/agendas">
+          <i class="fa fa-book"></i> <span>Minhas Agendas</span>
+        </a>
+      </li>
     </ul>
   </section>
   <!-- /.sidebar -->
