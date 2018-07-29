@@ -26,6 +26,7 @@
               <th>Descrição</th>
               <th>Status</th>
               <th>Cliente</th>
+              <th>Última movimentação</th>
             </tr>
           </thead>
 
@@ -46,6 +47,7 @@
                 </span>
               </td>
               <td><a [routerLink]="['/users', activity.customer_id]" [queryParams]="{ 'userType': 'Customer'}">{{ activity.customer_name }}</a></td>
+              <td>{{ activity.updated_at | date: 'dd/MM/yyy HH:mm' }}</td>
             </tr>
           </tbody>
         </table>
@@ -88,6 +90,7 @@
             <th>Descrição</th>
             <th>Status</th>
             <th>Cliente</th>
+            <th>Ultima movimentação</th>
           </tr>
           </thead>
           <tbody>
@@ -108,6 +111,7 @@
                 </span>
             </td>
             <td><a [routerLink]="['/users', activity.customer_id]" [queryParams]="{ 'userType': 'Customer'}">{{ activity.customer_name }}</a></td>
+            <td>{{ activity.updated_at | date: 'dd/MM/yyy HH:mm' }}</td>
           </tr>
           </tbody>
         </table>
