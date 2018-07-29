@@ -1,5 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
+.activity-not-started {
+  background-color: red;
+}
+.activity-in-progress {
+  background-color: dodgerblue;
+}
+
+.activity-finished {
+  background-color: forestgreen;
+}
+
 .ml-10 {
   margin-left: 10px;
 }
