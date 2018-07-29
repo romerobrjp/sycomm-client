@@ -54,6 +54,8 @@ export class AgendaDetailComponent implements OnInit {
       [],
       [],
       null,
+      null,
+      null,
       null
     );
 
