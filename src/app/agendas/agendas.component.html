@@ -37,7 +37,9 @@
     <tr>
       <td>{{ agenda.name }}</td>
       <td>{{ agenda.start_date | date: 'dd/MM/yyyy' }}</td>
-      <td>{{ agenda.employee.name }}</td>
+      <td>{{ agenda.activities.length }}</td>
+      <td>{{ agenda.open_activities_count }}</td>
+      <td>{{ agenda.customers.length }}</td>
 
       <td>
         <a [routerLink]="['/agendas', agenda.id]" class="btn btn-info mr-10" title="Detalhes">

@@ -13,10 +13,10 @@ export class AgendaService {
 
   constructor(private http: TokenService) { }
 
-  listLastUserAgendas(userId, quant): Observable<Agenda[]> {
+  listLastEmployeeAgendas(userId, quant): Observable<Agenda[]> {
     const url = `${this.urlResource}`;
 
-    return this.http.get(`${url}/list_last_user_agendas?user_id=${userId}&quant=${quant}`).pipe(
+    return this.http.get(`${url}/list_last_emplyee_agendas?employee_id=${userId}&quant=${quant}`).pipe(
       catchError(this.handleErrors),
       map((response: Response) => this.responseToModels(response)),
     );
@@ -28,8 +28,8 @@ export class AgendaService {
     return this.http.get(url).pipe(catchError(this.handleErrors));
   }
 
-  listUserAgendasPaginated(userId: number, page_number: number, per_page: number): Observable<Response> {
-    const url = `${this.urlResource}/list_user_agendas_paginated?user_id=${userId}&page_number=${page_number}&per_page=${per_page}`;
+  listEmployeeAgendasPaginated(employeeId: number, page_number: number, per_page: number): Observable<Response> {
+    const url = `${this.urlResource}/list_employee_agendas_paginated?employee_id=${employeeId}&page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
   }
@@ -76,6 +76,8 @@ export class AgendaService {
       customersCpf,
       jsonEntity['created_at'],
       jsonEntity['updated_at'],
+      jsonEntity['activities'],
+      jsonEntity['open_activities_count'],
     );
   }
 
@@ -96,6 +98,8 @@ export class AgendaService {
         customersCpf,
         jsonEntity['created_at'],
         jsonEntity['updated_at'],
+        jsonEntity['activities'],
+        jsonEntity['open_activities_count'],
       );
 
       items.push(item);
@@ -105,7 +109,7 @@ export class AgendaService {
   }
 
   private handleErrors(error: Response) {
-    console.error('Erro em UserService: ' + error);
+    console.error('Erro em AgendaService: ' + error);
     return observableThrowError(error);
   }
 }

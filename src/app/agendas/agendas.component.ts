@@ -22,6 +22,7 @@ export class AgendasComponent implements OnInit {
     offset: 0
   };
   totalCount = 0;
+  openActivitiesCount = 0;
 
   constructor(
     private agendaService: AgendaService,
@@ -35,7 +36,9 @@ export class AgendasComponent implements OnInit {
     this.columns = [
       { field: 'name', header: 'Nome' },
       { field: 'start_date', header: 'Data de inicio' },
-      { field: 'employee_name', header: 'Atribuido a' },
+      { field: 'activities', header: 'Atividades' },
+      { field: 'open_activities_count', header: 'Atividades em aberto' },
+      { field: 'customers', header: 'Número de Clientes' },
     ];
   }
 
@@ -47,7 +50,7 @@ export class AgendasComponent implements OnInit {
     if (this.authService.isAdmin()) {
       this.listAllPaginated();
     } else {
-      this.listUserAgendasPaginated();
+      this.listEmployeeAgendasPaginated();
     }
   }
 
@@ -63,8 +66,8 @@ export class AgendasComponent implements OnInit {
     );
   }
 
-  listUserAgendasPaginated() {
-    this.agendaService.listUserAgendasPaginated(this.authService.getCurrentUser()['id'], this.paginator.pageNumber, this.paginator.perPage).subscribe(
+  listEmployeeAgendasPaginated() {
+    this.agendaService.listEmployeeAgendasPaginated(this.authService.getCurrentUser()['id'], this.paginator.pageNumber, this.paginator.perPage).subscribe(
       successResponse => {
         this.rows = successResponse.json()['data'];
         this.totalCount = successResponse.json()['total_count'];

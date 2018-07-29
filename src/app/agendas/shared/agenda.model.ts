@@ -1,4 +1,5 @@
 import {User} from '../../users/shared/user.model';
+import {Activity} from '../../activities/shared/activity.model';
 
 export class Agenda {
   public constructor(
@@ -11,6 +12,8 @@ export class Agenda {
     public customers_cpf: Array<string>,
     public created_at: Date,
     public updated_at: Date,
+    public activities: Array<Activity>,
+    public open_activities_count: number,
   ) {}
 
   static attributesDictionary = {
