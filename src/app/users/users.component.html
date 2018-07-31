@@ -1,7 +1,8 @@
 <h1 class="text-center page-header">{{ getUsersListTitle() }}</h1>
 
 <p-table
-  id="users_p-table"
+  id="users_table"
+  #usersTable
   [value]="users"
   [paginator]="true"
   [pageLinks]="10"
@@ -14,7 +15,7 @@
   (onLazyLoad)="loadDataOnChange($event)"
 >
   <ng-template pTemplate="caption">
-    <div style="text-align: right">
+    <div class="text-align-right">
       <a [routerLink]="['/users/new']" [queryParams]="{ 'userType': userListingType}" class="btn btn-success table-btn-new">
         Novo
         <span class="fa fa-plus"></span>
@@ -32,6 +33,18 @@
       <th>
         Ações
       </th>
+    </tr>
+
+    <tr>
+      <th *ngFor="let col of columns" [ngSwitch]="col.field">
+        <input *ngSwitchCase="'registration'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+        <input *ngSwitchCase="'email'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+        <input *ngSwitchCase="'cpf'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+        <input *ngSwitchCase="'cellphone'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+      </th>
+
+      <th></th>
     </tr>
   </ng-template>
 
@@ -51,6 +64,16 @@
         </button>
       </td>
     </tr>
+  </ng-template>
+
+  <ng-template pTemplate="paginatorright">
+    Pagina:
+    <input
+      id="go_to_page_input"
+      type="number"
+      class="go-to-page-input"
+      (change)="changePageNumber($event)"
+    />
   </ng-template>
 </p-table>
 

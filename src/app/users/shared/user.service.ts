@@ -12,8 +12,14 @@ export class UserService {
 
   constructor(private http: TokenService) {}
 
-  listPaginated(page_number: number, per_page: number, userType: string): Observable<Response> {
-    const url = `${this.urlResource}/list_paginated?page_number=${page_number}&per_page=${per_page}&user_type=${userType}`;
+  listPaginated(page_number: number,
+                per_page: number,
+                userType: string,
+                sortField: string,
+                sortDirection: string,
+                searchField: string,
+                searchText: string): Observable<Response> {
+    const url = `${this.urlResource}/list_paginated?page_number=${page_number}&per_page=${per_page}&user_type=${userType}&sortField=${sortField}&sortDirection=${sortDirection}&searchField=${searchField}&searchText=${searchText}`;
 
     return this.http.get(url).pipe(
       map((response: Response) => response),

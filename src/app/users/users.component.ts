@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
 
 import { User } from './shared/user.model';
 import { UserService } from './shared/user.service';
 
 import { MessageService } from 'primeng/components/common/messageservice';
-import { ConfirmationService } from 'primeng/api';
+import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
 import { CpfPipe, TelefonePipe } from 'ng2-brpipes';
+import {GeneralUtils} from '../shared/general-utils';
+import {DataTable} from 'primeng/primeng';
 
 @Component({
   selector: 'app-users',
@@ -19,20 +21,20 @@ export class UsersComponent implements OnInit {
   adminColumns: any[];
   employeeColumns: any[];
   customerColumns: any[];
-  pageSizes = [25, 50, 100];
+  pageSizes = [10, 25, 50, 100];
   paginator = {
     pageNumber: 0,
     perPage: this.pageSizes[0],
     offset: 0,
-    userType: ''
+    userType: '',
+    sortField: 'name',
+    sortOrder: 'asc',
+    searchField: '',
+    searchText: ''
   };
   totalCount = 0;
-  userTypesDictionary = {
-    'Admin' : 'Admin',
-    'Employee' : 'Funcionário',
-    'Customer' : 'Cliente'
-  };
   userListingType: string;
+  @ViewChild('usersTable') usersTable: DataTable;
 
   private cpfPipe: CpfPipe;
   private telefonePipe: TelefonePipe;
@@ -112,22 +114,59 @@ export class UsersComponent implements OnInit {
   }
 
   listPaginated() {
-    this.userService.listPaginated(this.paginator.pageNumber, this.paginator.perPage, this.paginator.userType).subscribe(
+    this.userService.listPaginated(this.paginator.pageNumber,
+                                   this.paginator.perPage,
+                                   this.paginator.userType,
+                                   this.paginator.sortField,
+                                   this.paginator.sortOrder,
+                                   this.paginator.searchField,
+                                   this.paginator.searchText).subscribe(
       response => {
         this.users = response.json()['data'];
         this.totalCount = response.json()['total_count'];
+        document.getElementById('go_to_page_input')['value'] = this.paginator.pageNumber;
       },
       error => console.error('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );
   }
 
-  loadDataOnChange(event) {
+  loadDataOnChange(event: LazyLoadEvent) {
     this.paginator.offset = event.first;
     this.paginator.perPage = event.rows;
     this.paginator.pageNumber = Math.ceil(this.paginator.offset / this.paginator.perPage) + 1;
+    if (event.sortField) { this.paginator.sortField = event.sortField; }
+    this.paginator.sortOrder = GeneralUtils.sortOrderDictionary.get(event.sortOrder);
+
+    document.getElementById('go_to_page_input')['value'] = this.paginator.pageNumber;
 
     this.listPaginated();
   }
+
+  handleFilter(event: any) {
+    this.paginator.searchField = event.srcElement.name;
+    this.paginator.searchText = event.target.value;
+
+    this.listPaginated();
+  }
+
+  changePageNumber(event) {
+    let pageNumber = +event.srcElement.value;
+    const totalPagesNumber = Math.ceil(this.totalCount / this.paginator.perPage);
+
+    if (pageNumber < 1) {
+      pageNumber = 1;
+    }
+    else if (pageNumber > totalPagesNumber) {
+      pageNumber = totalPagesNumber;
+    }
+
+    this.usersTable.first = (pageNumber - 1) * this.usersTable.rows;
+    this.paginator.offset = this.usersTable.first;
+    this.paginator.perPage = this.usersTable.rows;
+    this.paginator.pageNumber = pageNumber;
+
+    this.listPaginated();
+  };
 
   delete(user) {
     this.confirmationService.confirm({
