@@ -13,6 +13,11 @@
   background-color: forestgreen;
 }
 
+.go-to-page-input {
+  text-align: center;
+  width: 7em;
+}
+
 .ml-10 {
   margin-left: 10px;
 }
@@ -31,4 +36,8 @@ tbody.ui-table-tbody tr td {
 
 .table-btn-new {
   color: #FFF !important;
+}
+
+.text-align-right {
+  text-align: right;
 }
