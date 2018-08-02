@@ -1,7 +1,7 @@
 <div class="container-fluid" *ngIf="authService.userSignedIn()">
   <div class="row">
     <h3 class="page-header text-center">
-      <strong> Atividades do dia </strong>
+      <strong> {{ getTitle() }} </strong>
     </h3>
 
     <div class="col-xs-12 col-sm-6 col-md-4 employees-activities-card" *ngFor="let employee of employeesWithDayActivities">

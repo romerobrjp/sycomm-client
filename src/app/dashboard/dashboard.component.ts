@@ -110,4 +110,9 @@ export class DashboardComponent implements OnInit {
   getClassForActivitStatus(status: string) {
 
   }
+
+  getTitle(): string {
+    if (this.authService.isAdmin()) return "Atividades do dia"
+    if (this.authService.isEmployee()) return "Dashboard"
+  }
 }
