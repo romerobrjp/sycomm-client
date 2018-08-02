@@ -226,7 +226,7 @@ export class AgendaDetailComponent implements OnInit {
     event.preventDefault();
     this.confirmationService.confirm({
       header: 'Confirmação',
-      message: 'As alteraçoes feitas nao foram salvas, se sair desta pagina os dados serao perdidos. Continuar?',
+      message: 'As alterações feitas nao foram salvas, se sair desta página os dados serão perdidos. Continuar?',
       icon: 'fa fa-question-circle',
       accept: () => {
         const navigationExtras: NavigationExtras = {

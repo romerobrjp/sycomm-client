@@ -14,6 +14,7 @@ import {Dictionary} from '../../shared/dictionary';
 import {UserService} from '../../users/shared/user.service';
 import {ErrorHandlerService} from '../../shared/error-handler.service';
 import {User} from '../../users/shared/user.model';
+import {ConfirmationService} from 'primeng/api';
 
 @Component({
   selector: 'app-activity-detail',
@@ -36,7 +37,8 @@ export class ActivityDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     public dictionary: Dictionary,
-    private userService: UserService
+    private userService: UserService,
+    private confirmationService: ConfirmationService
   ) {
     this.entity = new Activity(
       null,
@@ -101,6 +103,23 @@ export class ActivityDetailComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  goToCustomerConfirmation(event, customerId) {
+    this.confirmationService.confirm({
+      header: 'Confirmação',
+      message: 'As alterações feitas nao foram salvas, se sair desta página os dados serão perdidos. Continuar?',
+      icon: 'fa fa-question-circle',
+      accept: () => {
+        const navigationExtras: NavigationExtras = {
+          queryParams: { 'userType': 'Customer' }
+        };
+        this.router.navigate(['/users', customerId], navigationExtras);
+      },
+      reject: () => {
+        return false;
+      }
+    });
   }
 
   private create(): boolean {
