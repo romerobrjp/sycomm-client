@@ -5,6 +5,9 @@ import {MessageService} from 'primeng/components/common/messageservice';
 import {ConfirmationService} from 'primeng/api';
 import {ActivityService} from '../activities/shared/activity.service';
 import {AuthService} from '../shared/auth.service';
+import {UserService} from '../users/shared/user.service';
+import {User} from '../users/shared/user.model';
+import {Dictionary} from '../shared/dictionary';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +17,8 @@ import {AuthService} from '../shared/auth.service';
 export class DashboardComponent implements OnInit {
   employeeLastActivities: Array<Activity>;
   employeeDayActivities: Array<Activity>;
+  dayActivities: Array<Activity>;
+  employeesWithDayActivities: Array<User>;
   activityDictionary = {
     'not_started' : 'Não iniciada',
     'in_progress' : 'Em progresso',
@@ -26,20 +31,50 @@ export class DashboardComponent implements OnInit {
     'offer' : 'Oferta',
   };
 
-  constructor(private activityService: ActivityService,
-              public authService: AuthService,
+  constructor(public authService: AuthService,
+              private activityService: ActivityService,
+              private userService: UserService,
               private messageService: MessageService,
               private confirmationService: ConfirmationService,
               private activatedRoute: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              public dictionary: Dictionary
+  ) { }
 
   ngOnInit() {
-    this.listEmployeeDayActivities();
-    this.listEmployeeLastActivities();
+    if (this.authService.isAdmin()) {
+      this.listEmployeesWithDayActivities();
+    }
+    if (this.authService.isEmployee()) {
+      this.listEmployeeDayActivities();
+      this.listEmployeeLastActivities();
+    }
+  }
+
+  listDayActivities() {
+    this.activityService.listAllDayActivities().subscribe(
+      successResponse => {
+        this.dayActivities = successResponse;
+      },
+      errorResponse => {
+        console.error('Ocorreu um erro ao tentar buscar as atividades do dia:' + errorResponse);
+      }
+    );
+  }
+
+  listEmployeesWithDayActivities() {
+    this.userService.listEmployeesWithDayActivities().subscribe(
+      successResponse => {
+        this.employeesWithDayActivities = successResponse;
+      },
+      errorResponse => {
+        console.error('Ocorreu um erro ao tentar buscar os funcionario com atividades hoje:' + errorResponse);
+      }
+    );
   }
 
   listEmployeeLastActivities() {
-    this.activityService.listYesterdayEmployeeActivities(this.authService.getCurrentUser()['id'], 5).subscribe(
+    this.activityService.listEmployeeYesterdayActivities(this.authService.getCurrentUser()['id'], 5).subscribe(
       successResponse => {
         this.employeeLastActivities = successResponse;
       },

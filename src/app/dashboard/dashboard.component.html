@@ -1,7 +1,56 @@
 <div class="container-fluid" *ngIf="authService.userSignedIn()">
-  <h1 class="page-header text-center">
-    <strong> Dashboard </strong>
-  </h1>
+  <div class="row">
+    <h3 class="page-header text-center">
+      <strong> Atividades do dia </strong>
+    </h3>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 employees-activities-card" *ngFor="let employee of employeesWithDayActivities">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <span class="info-box-icon" style="margin-right: 7px"><i class="fa fa-user-circle"></i></span>
+          <h3 class="box-title">{{ employee.name }} ({{ employee.activities?.length > 0 ? employee.activities?.length : '0' }} atividades)</h3>
+          <br>
+          <br>
+          <p>Último acesso em {{ employee.last_sign_in_at | date: 'dd/MM/yyyy hh:MM:ss' }}</p>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
+
+        <div class="box-body">
+          <div class="info-box" *ngFor="let activity of employee.activities">
+            <div class="info-box-content info-box-content-no-margin">
+              <span class="">
+                <a [routerLink]="['/activities', activity.id]">
+                  {{ activity.name }}
+                </a>
+              </span>
+
+              <br />
+
+              <span
+                class="label"
+                [class.activity-not-started]="activity['status'] === 'not_started'"
+                [class.activity-in-progress]="activity['status'] === 'in_progress'"
+                [class.activity-finished]="activity['status'] === 'finished'"
+              >
+              {{ dictionary.activityStatuses[activity.status] }}
+              </span>
+
+              <br/>
+              <br/>
+
+              <span class="">{{ activity.description }}</span>
+            </div><!-- /.info-box-content -->
+          </div><!-- /.info-box -->
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- EMPLOYEE DAY ACTIVITIES -->
   <div class="box box-info" *ngIf="authService.isEmployee()">

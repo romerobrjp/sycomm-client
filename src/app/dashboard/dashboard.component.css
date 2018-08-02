@@ -1,0 +1,8 @@
+.employees-activities-card {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.info-box-content-no-margin {
+  margin-left: 0;
+}
