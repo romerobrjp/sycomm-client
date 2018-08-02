@@ -5,6 +5,7 @@ import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from './user.model';
 import { TokenService } from '../../shared/token.service';
+import {Response} from '@angular/http';
 
 @Injectable()
 export class UserService {
@@ -31,7 +32,7 @@ export class UserService {
     const url = `${this.urlResource}/list_by_type?user_type=${userType}`;
 
     return this.http.get(url).pipe(
-      map((response: Response) => UserService.responseToModels(response)),
+      map((response: Response) => this.responseToModels(response)),
       catchError(this.handleErrors)
     );
   }
@@ -40,7 +41,7 @@ export class UserService {
     const url = `${this.urlResource}/${id}`;
 
     return this.http.get(url).pipe(
-      map((response: Response) => UserService.responseToModel(response)),
+      map((response: Response) => this.responseToModel(response)),
       catchError(this.handleErrors),
     );
   }
@@ -49,7 +50,7 @@ export class UserService {
     const url = `${this.urlResource}/get_customer_by_cpf/${cpf}`;
 
     return this.http.get(url).pipe(
-      map((response: Response) => UserService.responseToModel(response)),
+      map((response: Response) => this.responseToModel(response)),
       catchError(this.handleErrors),
     );
   }
@@ -58,7 +59,7 @@ export class UserService {
     const url = `${this.urlResource}`;
 
     return this.http.post(url, user).pipe(
-      map((response: Response) => UserService.responseToModel(response)),
+      map((response: Response) => this.responseToModel(response)),
       catchError(this.handleErrors),
     );
   }
@@ -68,7 +69,7 @@ export class UserService {
 
     return this.http.put(url, user).pipe(
       catchError(this.handleErrors),
-      map((response: Response) => UserService.responseToModel(response)),
+      map((response: Response) => this.responseToModel(response)),
     );
   }
 
@@ -81,6 +82,15 @@ export class UserService {
     );
   }
 
+  listEmployeesWithDayActivities(): Observable<User[]> {
+    const url = `${this.urlResource}/list_employees_with_day_activities`;
+
+    return this.http.get(url).pipe(
+      map((response: Response) => this.responseToModels(response)),
+      catchError(this.handleErrors)
+    );
+  }
+
   // PRIVATE METHODS -----------------------------------------------------------
 
   private handleErrors(error: Response) {
@@ -88,7 +98,7 @@ export class UserService {
     return observableThrowError(error);
   }
 
-  static responseToModel(response: Response): User {
+  private responseToModel(response: Response): User {
     const userJson = response.json();
 
     return new User(
@@ -118,11 +128,14 @@ export class UserService {
       userJson['last_sign_in_at'],
       userJson['current_sign_in_ip'],
       userJson['last_sign_in_ip'],
+      userJson['agendas'],
+      userJson['activities'],
     );
   }
 
-  static responseToModels(response: Response): User[] {
-    let collection =  from(response.json());
+  private responseToModels(response: Response): User[] {
+    // let collection =  response.json()['data'] as Array<any>;
+    let collection =  response.json();
     let users: User[] = [];
 
     collection.forEach(jsonEntity => {
@@ -153,6 +166,8 @@ export class UserService {
         jsonEntity['last_sign_in_at'],
         jsonEntity['current_sign_in_ip'],
         jsonEntity['last_sign_in_ip'],
+        jsonEntity['agendas'],
+        jsonEntity['activities'],
       );
 
       users.push(user);

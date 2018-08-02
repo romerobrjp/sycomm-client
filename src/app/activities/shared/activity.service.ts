@@ -6,21 +6,13 @@ import {Injectable} from '@angular/core';
 import {Activity} from './activity.model';
 import {TokenService} from '../../shared/token.service';
 import {Response} from '@angular/http';
+import {User} from '../../users/shared/user.model';
 
 @Injectable()
 export class ActivityService {
   urlResource = 'activities';
 
   constructor(private http: TokenService) { }
-
-  listYesterdayEmployeeActivities(employeeId, quant): Observable<Activity[]> {
-    const url = `${this.urlResource}`;
-
-    return this.http.get(`${url}/list_employee_yesterday_activities?employee_id=${employeeId}&quant=${quant}`).pipe(
-      catchError(this.handleErrors),
-      map((response: Response) => this.responseToModels(response)),
-    );
-  }
 
   listAllPaginated(page_number: number, per_page: number): Observable<Response> {
     const url = `${this.urlResource}/list_all_paginated?page_number=${page_number}&per_page=${per_page}`;
@@ -34,12 +26,30 @@ export class ActivityService {
     return this.http.get(url).pipe(catchError(this.handleErrors));
   }
 
-  listEmployeeDayActivities(employeeId: number) {
+  listAllDayActivities(): Observable<Activity[]> {
+    const url = `${this.urlResource}/list_day_activities`;
+
+    return this.http.get(url).pipe(
+      map((response: Response) => this.responseToModels(response)),
+      catchError(this.handleErrors)
+    );
+  }
+
+  listEmployeeDayActivities(employeeId: number): Observable<Activity[]> {
     const url = `${this.urlResource}`;
 
     return this.http.get(`${url}/list_employee_day_activities?employee_id=${employeeId}`).pipe(
-      catchError(this.handleErrors),
       map((response: Response) => this.responseToModels(response)),
+      catchError(this.handleErrors),
+    );
+  }
+
+  listEmployeeYesterdayActivities(employeeId, quant): Observable<Activity[]> {
+    const url = `${this.urlResource}`;
+
+    return this.http.get(`${url}/list_employee_yesterday_activities?employee_id=${employeeId}&quant=${quant}`).pipe(
+      map((response: Response) => this.responseToModels(response)),
+      catchError(this.handleErrors),
     );
   }
 
@@ -47,8 +57,8 @@ export class ActivityService {
     const url = `${this.urlResource}/${id}`;
 
     return this.http.get(url).pipe(
+      map((response: Response) => this.responseToModel(response)),
       catchError(this.handleErrors),
-      map((response: Response) => this.responseToModel(response))
     );
   }
 

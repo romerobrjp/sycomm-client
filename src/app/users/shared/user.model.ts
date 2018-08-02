@@ -1,3 +1,6 @@
+import {Agenda} from '../../agendas/shared/agenda.model';
+import {Activity} from '../../activities/shared/activity.model';
+
 export class User {
   public constructor(
     public id: number,
@@ -25,7 +28,9 @@ export class User {
     public current_sign_in_at?: Date,
     public last_sign_in_at?: Date,
     public current_sign_in_ip?: string,
-    public last_sign_in_ip?: string
+    public last_sign_in_ip?: string,
+    public agendas?: Agenda[],
+    public activities?: Activity[]
   ) {}
 
   static attributesDictionary = {
