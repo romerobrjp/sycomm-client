@@ -110,11 +110,18 @@ export class AgendaDetailComponent implements OnInit {
 
     this.agendaService.create(this.entity).subscribe(
       () => {
-        this.router.navigate(['/activities']);
-        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Agenda criada'});
+        this.router.navigate(['/agendas']);
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Agenda criada' });
       },
       (error) => {
-        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao tentar criar a agenda.'});
+        this.messageService.clear();
+        this.messageService.add({ severity: 'error', summary: undefined, detail: error.json().errors });
+        this.messageService.add({
+          key: 'agenda_detail_messages',
+          severity: 'error',
+          summary: '',
+          detail: error.json().errors
+        });
         return false;
       }
     );

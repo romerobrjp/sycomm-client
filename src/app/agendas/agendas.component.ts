@@ -15,7 +15,7 @@ import { ActivatedRoute , Router} from '@angular/router';
 export class AgendasComponent implements OnInit {
   rows: Array<Agenda>;
   columns: any[];
-  pageSizes = [10, 20, 50];
+  pageSizes = [10, 20, 50, 100];
   paginator = {
     pageNumber: 0,
     perPage: this.pageSizes[0],
@@ -84,5 +84,24 @@ export class AgendasComponent implements OnInit {
     this.paginator.pageNumber = Math.ceil(this.paginator.offset / this.paginator.perPage) + 1;
 
     this.listPaginated();
+  }
+
+  delete(entity) {
+    this.confirmationService.confirm({
+      header: 'Confirmação',
+      message: 'Deseja realmente remover esta agenda?',
+      icon: 'fa fa-question-circle',
+      accept: () => {
+        this.agendaService.delete(entity.id).subscribe(
+          () => {
+            this.listPaginated();
+            this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Agenda removida!'});
+          }
+        );
+      },
+      reject: () => {
+        return false;
+      }
+    });
   }
 }

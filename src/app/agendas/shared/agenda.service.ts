@@ -61,6 +61,15 @@ export class AgendaService {
     );
   }
 
+  delete(id: number): Observable<null> {
+    const url = `${this.urlResource}/${id}`;
+
+    return this.http.delete(url).pipe(
+      catchError(this.handleErrors),
+      map(() => null),
+    );
+  }
+
   private responseToModel(response: Response): Agenda {
     const jsonEntity = response.json();
 
