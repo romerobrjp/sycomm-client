@@ -15,10 +15,10 @@ import {Dictionary} from '../shared/dictionary';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  employeeLastActivities: Array<Activity>;
-  employeeDayActivities: Array<Activity>;
-  dayActivities: Array<Activity>;
-  employeesWithDayActivities: Array<User>;
+  employeeLastActivities: Array<Activity> = [];
+  employeeDayActivities: Array<Activity> = [];
+  dayActivities: Array<Activity> = [];
+  employeesWithDayActivities: Array<User> = [];
   activityDictionary = {
     'not_started' : 'Não iniciada',
     'in_progress' : 'Em progresso',

@@ -4,6 +4,12 @@
       <strong> {{ getTitle() }} </strong>
     </h3>
 
+    <div class="box box-info" *ngIf="authService.isAdmin()">
+      <div *ngIf="employeesWithDayActivities.length == 0">
+        <p class="text-center" style="line-height: 5em;">Nenhuma atividade para hoje</p>
+      </div>
+    </div>
+
     <div class="col-xs-12 col-sm-6 col-md-4 employees-activities-card" *ngFor="let employee of employeesWithDayActivities">
       <div class="box box-info">
         <div class="box-header with-border">
