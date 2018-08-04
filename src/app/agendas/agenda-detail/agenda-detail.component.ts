@@ -51,6 +51,7 @@ export class AgendaDetailComponent implements OnInit {
       null,
       null,
       null,
+      null,
       [],
       [],
       null,
@@ -62,6 +63,7 @@ export class AgendaDetailComponent implements OnInit {
     this.form = this.formBuilder.group({
       name: [{value : '', disabled: !this.authService.isAdmin()}, Validators.required],
       start_date: [{value : null, disabled: !this.authService.isAdmin()}],
+      end_date: [{value : null, disabled: !this.authService.isAdmin()}],
       employee_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
       customers_cpf: [{value : '', disabled: !this.authService.isAdmin()}, Validators.required],
       currentCpf: [''],
@@ -137,16 +139,27 @@ export class AgendaDetailComponent implements OnInit {
       (response) => {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Agenda atualizada'});
       },
-      (errorRseponse) => {
-        for (const [key, value] of Object.entries(errorRseponse.error.errors)) {
-          for (const [errorKey, errorMessage] of Object.entries(value)) {
-            this.messageService.add({
-              key: 'agenda_detail_messages',
-              severity: 'error',
-              summary: Agenda.attributesDictionary[key],
-              detail: errorMessage
-            });
+      (errorResponse) => {
+        if (errorResponse.error && errorResponse.error.errors) {
+          for (const [key, value] of Object.entries(errorResponse.error.errors)) {
+            for (const [errorKey, errorMessage] of Object.entries(value)) {
+              this.messageService.add({
+                key: 'agenda_detail_messages',
+                severity: 'error',
+                summary: Agenda.attributesDictionary[key],
+                detail: errorMessage
+              });
+            }
           }
+        } else {
+          this.messageService.clear();
+          this.messageService.add({ severity: 'error', summary: undefined, detail: errorResponse.json().errors });
+          this.messageService.add({
+            key: 'agenda_detail_messages',
+            severity: 'error',
+            summary: '',
+            detail: errorResponse.json().errors
+          });
         }
       }
     );

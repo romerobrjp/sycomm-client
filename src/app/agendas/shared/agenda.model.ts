@@ -6,6 +6,7 @@ export class Agenda {
     public id: number,
     public name: string,
     public start_date: Date,
+    public end_date: Date,
     public employee_id: number,
     public employee: User,
     public customers: Array<User>,

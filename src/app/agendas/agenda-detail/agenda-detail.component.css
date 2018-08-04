@@ -17,3 +17,8 @@
   margin: 2px 5px 0 0;
   float: right;
 }
+
+.customers-cpf-agenda-box {
+  height: 215px;
+  overflow-y: scroll;
+}
