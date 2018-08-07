@@ -86,4 +86,21 @@ export class ActivitiesComponent implements OnInit {
 
     this.listPaginated();
   }
+
+  delete(entity) {
+    this.confirmationService.confirm({
+      header: 'Confirmação',
+      message: `Deseja realmente remover a atividade "${entity.name}"?`,
+      icon: 'fa fa-question-circle',
+      accept: () => {
+        this.activityService.delete(entity.id).subscribe(
+          response => this.listPaginated()
+        );
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade removida!'});
+      },
+      reject: () => {
+        return false;
+      }
+    });
+  }
 }
