@@ -9,19 +9,26 @@
   [resizableColumns]="true"
   [rowsPerPageOptions]="pageSizes"
   [lazy]="true"
+  [(selection)]="selectedAgendas"
   (onLazyLoad)="loadDataOnChange($event)"
 >
   <ng-template pTemplate="caption">
-    <div style="text-align: right" *ngIf="authService.isAdmin()">
-      <a routerLink="/agendas/new" class="btn btn-success table-btn-new">
+    <div style="text-align: left">
+      <a routerLink="/agendas/new" class="btn btn-success table-btn-new mr-10" *ngIf="authService.isAdmin()">
+        <i class="fa fa-plus"></i>
         Novo
-        <span class="fa fa-plus"></span>
       </a>
+
+      <button class="btn btn-danger" type="button" *ngIf="authService.isAdmin()" (click)="deleteAllInprogress()"><i class="fa fa-trash-o mr-10"></i>Excluir</button>
     </div>
   </ng-template>
 
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 3em" *ngIf="authService.isAdmin()">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+
       <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
         {{col.header}}
         <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -35,6 +42,10 @@
 
   <ng-template pTemplate="body" let-agenda>
     <tr>
+      <td *ngIf="authService.isAdmin()">
+        <p-tableCheckbox [value]="agenda"></p-tableCheckbox>
+      </td>
+
       <td>{{ agenda.name }}</td>
       <td>{{ agenda.start_date | date: 'dd/MM/yyyy' }}</td>
       <td>{{ agenda.activities.length }}</td>

@@ -6,6 +6,7 @@ import { ConfirmationService } from 'primeng/api';
 import { AgendaService } from './shared/agenda.service';
 import { Agenda } from './shared/agenda.model';
 import { ActivatedRoute , Router} from '@angular/router';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-agendas',
@@ -23,6 +24,8 @@ export class AgendasComponent implements OnInit {
   };
   totalCount = 0;
   openActivitiesCount = 0;
+  selectedAgendas: Agenda[] = [];
+  selectedAgendasIds: Array<number> = [];
 
   constructor(
     private agendaService: AgendaService,
@@ -89,7 +92,7 @@ export class AgendasComponent implements OnInit {
   delete(entity) {
     this.confirmationService.confirm({
       header: 'Confirmação',
-      message: 'Deseja realmente remover esta agenda?',
+      message: 'Caso esta agenda possua atividades, elas também serão excluídas. Prosseguir?',
       icon: 'fa fa-question-circle',
       accept: () => {
         this.agendaService.delete(entity.id).subscribe(
@@ -103,5 +106,35 @@ export class AgendasComponent implements OnInit {
         return false;
       }
     });
+  }
+
+  deleteAllInprogress() {
+    if (this.selectedAgendas && this.selectedAgendas.length > 0) {
+      const agendasIDs: Array<number> = this.selectedAgendas.map(agenda => agenda.id);
+
+      swal({ title: `${this.selectedAgendas.length} agendas selecionadas.`, text: `Caso alguma das agendas selecionadas possua atividades, elas também serão excluídas. Prosseguir?`, type: 'warning', showCancelButton: true }).then(
+        result => {
+          if (result.value) {
+            this.agendaService.deleteAgendas(agendasIDs).subscribe(
+              () => {
+                this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Agendas removidas!'});
+                this.listAllPaginated();
+              },
+              (responseError) => {
+                this.messageService.add({severity: 'error', summary: 'Erro', detail: responseError});
+              },
+              () => {
+                this.selectedAgendas = [];
+              }
+            );
+          } else {
+            return false;
+          }
+        }
+      );
+    } else {
+      swal('Aviso', 'Selecione ao menos uma agenda para realizar esta ação.', 'warning');
+      return false;
+    }
   }
 }

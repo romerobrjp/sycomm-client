@@ -5,7 +5,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Agenda} from './agenda.model';
 import {TokenService} from '../../shared/token.service';
-import {Response} from '@angular/http';
+import {RequestOptions, Response} from '@angular/http';
 
 @Injectable()
 export class AgendaService {
@@ -65,6 +65,19 @@ export class AgendaService {
     const url = `${this.urlResource}/${id}`;
 
     return this.http.delete(url).pipe(
+      catchError(this.handleErrors),
+      map(() => null),
+    );
+  }
+
+  deleteAgendas(agendasIDs: number[]) {
+    const url = `${this.urlResource}/delete-many`;
+    const params = {
+      'agendas_ids': agendasIDs.toString()
+    };
+    const requestOptions = new RequestOptions({ body: params });
+
+    return this.http.delete(url, {body: requestOptions}).pipe(
       catchError(this.handleErrors),
       map(() => null),
     );
