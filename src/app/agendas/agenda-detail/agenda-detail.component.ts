@@ -16,6 +16,8 @@ import {UserService} from '../../users/shared/user.service';
 import {ConfirmationService} from 'primeng/api';
 import * as cpf_lib from '@fnando/cpf';
 import swal from 'sweetalert2';
+import {Activity} from '../../activities/shared/activity.model';
+import {ActivityService} from '../../activities/shared/activity.service';
 
 @Component({
   selector: 'app-agenda-detail',
@@ -33,6 +35,16 @@ export class AgendaDetailComponent implements OnInit {
   employees: Array<User> = [];
   cpfMask = FormUtils.cpfMask;
 
+  agendaActivities: Array<Activity>;
+  activitiesTableColumns: any[];
+  activitiesTablePageSizes = [10, 20, 50];
+  activitiesTablePaginator = {
+    pageNumber: 0,
+    perPage: this.activitiesTablePageSizes[0],
+    offset: 0
+  };
+  activitiesTotalCount = 0;
+
   constructor(
     public authService: AuthService,
     private agendaService: AgendaService,
@@ -42,6 +54,7 @@ export class AgendaDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private userService: UserService,
+    private activityService: ActivityService,
     public dictionary: Dictionary,
     private confirmationService: ConfirmationService
   ) {
@@ -70,17 +83,31 @@ export class AgendaDetailComponent implements OnInit {
     });
 
     this.formUtils = new FormUtils(this.form);
+
+    this.activitiesTableColumns = [
+      { field: 'name', header: 'Nome' },
+      { field: 'agenda.start_date', header: 'Data' },
+      { field: 'description', header: 'Descrição' },
+      { field: 'activity_type', header: 'Tipo' },
+      { field: 'status', header: 'Status' },
+      { field: 'customer_name', header: 'Cliente' },
+      { field: 'annotations', header: 'Anotações' },
+    ];
   }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(switchMap(
-      (params: Params) => this.agendaService.getById(+params['id'])
-    )).subscribe(
+    this.activatedRoute.params.pipe(
+      switchMap(
+        (params: Params) => this.agendaService.getById(+params['id'])
+      )
+    ).subscribe(
       responseSuccess => {
         if (responseSuccess) {
           this.setEntity(responseSuccess);
           this.customers = this.entity.customers;
           this.customersCpf = this.customers.map( c => c.cpf);
+
+          this.loadAgendaActivities();
         } else {
           console.error('Erro ao tentar carrgera agenda: ' + responseSuccess);
         }
@@ -94,6 +121,18 @@ export class AgendaDetailComponent implements OnInit {
       (success) => this.employees = success,
       (error) => {
         ErrorHandlerService.handleResponseErrors(error);
+      }
+    );
+  }
+
+  private loadAgendaActivities() {
+    this.activityService.listByAgendaPaginated(this.entity.id, this.activitiesTablePaginator.pageNumber, this.activitiesTablePaginator.perPage).subscribe(
+      successResponse => {
+        this.agendaActivities = successResponse.json()['data'];
+        this.activitiesTotalCount = successResponse.json()['total_count'];
+      },
+      errorResponse => {
+        console.error('Ocorreu um erro ao tentar buscar as atividades: ' + errorResponse);
       }
     );
   }
@@ -253,6 +292,32 @@ export class AgendaDetailComponent implements OnInit {
           queryParams: { 'userType': 'Customer' }
         };
         this.router.navigate(['/users', customerId], navigationExtras);
+      },
+      reject: () => {
+        return false;
+      }
+    });
+  }
+
+  // activities
+  loadActivitiesOnChange(event) {
+    this.activitiesTablePaginator.offset = event.first;
+    this.activitiesTablePaginator.perPage = event.rows;
+    this.activitiesTablePaginator.pageNumber = Math.ceil(this.activitiesTablePaginator.offset / this.activitiesTablePaginator.perPage) + 1;
+
+    this.loadAgendaActivities();
+  }
+
+  deleteActivity(activity) {
+    this.confirmationService.confirm({
+      header: 'Confirmação',
+      message: `Deseja realmente remover a atividade "${activity.name}"?`,
+      icon: 'fa fa-question-circle',
+      accept: () => {
+        this.activityService.delete(activity.id).subscribe(
+          response => this.loadAgendaActivities()
+        );
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade removida!'});
       },
       reject: () => {
         return false;

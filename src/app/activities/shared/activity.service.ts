@@ -53,6 +53,14 @@ export class ActivityService {
     );
   }
 
+  listByAgendaPaginated(agendaId: number, page_number: number, per_page: number): Observable<Response> {
+    const url = `${this.urlResource}`;
+
+    return this.http.get(`${url}/list_by_agenda_paginated?agenda_id=${agendaId}&page_number=${page_number}&per_page=${per_page}`).pipe(
+      catchError(this.handleErrors),
+    );
+  }
+
   getById(id: number): Observable<Activity> {
     const url = `${this.urlResource}/${id}`;
 
@@ -77,6 +85,15 @@ export class ActivityService {
     return this.http.put(url, act).pipe(
       catchError(this.handleErrors),
       map((response: Response) => this.responseToModel(response))
+    );
+  }
+
+  delete(id: number): Observable<null> {
+    const url = `${this.urlResource}/${id}`;
+
+    return this.http.delete(url).pipe(
+      catchError(this.handleErrors),
+      map(() => null),
     );
   }
 

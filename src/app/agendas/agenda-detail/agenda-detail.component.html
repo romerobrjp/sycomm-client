@@ -3,113 +3,193 @@
     <strong> Detalhes da Agenda </strong>
   </h1>
 
-  <form [formGroup]="form" class="text-center" (ngSubmit)="createOrUpdate()" (keydown.enter)="$event.preventDefault()">
-    <div class="row">
-      <div class="form-group col-lg-3 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
-        <label for="name" class="control-label">Nome *</label>
-        <input
-          id="name"
-          formControlName="name"
-          class="form-control"
-          placeholder=""
-          type="text"
-        />
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Custom Tabs -->
+      <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab_1" data-toggle="tab">Detalhes</a></li>
+          <li><a href="#tab_2" data-toggle="tab">Atividades</a></li>
+        </ul>
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
-          <div *ngIf="form.get('name')['errors']['required']"><strong>Nome</strong> é obrigatório</div>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab_1">
+            <form [formGroup]="form" class="text-center" (ngSubmit)="createOrUpdate()" (keydown.enter)="$event.preventDefault()">
+              <div class="row">
+                <div class="form-group col-lg-3 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
+                  <label for="name" class="control-label">Nome *</label>
+                  <input
+                    id="name"
+                    formControlName="name"
+                    class="form-control"
+                    placeholder=""
+                    type="text"
+                  />
+
+                  <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
+                    <div *ngIf="form.get('name')['errors']['required']"><strong>Nome</strong> é obrigatório</div>
+                  </div>
+
+                  <br />
+
+                  <label for="start_date" class="control-label">Data de início</label>
+                  <input
+                    id="start_date"
+                    formControlName="start_date"
+                    class="form-control"
+                    placeholder="01/01/2018"
+                    type="date"
+                  />
+
+                  <br />
+
+                  <label for="end_date" class="control-label">Data de término *</label>
+                  <input
+                    id="end_date"
+                    formControlName="end_date"
+                    class="form-control"
+                    placeholder="31/01/2018"
+                    type="date"
+                  />
+
+                  <br />
+
+                  <label for="employee" class="control-label">Funcionário *</label>
+                  <select
+                    id="employee"
+                    class="form-control"
+                    formControlName="employee_id"
+                  >
+                    <option *ngFor="let option of employees" [value]="option['id']">{{ option['name'] }}</option>
+                  </select>
+
+                  <div class="text-danger" *ngIf="formUtils.showFieldError('employee_id')">
+                    <div *ngIf="form.get('employee_id')['errors']['required']"><strong>Funcionário </strong> é obrigatório</div>
+                  </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                  <label class="control-label">Clientes</label>
+
+                  <div class="box box-solid">
+                    <div class="box-body customers-cpf-agenda-box">
+                      <ol *ngIf="customers.length > 0">
+                        <li *ngFor="let customer of customers" class="cpf-item">
+                          <a
+                            (click)="goToCustomerConfirmation($event, customer?.id || 0)"
+                            pTooltip="{{ customer.name }}"
+                          >
+                            {{ customer.cpf | cpf }} / {{ getNameAndSurname(customer.name) }}
+                          </a>
+                          <i class="fa fa-times removeCpfButton" (click)="removeCpf($event, customer.cpf)"></i>
+                        </li>
+                      </ol>
+                      <span *ngIf="customers.length === 0">Nenhum cliente registrado para esta agenda</span>
+                    </div>
+                  </div>
+
+                  <div class="ui-inputgroup">
+                    <input
+                      id="customers_cpf_input"
+                      class="form-control margin-r-5"
+                      formControlName="currentCpf"
+                      placeholder="000.000.000-00"
+                      type="text"
+                      [textMask]="{ mask: cpfMask }"
+                      (keyup.enter)="addCpf()"
+                    />
+                    <button class="btn btn-sm btn-primary margin-r-5" type="button" (click)="addCpf()">Incluir</button>
+                    <button class="btn btn-sm btn-danger" type="button" (click)="clearCpfs()">
+                      Limpar lista
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-7 col-lg-offset-2">
+                  <p-messages [(value)]="msgs" key="agenda_detail_messages"></p-messages>
+                </div>
+              </div>
+
+              <br/>
+
+              <div class="row text-center">
+                <div class="col-lg-12">
+                  <button type="submit" class="btn btn-success mr-10">{{ entity.id ? 'Atualizar' : 'Cadastrar' }}</button>
+                  <button type="button" class="btn btn-default" (click)="goBack()">Voltar</button>
+                </div>
+              </div>
+            </form>
+          <!-- /.tab-pane -->
         </div>
+        <!-- /.tab-content -->
 
-        <br />
+        <div class="tab-pane" id="tab_2">
+          <p-table
+            id="agenda_activities_ptable"
+            [value]="agendaActivities"
+            [paginator]="true"
+            [pageLinks]="10"
+            [totalRecords]="activitiesTotalCount"
+            [rows]="activitiesTablePaginator.perPage"
+            [responsive]="true"
+            [resizableColumns]="true"
+            [rowsPerPageOptions]="activitiesTablePageSizes"
+            [lazy]="true"
+            (onLazyLoad)="loadActivitiesOnChange($event)"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th *ngFor="let col of activitiesTableColumns" [pSortableColumn]="col.field" pResizableColumn>
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
 
-        <label for="start_date" class="control-label">Data de início</label>
-        <input
-          id="start_date"
-          formControlName="start_date"
-          class="form-control"
-          placeholder="01/01/2018"
-          type="date"
-        />
+                <th>
+                  Ações
+                </th>
+              </tr>
+            </ng-template>
 
-        <br />
+            <ng-template pTemplate="body" let-activity>
+              <tr>
+                <td>{{ activity.name }}</td>
+                <td>{{ activity.agenda.start_date | date: 'dd/MM/yyyy'}}</td>
+                <td>{{ activity.description }}</td>
+                <td>{{ dictionary.activityTypes[activity.activity_type] }}</td>
+                <td>
+                  <span
+                    class="label"
+                    [class.activity-not-started]="activity['status'] === 'not_started'"
+                    [class.activity-in-progress]="activity['status'] === 'in_progress'"
+                    [class.activity-finished]="activity['status'] === 'finished'"
+                  >
+                    {{ dictionary.activityStatuses[activity.status] }}
+                  </span>
+                </td>
+                <td>{{ activity.customer_name }}</td>
+                <td>{{ activity.annotations }}</td>
 
-        <label for="end_date" class="control-label">Data de término *</label>
-        <input
-          id="end_date"
-          formControlName="end_date"
-          class="form-control"
-          placeholder="31/01/2018"
-          type="date"
-        />
+                <td>
+                  <a [routerLink]="['/activities', activity.id]" class="btn btn-info mr-10" title="Detalhes">
+                    <i class="fa fa-info-circle"></i>
+                  </a>
 
-        <br />
-
-        <label for="employee" class="control-label">Funcionário *</label>
-        <select
-          id="employee"
-          class="form-control"
-          formControlName="employee_id"
-        >
-          <option *ngFor="let option of employees" [value]="option['id']">{{ option['name'] }}</option>
-        </select>
-
-        <div class="text-danger" *ngIf="formUtils.showFieldError('employee_id')">
-          <div *ngIf="form.get('employee_id')['errors']['required']"><strong>Funcionário </strong> é obrigatório</div>
+                  <button class="btn btn-danger" (click)="deleteActivity(activity)" *ngIf="authService.isAdmin()" title="Excluir">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
         </div>
+        <!-- /.tab-pane -->
       </div>
-
-      <div class="form-group col-lg-4">
-        <label class="control-label">Clientes</label>
-
-        <div class="box box-solid">
-          <div class="box-body customers-cpf-agenda-box">
-            <ol *ngIf="customers.length > 0">
-              <li *ngFor="let customer of customers" class="cpf-item">
-                <a
-                  (click)="goToCustomerConfirmation($event, customer?.id || 0)"
-                  pTooltip="{{ customer.name }}"
-                >
-                  {{ customer.cpf | cpf }} / {{ getNameAndSurname(customer.name) }}
-                </a>
-                <i class="fa fa-times removeCpfButton" (click)="removeCpf($event, customer.cpf)"></i>
-              </li>
-            </ol>
-            <span *ngIf="customers.length === 0">Nenhum cliente registrado para esta agenda</span>
-          </div>
-        </div>
-
-        <div class="ui-inputgroup">
-          <input
-            id="customers_cpf_input"
-            class="form-control margin-r-5"
-            formControlName="currentCpf"
-            placeholder="000.000.000-00"
-            type="text"
-            [textMask]="{ mask: cpfMask }"
-            (keyup.enter)="addCpf()"
-          />
-          <button class="btn btn-sm btn-primary margin-r-5" type="button" (click)="addCpf()">Incluir</button>
-          <button class="btn btn-sm btn-danger" type="button" (click)="clearCpfs()">
-            Limpar lista
-          </button>
-        </div>
-      </div>
+      <!-- nav-tabs-custom -->
     </div>
-
-    <div class="row">
-      <div class="col-lg-7 col-lg-offset-2">
-        <p-messages [(value)]="msgs" key="agenda_detail_messages"></p-messages>
-      </div>
-    </div>
-
-    <br/>
-
-    <div class="row text-center">
-      <div class="col-lg-12">
-        <button type="submit" class="btn btn-success mr-10">{{ entity.id ? 'Atualizar' : 'Cadastrar' }}</button>
-        <button type="button" class="btn btn-default" (click)="goBack()">Voltar</button>
-      </div>
-    </div>
-  </form>
+    <!-- /.col -->
+  </div>
 </div>
 
 <p-confirmDialog #goToCustomerConfirmationDialog width="425">
