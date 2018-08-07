@@ -12,7 +12,7 @@
   (onLazyLoad)="loadDataOnChange($event)"
 >
   <ng-template pTemplate="caption">
-    <div style="text-align: right" *ngIf="authService.isAdmin()">
+    <div class="text-align-left" *ngIf="authService.isAdmin()">
       <a routerLink="/activities/new" class="btn btn-success table-btn-new">
         Novo
         <span class="fa fa-plus"></span>
