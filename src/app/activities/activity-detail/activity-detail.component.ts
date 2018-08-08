@@ -27,6 +27,9 @@ export class ActivityDetailComponent implements OnInit {
   formUtils: FormUtils;
   msgs: Message[] = [];
   employees: User[];
+  agendaCustomers: User[] = [];
+  customer: User;
+  agendaId: number;
 
   constructor(
     public authService: AuthService,
@@ -64,20 +67,31 @@ export class ActivityDetailComponent implements OnInit {
       status: [{value: null, disabled: !this.authService.isAdmin() || (!this.authService.isAdmin() && this.entity.status === 1)}, [Validators.required]],
       employee_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
       customer_id: [{value : null, disabled: !this.authService.isAdmin()}, Validators.required],
-      customer_name: [{value : '', disabled: !this.authService.isAdmin()}, Validators.required],
     });
 
     this.formUtils = new FormUtils(this.form);
   }
 
   ngOnInit() {
+    this.agendaId = +this.activatedRoute.snapshot.queryParamMap.get('agendaId');
+
     this.activatedRoute.params.pipe(switchMap(
       (params: Params) => this.activityService.getById(+params['id'])
     )).subscribe(
       responseSuccess => {
         if (responseSuccess) {
-          // console.log(JSON.stringify(responseSuccess));
           this.setEntity(responseSuccess);
+
+          if (this.agendaId) {
+            this.userService.listCustomersByAgenda(this.entity.agenda.id).subscribe(
+              (success) => {
+                this.agendaCustomers = success;
+              },
+              (error) => {
+                ErrorHandlerService.handleResponseErrors(error);
+              }
+            );
+          }
         }
       },
       responseError => {
@@ -88,7 +102,6 @@ export class ActivityDetailComponent implements OnInit {
     this.userService.listBytype('Employee').subscribe(
       (success) => {
         this.employees = success;
-        // console.log(JSON.stringify(this.employees));
       },
       (error) => {
         ErrorHandlerService.handleResponseErrors(error);
@@ -130,21 +143,21 @@ export class ActivityDetailComponent implements OnInit {
         this.router.navigate(['/activities']);
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade criada'});
       },
-      (error) => {
+      () => {
         this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro inesperado ao tentar criar a atividade.'});
         return false;
       }
     );
 
     return true;
-  };
+  }
 
   private update(): void {
     this.messageService.clear();
     this.applyFormValues();
 
     this.activityService.update(this.entity).subscribe(
-      (response) => {
+      () => {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade atualizada'});
       },
       (errorRseponse) => {
@@ -178,6 +191,5 @@ export class ActivityDetailComponent implements OnInit {
     this.entity.activity_type = this.form.get('activity_type').value;
     this.entity.employee_id = +this.form.get('employee_id').value;
     this.entity.customer_id = +this.form.get('customer_id').value;
-    this.entity.customer_name = this.form.get('customer_name').value;
   }
 }

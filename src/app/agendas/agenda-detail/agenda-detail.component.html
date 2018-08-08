@@ -172,7 +172,7 @@
                 <td>{{ activity.annotations }}</td>
 
                 <td>
-                  <a [routerLink]="['/activities', activity.id]" class="btn btn-info mr-10" title="Detalhes">
+                  <a [routerLink]="['/activities', activity.id]" [queryParams]="{ agendaId: entity.id }" class="btn btn-info mr-10" title="Detalhes">
                     <i class="fa fa-info-circle"></i>
                   </a>
 

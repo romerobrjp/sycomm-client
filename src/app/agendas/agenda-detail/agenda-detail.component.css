@@ -21,4 +21,5 @@
 .customers-cpf-agenda-box {
   height: 215px;
   overflow-y: scroll;
+  border: 1px solid #d2d6de;
 }

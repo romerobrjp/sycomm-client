@@ -63,16 +63,27 @@
         <div class="text-danger" *ngIf="formUtils.showFieldError('employee_id')">
           <div *ngIf="form.get('employee_id')['errors']['required']">Campo<strong> 'Atribuído a' </strong> é obrigatório</div>
         </div>
+
+        <br />
+
+        <label for="customer" class="control-label">Cliente</label> <br>
+        <select
+          id="customer"
+          class="form-control"
+          formControlName="customer_id"
+        >
+          <option *ngFor="let option of agendaCustomers" [value]="option['id']">{{ option['name'] }}</option>
+        </select>
       </div>
 
       <div class="form-group col-lg-4">
-        <label for="annotations" class="control-label">Descriçao *</label>
+        <label for="annotations" class="control-label">Descrição *</label>
         <textarea
           id="description"
           formControlName="description"
           class="form-control"
           placeholder="Descreva a atividade aqui..."
-          rows="3"
+          rows="6"
         ></textarea>
 
         <br>
@@ -83,15 +94,8 @@
           formControlName="annotations"
           class="form-control"
           placeholder="Anotações da atividade aqui..."
-          rows="4"
+          rows="8"
         ></textarea>
-
-        <br />
-
-        <label for="customer" class="control-label">Cliente</label> <br>
-        <a id="customer" (click)="goToCustomerConfirmation($event, entity?.customer_id || 0)" class="link-like">
-          <strong>{{ entity.customer_name }}</strong>
-        </a>
       </div>
     </div>
 

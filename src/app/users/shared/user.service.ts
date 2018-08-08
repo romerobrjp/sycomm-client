@@ -1,5 +1,5 @@
 
-import {throwError as observableThrowError, Observable, from} from 'rxjs';
+import {throwError as observableThrowError, Observable} from 'rxjs';
 
 import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -9,7 +9,7 @@ import {Response} from '@angular/http';
 
 @Injectable()
 export class UserService {
-  urlResource: string = 'users';
+  urlResource = 'users';
 
   constructor(private http: TokenService) {}
 
@@ -30,6 +30,15 @@ export class UserService {
 
   listBytype(userType: string): Observable<User[]> {
     const url = `${this.urlResource}/list_by_type?user_type=${userType}`;
+
+    return this.http.get(url).pipe(
+      map((response: Response) => this.responseToModels(response)),
+      catchError(this.handleErrors)
+    );
+  }
+
+  listCustomersByAgenda(agendaId: number): Observable<User[]> {
+    const url = `${this.urlResource}/list_customers_by_agenda?agenda_id=${agendaId}`;
 
     return this.http.get(url).pipe(
       map((response: Response) => this.responseToModels(response)),
@@ -135,11 +144,11 @@ export class UserService {
 
   private responseToModels(response: Response): User[] {
     // let collection =  response.json()['data'] as Array<any>;
-    let collection =  response.json();
-    let users: User[] = [];
+    const collection =  response.json();
+    const users: User[] = [];
 
     collection.forEach(jsonEntity => {
-      let user = new User(
+      const user = new User(
         jsonEntity['id'],
         jsonEntity['name'],
         jsonEntity['type'],
