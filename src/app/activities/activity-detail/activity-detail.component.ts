@@ -1,4 +1,3 @@
-
 import {switchMap} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -15,6 +14,7 @@ import {UserService} from '../../users/shared/user.service';
 import {ErrorHandlerService} from '../../shared/error-handler.service';
 import {User} from '../../users/shared/user.model';
 import {ConfirmationService} from 'primeng/api';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-activity-detail',
@@ -56,7 +56,7 @@ export class ActivityDetailComponent implements OnInit {
       null,
       null,
       null,
-      null
+      null,
     );
 
     this.form = this.formBuilder.group({
@@ -75,23 +75,23 @@ export class ActivityDetailComponent implements OnInit {
   ngOnInit() {
     this.agendaId = +this.activatedRoute.snapshot.queryParamMap.get('agendaId');
 
+    if (this.agendaId) {
+      this.userService.listCustomersByAgenda(this.agendaId).subscribe(
+        (success) => {
+          this.agendaCustomers = success;
+        },
+        (error) => {
+          ErrorHandlerService.handleResponseErrors(error);
+        }
+      );
+    }
+
     this.activatedRoute.params.pipe(switchMap(
       (params: Params) => this.activityService.getById(+params['id'])
     )).subscribe(
       responseSuccess => {
         if (responseSuccess) {
           this.setEntity(responseSuccess);
-
-          if (this.agendaId) {
-            this.userService.listCustomersByAgenda(this.entity.agenda.id).subscribe(
-              (success) => {
-                this.agendaCustomers = success;
-              },
-              (error) => {
-                ErrorHandlerService.handleResponseErrors(error);
-              }
-            );
-          }
         }
       },
       responseError => {
@@ -138,7 +138,7 @@ export class ActivityDetailComponent implements OnInit {
   private create(): boolean {
     this.applyFormValues();
 
-    this.activityService.create(this.entity).subscribe(
+    this.activityService.create(this.entity, this.agendaId).subscribe(
       () => {
         this.router.navigate(['/activities']);
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade criada'});
@@ -191,5 +191,6 @@ export class ActivityDetailComponent implements OnInit {
     this.entity.activity_type = this.form.get('activity_type').value;
     this.entity.employee_id = +this.form.get('employee_id').value;
     this.entity.customer_id = +this.form.get('customer_id').value;
+    this.entity.customer_name = $('#customer option:selected').html();
   }
 }

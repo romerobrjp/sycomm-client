@@ -6,7 +6,6 @@ import {Injectable} from '@angular/core';
 import {Activity} from './activity.model';
 import {TokenService} from '../../shared/token.service';
 import {Response} from '@angular/http';
-import {User} from '../../users/shared/user.model';
 
 @Injectable()
 export class ActivityService {
@@ -70,10 +69,10 @@ export class ActivityService {
     );
   }
 
-  create(entity: Activity): Observable<Activity> {
+  create(entity: Activity, agendaId: number): Observable<Activity> {
     const url = `${this.urlResource}`;
 
-    return this.http.post(url, entity).pipe(
+    return this.http.post(url, { activity: entity, agenda_id: agendaId }).pipe(
       map((response: Response) => this.responseToModel(response)),
       catchError(this.handleErrors),
     );

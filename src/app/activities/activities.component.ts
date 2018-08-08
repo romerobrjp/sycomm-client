@@ -28,8 +28,6 @@ export class ActivitiesComponent implements OnInit {
     public authService: AuthService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
     public dictionary: Dictionary
   ) {
     this.columns = [
@@ -94,9 +92,12 @@ export class ActivitiesComponent implements OnInit {
       icon: 'fa fa-question-circle',
       accept: () => {
         this.activityService.delete(entity.id).subscribe(
-          response => this.listPaginated()
+          () => {
+            this.paginator.pageNumber = 0;
+            this.listPaginated();
+            this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade removida!'});
+          }
         );
-        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade removida!'});
       },
       reject: () => {
         return false;
