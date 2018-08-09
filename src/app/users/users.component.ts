@@ -190,15 +190,15 @@ export class UsersComponent implements OnInit {
     let usersListTitle = '';
 
     switch (userType) {
-      case 'admin': {
+      case 'Admin': {
         usersListTitle = 'Administradores';
         break;
       }
-      case 'employee': {
+      case 'Employee': {
         usersListTitle = 'Funcionários';
         break;
       }
-      case 'customer': {
+      case 'Customer': {
         usersListTitle = 'Clientes';
         break;
       }
