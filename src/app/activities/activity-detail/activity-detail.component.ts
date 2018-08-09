@@ -75,6 +75,9 @@ export class ActivityDetailComponent implements OnInit {
   ngOnInit() {
     this.agendaId = +this.activatedRoute.snapshot.queryParamMap.get('agendaId');
 
+    this.entity.employee_id = +this.activatedRoute.snapshot.queryParamMap.get('employeeId');
+    this.form.patchValue(this.entity);
+
     if (this.agendaId) {
       this.userService.listCustomersByAgenda(this.agendaId).subscribe(
         (success) => {
