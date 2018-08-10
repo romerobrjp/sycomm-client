@@ -73,32 +73,41 @@ export class ActivityDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.agendaId = +this.activatedRoute.snapshot.queryParamMap.get('agendaId');
-
     this.entity.employee_id = +this.activatedRoute.snapshot.queryParamMap.get('employeeId');
     this.form.patchValue(this.entity);
 
-    if (this.agendaId) {
-      this.userService.listCustomersByAgenda(this.agendaId).subscribe(
-        (success) => {
-          this.agendaCustomers = success;
-        },
-        (error) => {
-          ErrorHandlerService.handleResponseErrors(error);
-        }
-      );
-    }
+    this.activatedRoute.params.subscribe(
+      (params: Params) => {
+        if (params['id']) {
+          this.activityService.getById(+params['id']).subscribe(
+            responseSuccess => {
+              this.setEntity(responseSuccess);
+              this.agendaId = this.entity.agenda.id;
+              this.userService.listCustomersByAgenda(this.agendaId).subscribe(
+                (success) => {
+                  this.agendaCustomers = success;
+                },
+                (error) => {
+                  ErrorHandlerService.handleResponseErrors(error);
+                }
+              );
+            },
+            responseError => {
+              console.error('Erro ao tentar carrgera atividade: ' + responseError);
+            }
+          );
+        } else {
+          this.agendaId = +this.activatedRoute.snapshot.queryParamMap.get('agendaId');
 
-    this.activatedRoute.params.pipe(switchMap(
-      (params: Params) => this.activityService.getById(+params['id'])
-    )).subscribe(
-      responseSuccess => {
-        if (responseSuccess) {
-          this.setEntity(responseSuccess);
+          this.userService.listCustomersByAgenda(this.agendaId).subscribe(
+            (success) => {
+              this.agendaCustomers = success;
+            },
+            (error) => {
+              ErrorHandlerService.handleResponseErrors(error);
+            }
+          );
         }
-      },
-      responseError => {
-        console.error('Erro ao tentar carrgera atividade: ' + responseError);
       }
     );
 
