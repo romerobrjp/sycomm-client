@@ -54,6 +54,11 @@ const ROUTES = RouterModule.forRoot([
     canActivate: [AuthGuard]
   },
   {
+    path: 'agendas/new',
+    component: AgendaDetailComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'agendas/:id',
     component: AgendaDetailComponent,
     canActivate: [AuthGuard]
@@ -61,6 +66,11 @@ const ROUTES = RouterModule.forRoot([
   {
     path: 'activities',
     component: ActivitiesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'activities/new',
+    component: ActivityDetailComponent,
     canActivate: [AuthGuard]
   },
   {
