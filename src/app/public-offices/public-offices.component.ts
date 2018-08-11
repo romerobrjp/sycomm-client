@@ -36,8 +36,6 @@ export class PublicOfficesComponent implements OnInit {
     public authService: AuthService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
     public dictionary: Dictionary
   ) {
     this.columns = [

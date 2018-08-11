@@ -4,4 +4,9 @@ export class PublicOffice {
     public name: string,
     public description: string
   ) {}
+
+  static attributesDictionary = {
+    'name' : 'Nome',
+    'description' : 'Descriçao',
+  };
 }

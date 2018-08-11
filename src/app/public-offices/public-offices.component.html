@@ -1,4 +1,4 @@
-<h1 class="text-center page-header">Órgãos</h1>
+<h1 class="text-center page-header">Cargos ({{ totalCount }})</h1>
 
 <p-table
   id="models_p-table"
@@ -37,8 +37,8 @@
 
     <tr>
       <th *ngFor="let col of columns" [ngSwitch]="col.field">
-        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
-        <input *ngSwitchCase="'description'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" placeholder="Filtre por Nome..." (change)="handleFilter($event)">
+        <input *ngSwitchCase="'description'" [name]="col.field" pInputText type="text" placeholder="Filtre por Descrição..." (change)="handleFilter($event)">
       </th>
 
       <th></th>

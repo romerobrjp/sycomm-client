@@ -34,6 +34,7 @@ import { ActivityDetailComponent } from './activities/activity-detail/activity-d
 import { AgendasComponent } from './agendas/agendas.component';
 import { AgendaDetailComponent } from './agendas/agenda-detail/agenda-detail.component';
 import { PublicAgencyDetailComponent } from './public-agencies/public-agency-detail/public-agency-detail.component';
+import {PublicOfficeDetailComponent} from './public-offices/public-office-detail/public-office-detail.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -75,7 +76,8 @@ import { AppRoutingModule } from './app-routing.module';
     ActivityDetailComponent,
     AgendasComponent,
     AgendaDetailComponent,
-    PublicAgencyDetailComponent
+    PublicAgencyDetailComponent,
+    PublicOfficeDetailComponent
   ],
   imports: [
     BrowserModule,
