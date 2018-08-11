@@ -96,31 +96,26 @@ export class AgendaDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(
-      switchMap(
-        (params: Params) => this.agendaService.getById(+params['id'])
-      )
-    ).subscribe(
-      responseSuccess => {
-        if (responseSuccess) {
-          this.setEntity(responseSuccess);
-          this.customers = this.entity.customers;
-          this.customersCpf = this.customers.map( c => c.cpf);
-
-          this.loadAgendaActivities();
-        } else {
-          console.error('Erro ao tentar carrgera agenda: ' + responseSuccess);
+    this.activatedRoute.params.subscribe(
+      (params: Params) => {
+        if (params['id']) {
+          this.agendaService.getById(+params['id']).subscribe(
+            (responseSuccess) => {
+              this.setEntity(responseSuccess);
+              this.customers = this.entity.customers;
+              this.customersCpf = this.customers.map( c => c.cpf);
+              this.loadAgendaActivities();
+            },
+            responseError => {
+              console.error('Erro ao tentar carregar agenda: ' + responseError);
+            }
+          );
         }
-      },
-      responseError => {
-        console.error('Erro ao tentar carrgera agenda: ' + responseError);
-      }
-    );
 
-    this.userService.listBytype('Employee').subscribe(
-      (success) => this.employees = success,
-      (error) => {
-        ErrorHandlerService.handleResponseErrors(error);
+        this.userService.listBytype('Employee').subscribe(
+          (success) => this.employees = success,
+          (error) => ErrorHandlerService.handleResponseErrors(error)
+        );
       }
     );
   }

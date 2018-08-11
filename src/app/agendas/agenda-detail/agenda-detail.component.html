@@ -9,7 +9,7 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#tab_1" data-toggle="tab">Detalhes</a></li>
-          <li><a href="#tab_2" data-toggle="tab">Atividades</a></li>
+          <li><a href="#tab_2" data-toggle="tab" *ngIf="entity.id">Atividades</a></li>
         </ul>
 
         <div class="tab-content">
@@ -125,7 +125,7 @@
         </div>
         <!-- /.tab-content -->
 
-        <div class="tab-pane" id="tab_2">
+        <div class="tab-pane" id="tab_2" *ngIf="entity.id">
           <p-table
             id="agenda_activities_ptable"
             [value]="agendaActivities"
@@ -141,7 +141,7 @@
           >
             <ng-template pTemplate="caption">
               <div class="text-align-left" *ngIf="authService.isAdmin()">
-                <a routerLink="/activities/new" [queryParams]="{ agendaId: entity.id }" class="btn btn-success table-btn-new">
+                <a routerLink="/activities/new" [queryParams]="{ agendaId: entity.id, employeeId: entity.employee_id }" class="btn btn-success table-btn-new">
                   <span class="fa fa-plus"></span> Novo
                 </a>
               </div>

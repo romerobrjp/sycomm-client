@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { PublicOfficeService } from './public_office.service';
+import { PublicOfficeService } from './public-office.service';
 
 describe('PublicOfficeService', () => {
   beforeEach(() => {

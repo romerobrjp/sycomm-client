@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PublicOfficesComponent } from './public_offices.component';
+import { PublicAgenciesComponent } from './public-agencies.component';
 
-describe('PublicOfficesComponent', () => {
-  let component: PublicOfficesComponent;
-  let fixture: ComponentFixture<PublicOfficesComponent>;
+describe('PublicAgenciesComponent', () => {
+  let component: PublicAgenciesComponent;
+  let fixture: ComponentFixture<PublicAgenciesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PublicOfficesComponent ]
+      declarations: [ PublicAgenciesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PublicOfficesComponent);
+    fixture = TestBed.createComponent(PublicAgenciesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -40,4 +40,11 @@ export class LeftSidebarComponent {
     return this.authService.isAdmin();
   }
 
+  shouldShowPublicOfficesMenu() {
+    return this.authService.isAdmin();
+  }
+
+  shouldShowPublicAgenciesMenu() {
+    return this.authService.isAdmin();
+  }
 }

@@ -12,6 +12,10 @@ import {ProfileComponent} from './profile/profile.component';
 import {ActivityDetailComponent} from './activities/activity-detail/activity-detail.component';
 import {AgendasComponent} from './agendas/agendas.component';
 import {AgendaDetailComponent} from './agendas/agenda-detail/agenda-detail.component';
+import {PublicAgenciesComponent} from './public-agencies/public-agencies.component';
+import {PublicAgencyDetailComponent} from './public-agencies/public-agency-detail/public-agency-detail.component';
+import {PublicOfficesComponent} from './public-offices/public-offices.component';
+import {PublicOfficeDetailComponent} from './public-offices/public-office-detail/public-office-detail.component';
 
 const ROUTES = RouterModule.forRoot([
   {
@@ -54,6 +58,11 @@ const ROUTES = RouterModule.forRoot([
     canActivate: [AuthGuard]
   },
   {
+    path: 'agendas/new',
+    component: AgendaDetailComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'agendas/:id',
     component: AgendaDetailComponent,
     canActivate: [AuthGuard]
@@ -64,8 +73,43 @@ const ROUTES = RouterModule.forRoot([
     canActivate: [AuthGuard]
   },
   {
+    path: 'activities/new',
+    component: ActivityDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'activities/:id',
     component: ActivityDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-agencies',
+    component: PublicAgenciesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-agencies/new',
+    component: PublicAgencyDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-agencies/:id',
+    component: PublicAgencyDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-offices',
+    component: PublicOfficesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-offices/new',
+    component: PublicOfficeDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-offices/:id',
+    component: PublicOfficeDetailComponent,
     canActivate: [AuthGuard]
   },
 ]);
