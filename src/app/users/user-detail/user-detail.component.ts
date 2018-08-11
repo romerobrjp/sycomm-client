@@ -7,13 +7,13 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 
 import { AuthService } from '../../shared/auth.service';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { PublicAgencyService } from '../../public-agencies/shared/public_agency.service';
+import { PublicAgencyService } from '../../public-agencies/shared/public-agency.service';
 import { PublicOfficeService } from '../../public-offices/shared/public-office.service';
 import { UserService } from '../shared/user.service';
 
 import { User } from '../shared/user.model';
 import { PublicOffice } from '../../public-offices/shared/public-office.model';
-import { PublicAgency } from '../../public-agencies/shared/public_agency.model';
+import { PublicAgency } from '../../public-agencies/shared/public-agency.model';
 
 import { Message } from 'primeng/components/common/api';
 import { Dictionary } from '../../shared/dictionary';

@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { PublicAgencyService } from './public_agency.service';
+import { PublicAgencyService } from './public-agency.service';
 
 describe('PublicAgencyService', () => {
   beforeEach(() => {

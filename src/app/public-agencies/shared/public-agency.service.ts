@@ -1,7 +1,7 @@
 import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {PublicAgency} from './public_agency.model';
+import {PublicAgency} from './public-agency.model';
 import {TokenService} from '../../shared/token.service';
 import {Response} from '@angular/http';
 import {throwError as observableThrowError} from 'rxjs/index';

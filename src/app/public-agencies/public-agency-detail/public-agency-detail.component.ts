@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {PublicAgency} from '../shared/public_agency.model';
+import {PublicAgency} from '../shared/public-agency.model';
 import {switchMap} from 'rxjs/operators';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
@@ -9,7 +9,7 @@ import {Location} from '@angular/common';
 import {Message} from 'primeng/components/common/api';
 import {AuthService} from '../../shared/auth.service';
 import {FormUtils} from '../../shared/form-utils';
-import {PublicAgencyService} from '../shared/public_agency.service';
+import {PublicAgencyService} from '../shared/public-agency.service';
 
 @Component({
   selector: 'app-public-agency-detail',

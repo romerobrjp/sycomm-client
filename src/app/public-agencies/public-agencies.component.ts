@@ -4,15 +4,15 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../shared/auth.service';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
-import {PublicAgencyService} from './shared/public_agency.service';
+import {PublicAgencyService} from './shared/public-agency.service';
 import {GeneralUtils} from '../shared/general-utils';
 import {DataTable} from 'primeng/primeng';
-import {PublicAgency} from './shared/public_agency.model';
+import {PublicAgency} from './shared/public-agency.model';
 
 @Component({
   selector: 'app-public_agencies',
-  templateUrl: './public_agencies.component.html',
-  styleUrls: ['./public_agencies.component.css']
+  templateUrl: './public-agencies.component.html',
+  styleUrls: ['./public-agencies.component.css']
 })
 export class PublicAgenciesComponent implements OnInit {
   rows: Array<PublicAgency>;

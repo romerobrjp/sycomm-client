@@ -12,7 +12,7 @@ import {ProfileComponent} from './profile/profile.component';
 import {ActivityDetailComponent} from './activities/activity-detail/activity-detail.component';
 import {AgendasComponent} from './agendas/agendas.component';
 import {AgendaDetailComponent} from './agendas/agenda-detail/agenda-detail.component';
-import {PublicAgenciesComponent} from './public-agencies/public_agencies.component';
+import {PublicAgenciesComponent} from './public-agencies/public-agencies.component';
 import {PublicAgencyDetailComponent} from './public-agencies/public-agency-detail/public-agency-detail.component';
 import {PublicOfficesComponent} from './public-offices/public-offices.component';
 import {PublicOfficeDetailComponent} from './public-offices/public-office-detail/public-office-detail.component';
