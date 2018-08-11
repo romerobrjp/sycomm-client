@@ -45,9 +45,7 @@ export class PublicAgenciesComponent implements OnInit {
     ];
   }
 
-  ngOnInit() {
-    this.listPaginated();
-  }
+  ngOnInit() {}
 
   listPaginated() {
     this.publicAgencyService.listPaginated(this.paginator.pageNumber,

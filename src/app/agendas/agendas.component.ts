@@ -45,9 +45,7 @@ export class AgendasComponent implements OnInit {
     ];
   }
 
-  ngOnInit() {
-    this.listPaginated();
-  }
+  ngOnInit() {}
 
   listPaginated() {
     if (this.authService.isAdmin()) {
