@@ -1,4 +1,3 @@
-
 import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
@@ -13,9 +12,9 @@ export class PublicAgencyService {
 
   constructor(private http: TokenService) { }
 
-  public getAll(): Observable<Response> {
+  public getAll(): Observable<PublicAgency[]> {
     return this.http.get(this.resourceUrl).pipe(
-      map((response: Response) => response),
+      map((response: Response) => this.responseToModels(response)),
       catchError(null),
     );
   }
