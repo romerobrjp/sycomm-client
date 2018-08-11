@@ -25,7 +25,7 @@ import { ControlSidebarComponent } from './shared/control-sidebar/control-sideba
 import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { PublicOfficesComponent } from './public_offices/public_offices.component';
-import { PublicAgenciesComponent } from './public_agencies/public_agencies.component';
+import { PublicAgenciesComponent } from './public-agencies/public_agencies.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -33,11 +33,12 @@ import { ActivitiesComponent } from './activities/activities.component';
 import { ActivityDetailComponent } from './activities/activity-detail/activity-detail.component';
 import { AgendasComponent } from './agendas/agendas.component';
 import { AgendaDetailComponent } from './agendas/agenda-detail/agenda-detail.component';
+import { PublicAgencyDetailComponent } from './public-agencies/public-agency-detail/public-agency-detail.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
 import { PublicOfficeService } from './public_offices/shared/public_office.service';
-import { PublicAgencyService } from './public_agencies/shared/public_agency.service';
+import { PublicAgencyService } from './public-agencies/shared/public_agency.service';
 import { ActivityService } from './activities/shared/activity.service';
 import { AgendaService } from './agendas/shared/agenda.service';
 import { AuthService } from './shared/auth.service';
@@ -73,7 +74,8 @@ import { AppRoutingModule } from './app-routing.module';
     ActivitiesComponent,
     ActivityDetailComponent,
     AgendasComponent,
-    AgendaDetailComponent
+    AgendaDetailComponent,
+    PublicAgencyDetailComponent
   ],
   imports: [
     BrowserModule,

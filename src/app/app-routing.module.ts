@@ -12,6 +12,8 @@ import {ProfileComponent} from './profile/profile.component';
 import {ActivityDetailComponent} from './activities/activity-detail/activity-detail.component';
 import {AgendasComponent} from './agendas/agendas.component';
 import {AgendaDetailComponent} from './agendas/agenda-detail/agenda-detail.component';
+import {PublicAgenciesComponent} from './public-agencies/public_agencies.component';
+import {PublicAgencyDetailComponent} from './public-agencies/public-agency-detail/public-agency-detail.component';
 
 const ROUTES = RouterModule.forRoot([
   {
@@ -76,6 +78,21 @@ const ROUTES = RouterModule.forRoot([
   {
     path: 'activities/:id',
     component: ActivityDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-agencies',
+    component: PublicAgenciesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-agencies/new',
+    component: PublicAgencyDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'public-agencies/:id',
+    component: PublicAgencyDetailComponent,
     canActivate: [AuthGuard]
   },
 ]);
