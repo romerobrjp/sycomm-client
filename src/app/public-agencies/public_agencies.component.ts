@@ -1,6 +1,4 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Agenda} from '../agendas/shared/agenda.model';
-import {AgendaService} from '../agendas/shared/agenda.service';
 import {Dictionary} from '../shared/dictionary';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../shared/auth.service';
@@ -9,6 +7,7 @@ import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
 import {PublicAgencyService} from './shared/public_agency.service';
 import {GeneralUtils} from '../shared/general-utils';
 import {DataTable} from 'primeng/primeng';
+import {PublicAgency} from './shared/public_agency.model';
 
 @Component({
   selector: 'app-public_agencies',
@@ -16,7 +15,7 @@ import {DataTable} from 'primeng/primeng';
   styleUrls: ['./public_agencies.component.css']
 })
 export class PublicAgenciesComponent implements OnInit {
-  rows: Array<Agenda>;
+  rows: Array<PublicAgency>;
   columns: any[];
   pageSizes = [10, 20, 50, 100];
   paginator = {
@@ -104,16 +103,16 @@ export class PublicAgenciesComponent implements OnInit {
     this.listPaginated();
   }
 
-  delete(model) {
+  delete(model: PublicAgency) {
     this.confirmationService.confirm({
       header: 'Confirmação',
-      message: 'Deseja realmente remover este usuário?',
+      message: `Deseja realmente remover este o órgão "${model.name}"?`,
       icon: 'fa fa-question-circle',
       accept: () => {
         this.publicAgencyService.delete(model.id).subscribe(
           response => this.listPaginated()
         );
-        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário removido!'});
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Registro removido!'});
       },
       reject: () => {
         return false;
