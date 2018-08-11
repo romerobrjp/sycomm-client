@@ -58,7 +58,7 @@ export class PublicOfficesComponent implements OnInit {
       (response) => {
         this.rows = response.json()['data'];
         this.totalCount = response.json()['total_count'];
-        document.getElementById('go_to_page_input')['value'] = this.paginator.pageNumber;
+        if (document.getElementById('go_to_page_input')) { document.getElementById('go_to_page_input')['value'] = this.paginator.pageNumber; }
       },
       error => console.error('Ocorreu um erro ao tentar buscar os usuários:' + error)
     );
@@ -71,7 +71,7 @@ export class PublicOfficesComponent implements OnInit {
     if (event.sortField) { this.paginator.sortField = event.sortField; }
     this.paginator.sortOrder = GeneralUtils.sortOrderDictionary.get(event.sortOrder);
 
-    document.getElementById('go_to_page_input')['value'] = this.paginator.pageNumber;
+    if (document.getElementById('go_to_page_input')) { document.getElementById('go_to_page_input')['value'] = this.paginator.pageNumber; }
 
     this.listPaginated();
   }
