@@ -166,7 +166,7 @@ export class UsersComponent implements OnInit {
     this.paginator.pageNumber = pageNumber;
 
     this.listPaginated();
-  };
+  }
 
   delete(user) {
     this.confirmationService.confirm({
