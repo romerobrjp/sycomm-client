@@ -1,0 +1,82 @@
+<h1 class="text-center page-header">Órgãos</h1>
+
+<p-table
+  id="models_p-table"
+  #modelsTable
+  [value]="rows"
+  [paginator]="true"
+  [pageLinks]="10"
+  [totalRecords]="totalCount"
+  [rows]="paginator.perPage"
+  [responsive]="true"
+  [resizableColumns]="true"
+  [rowsPerPageOptions]="pageSizes"
+  [lazy]="true"
+  (onLazyLoad)="loadDataOnChange($event)"
+>
+  <ng-template pTemplate="caption">
+    <div style="text-align: left">
+      <a routerLink="/public-offices/new" class="btn btn-success table-btn-new mr-10" *ngIf="authService.isAdmin()">
+        <i class="fa fa-plus"></i>
+        Novo
+      </a>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+        {{col.header}}
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+
+      <th>
+        Ações
+      </th>
+    </tr>
+
+    <tr>
+      <th *ngFor="let col of columns" [ngSwitch]="col.field">
+        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+        <input *ngSwitchCase="'description'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+      </th>
+
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-model>
+    <tr>
+
+      <td>{{ model.name }}</td>
+      <td>{{ model.description }}</td>
+
+      <td>
+        <a [routerLink]="['/public-offices', model.id]" class="btn btn-info mr-10" title="Detalhes">
+          <i class="fa fa-info-circle"></i>
+        </a>
+
+        <button class="btn btn-danger" (click)="delete(model)" *ngIf="authService.isAdmin()" title="Excluir">
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="paginatorright">
+    Página:
+    <input
+      id="go_to_page_input"
+      type="number"
+      class="go-to-page-input"
+      (change)="changePageNumber($event)"
+    />
+  </ng-template>
+</p-table>
+
+<p-confirmDialog #deleteModelDialog>
+  <p-footer>
+    <button class="btn btn-danger mr-10" type="button" (click)="deleteModelDialog.accept()">Sim</button>
+    <button class="btn btn-default" type="button" (click)="deleteModelDialog.reject()">Não</button>
+  </p-footer>
+</p-confirmDialog>

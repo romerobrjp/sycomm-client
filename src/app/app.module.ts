@@ -24,7 +24,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { ControlSidebarComponent } from './shared/control-sidebar/control-sidebar.component';
 import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
-import { PublicOfficesComponent } from './public_offices/public_offices.component';
+import { PublicOfficesComponent } from './public-offices/public-offices.component';
 import { PublicAgenciesComponent } from './public-agencies/public_agencies.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignInComponent } from './sign-in/sign-in.component';
@@ -37,7 +37,7 @@ import { PublicAgencyDetailComponent } from './public-agencies/public-agency-det
 
 // Services
 import { UserService } from './users/shared/user.service';
-import { PublicOfficeService } from './public_offices/shared/public_office.service';
+import { PublicOfficeService } from './public-offices/shared/public-office.service';
 import { PublicAgencyService } from './public-agencies/shared/public_agency.service';
 import { ActivityService } from './activities/shared/activity.service';
 import { AgendaService } from './agendas/shared/agenda.service';

@@ -14,6 +14,7 @@ import {AgendasComponent} from './agendas/agendas.component';
 import {AgendaDetailComponent} from './agendas/agenda-detail/agenda-detail.component';
 import {PublicAgenciesComponent} from './public-agencies/public_agencies.component';
 import {PublicAgencyDetailComponent} from './public-agencies/public-agency-detail/public-agency-detail.component';
+import {PublicOfficesComponent} from './public-offices/public-offices.component';
 
 const ROUTES = RouterModule.forRoot([
   {
@@ -95,6 +96,21 @@ const ROUTES = RouterModule.forRoot([
     component: PublicAgencyDetailComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'public-offices',
+    component: PublicOfficesComponent,
+    canActivate: [AuthGuard]
+  },
+  // {
+  //   path: 'public-offices/new',
+  //   component: PublicOfficeDetailComponent,
+  //   canActivate: [AuthGuard]
+  // },
+  // {
+  //   path: 'public-offices/:id',
+  //   component: PublicOfficeDetailComponent,
+  //   canActivate: [AuthGuard]
+  // },
 ]);
 
 @NgModule({

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PublicOfficesComponent } from './public_offices.component';
+import { PublicOfficesComponent } from './public-offices.component';
 
 describe('PublicOfficesComponent', () => {
   let component: PublicOfficesComponent;
