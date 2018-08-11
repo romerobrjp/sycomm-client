@@ -89,6 +89,17 @@
             </a>
           </li>
 
+          <li>
+            <a routerLink="/public-agencies" routerLinkActive="active" class="nav-link" *ngIf="shouldShowPublicAgenciesMenu()">
+              <i class="fa fa-circle-o"></i>Órgãos
+            </a>
+          </li>
+
+          <li>
+            <a routerLink="/public-offices" routerLinkActive="active" class="nav-link" *ngIf="shouldShowPublicOfficesMenu()">
+              <i class="fa fa-circle-o"></i>Cargos
+            </a>
+          </li>
         </ul>
       </li>
 
