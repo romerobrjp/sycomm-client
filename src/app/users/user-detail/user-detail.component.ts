@@ -195,13 +195,25 @@ export class UserDetailComponent implements OnInit {
     }
   }
 
-  private setUser(user: User): void {
-    this.user = user;
-    this.form.patchValue(user);
+  isAdmin(): boolean {
+    return this.userType === 'Admin';
+  }
+
+  isEmployee(): boolean {
+    return this.userType === 'Employee';
+  }
+
+  isCustomer(): boolean {
+    return this.userType === 'Customer';
   }
 
   getCurrentUserTypeName(): string {
     return this.dictionary.userTypes[this.user.type];
+  }
+
+  private setUser(user: User): void {
+    this.user = user;
+    this.form.patchValue(user);
   }
 
   private applyFormValues() {
@@ -227,17 +239,5 @@ export class UserDetailComponent implements OnInit {
     } else {
       return '';
     }
-  }
-
-  private isAdmin(): boolean {
-    return this.userType === 'Admin';
-  }
-
-  private isEmployee(): boolean {
-    return this.userType === 'Employee';
-  }
-
-  private isCustomer(): boolean {
-    return this.userType === 'Customer';
   }
 }
