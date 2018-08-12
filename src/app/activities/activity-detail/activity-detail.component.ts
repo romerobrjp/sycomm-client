@@ -147,7 +147,7 @@ export class ActivityDetailComponent implements OnInit {
     });
   }
 
-  private create(): boolean {
+  create(): boolean {
     this.applyFormValues();
 
     this.activityService.create(this.entity, this.agendaId).subscribe(
@@ -164,7 +164,7 @@ export class ActivityDetailComponent implements OnInit {
     return true;
   }
 
-  private update(): void {
+  update(): void {
     this.messageService.clear();
     this.applyFormValues();
 
@@ -187,7 +187,7 @@ export class ActivityDetailComponent implements OnInit {
     );
   }
 
-  private createOrUpdate() {
+  createOrUpdate() {
     if (this.entity.id) {
       this.update();
     } else {

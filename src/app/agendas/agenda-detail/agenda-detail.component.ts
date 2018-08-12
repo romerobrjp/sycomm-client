@@ -120,7 +120,7 @@ export class AgendaDetailComponent implements OnInit {
     );
   }
 
-  private loadAgendaActivities() {
+  loadAgendaActivities() {
     this.activityService.listByAgendaPaginated(this.entity.id, this.activitiesTablePaginator.pageNumber, this.activitiesTablePaginator.perPage).subscribe(
       successResponse => {
         this.agendaActivities = successResponse.json()['data'];
@@ -141,7 +141,7 @@ export class AgendaDetailComponent implements OnInit {
     this.location.back();
   }
 
-  private create(): boolean {
+  create(): boolean {
     this.applyFormValues();
 
     this.agendaService.create(this.entity).subscribe(
@@ -165,7 +165,7 @@ export class AgendaDetailComponent implements OnInit {
     return true;
   }
 
-  private update(): void {
+  update(): void {
     this.messageService.clear();
     this.applyFormValues();
 
@@ -199,7 +199,7 @@ export class AgendaDetailComponent implements OnInit {
     );
   }
 
-  private createOrUpdate() {
+  createOrUpdate() {
     if (this.entity.id) {
       this.update();
     } else {
@@ -207,14 +207,14 @@ export class AgendaDetailComponent implements OnInit {
     }
   }
 
-  private applyFormValues() {
+  applyFormValues() {
     this.entity.name = this.form.get('name').value;
     this.entity.start_date = this.form.get('start_date').value;
     this.entity.employee_id = +this.form.get('employee_id').value;
     this.entity.customers_cpf = this.customersCpf.map( cpf => cpf_lib.strip(cpf));
   }
 
-  private addCpf() {
+  addCpf() {
     let currentCpf: string = cpf_lib.strip(this.form.get('currentCpf').value);
 
     if (!cpf_lib.isValid(currentCpf)) {
@@ -247,14 +247,14 @@ export class AgendaDetailComponent implements OnInit {
     this.form.get('currentCpf').reset();
   }
 
-  private clearCpfs() {
+  clearCpfs() {
     this.customersCpf = [];
     this.customers = [];
     this.entity.customers = [];
     this.entity.customers_cpf = [];
   }
 
-  private removeCpf(event, cpf) {
+  removeCpf(event, cpf) {
     this.customersCpf.splice(this.customersCpf.indexOf(cpf), 1);
     let customerWithCpf: User = this.customers.filter((c: User) => (c.cpf === cpf))[0];
     this.customers.splice(this.customers.indexOf(customerWithCpf), 1);
