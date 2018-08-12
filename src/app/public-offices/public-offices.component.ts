@@ -44,9 +44,7 @@ export class PublicOfficesComponent implements OnInit {
     ];
   }
 
-  ngOnInit() {
-    this.listPaginated();
-  }
+  ngOnInit() {}
 
   listPaginated() {
     this.publicOfficeService.listPaginated(this.paginator.pageNumber,

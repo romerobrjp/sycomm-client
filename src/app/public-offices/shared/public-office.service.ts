@@ -9,7 +9,7 @@ import {throwError as observableThrowError} from 'rxjs/index';
 
 @Injectable()
 export class PublicOfficeService {
-  public resourceUrl = '/public_offices';
+  public resourceUrl = 'public_offices';
 
   constructor(private http: TokenService) { }
 

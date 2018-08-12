@@ -98,9 +98,11 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     this.userType = this.activatedRoute.snapshot.queryParamMap.get('userType');
-    this.activatedRoute.params.pipe(switchMap(
-      (params: Params) => this.userService.getById(+params['id'])
-    )).subscribe(
+    this.activatedRoute.params.pipe(
+      switchMap(
+        (params: Params) => this.userService.getById(+params['id'])
+      )
+    ).subscribe(
       user => {
         if (user) {
           this.setUser(user);

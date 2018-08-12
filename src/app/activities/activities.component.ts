@@ -41,9 +41,7 @@ export class ActivitiesComponent implements OnInit {
     ];
   }
 
-  ngOnInit() {
-    this.listPaginated();
-  }
+  ngOnInit() {}
 
   listPaginated() {
     if (this.authService.isAdmin()) {

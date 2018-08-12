@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import { Router, ActivatedRoute, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Router, ActivatedRoute, Event, NavigationStart, NavigationEnd, NavigationError, Params} from '@angular/router';
 
 import { User } from './shared/user.model';
 import { UserService } from './shared/user.service';
@@ -9,13 +9,14 @@ import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
 import { CpfPipe, TelefonePipe } from 'ng2-brpipes';
 import {GeneralUtils} from '../shared/general-utils';
 import {DataTable} from 'primeng/primeng';
+import 'rxjs-compat/add/operator/filter';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
   users: User[];
   columns: any[];
   adminColumns: any[];
@@ -38,6 +39,7 @@ export class UsersComponent implements OnInit {
 
   private cpfPipe: CpfPipe;
   private telefonePipe: TelefonePipe;
+  private sub: any;
 
   public constructor(
     private userService: UserService,
@@ -46,6 +48,7 @@ export class UsersComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
+    console.log(`constructor`);
     this.cpfPipe = new CpfPipe();
     this.telefonePipe = new TelefonePipe();
 
@@ -71,46 +74,37 @@ export class UsersComponent implements OnInit {
       { field: 'public_agency', header: 'Órgão' }
     ];
 
-    router.events.subscribe( (event: Event) => {
-      if (event instanceof NavigationStart) {
-        // console.log('NavigationStart');
-      }
+    this.sub = this.router.events.filter(event => event instanceof NavigationEnd).subscribe(
+      (event: NavigationEnd) =>  {
+        if (event.url.includes('users')) {
+          this.userListingType = this.activatedRoute.snapshot.queryParamMap.get('userType');
 
-      if (event instanceof NavigationEnd) {
-        // console.log('NavigationEnd');
+          this.paginator.userType = this.userListingType;
 
-        this.userListingType = this.activatedRoute.snapshot.queryParamMap.get('userType');
-
-        this.paginator.userType = this.userListingType;
-
-        switch (this.userListingType) {
-          case 'Admin': {
-            this.columns = this.adminColumns;
-            break;
+          switch (this.userListingType) {
+            case 'Admin': {
+              this.columns = this.adminColumns;
+              break;
+            }
+            case 'Employee': {
+              this.columns = this.employeeColumns;
+              break;
+            }
+            case 'Customer': {
+              this.columns = this.customerColumns;
+              break;
+            }
           }
-          case 'Employee': {
-            this.columns = this.employeeColumns;
-            break;
-          }
-          case 'Customer': {
-            this.columns = this.customerColumns;
-            break;
-          }
+          this.listPaginated();
         }
-
-        this.listPaginated();
       }
-
-      if (event instanceof NavigationError) {
-          // Hide loading indicator
-          // Present error to user
-          console.error(event.error);
-      }
-    });
+    );
   }
 
-  ngOnInit() {
-    this.listPaginated();
+  ngOnInit() {}
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   listPaginated() {
@@ -136,7 +130,6 @@ export class UsersComponent implements OnInit {
     this.paginator.pageNumber = Math.ceil(this.paginator.offset / this.paginator.perPage) + 1;
     if (event.sortField) { this.paginator.sortField = event.sortField; }
     this.paginator.sortOrder = GeneralUtils.sortOrderDictionary.get(event.sortOrder);
-
     if (document.getElementById('go_to_page_input')) { document.getElementById('go_to_page_input')['value'] = this.paginator.pageNumber; }
 
     this.listPaginated();
