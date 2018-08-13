@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <h1 class="page-header text-center">
-    <strong> Detalhes do {{ dictionary.userTypes[userType] }} </strong>
+    <strong>{{ dictionary.userTypes[userType] }}</strong>
   </h1>
 
   <form [formGroup]="form" class="text-center" (ngSubmit)="createOrUpdate()">
@@ -158,7 +158,7 @@
         <label for="type" class="control-label">Tipo *</label>
         <select
           id="type"
-          [disabled] ="!authService.isAdmin()"
+          disabled="disabled"
           class="form-control"
           formControlName="type"
         >

@@ -98,29 +98,31 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     this.userType = this.activatedRoute.snapshot.queryParamMap.get('userType');
-    this.activatedRoute.params.pipe(
-      switchMap(
-        (params: Params) => this.userService.getById(+params['id'])
-      )
-    ).subscribe(
-      user => {
-        if (user) {
-          this.setUser(user);
+    this.form.controls['type'].setValue(this.userType);
+
+    this.activatedRoute.params.subscribe(
+      (params: Params) => {
+        if (params['id']) {
+          this.userService.getById(+params['id']).subscribe(
+            user => {
+              if (user) {
+                this.setUser(user);
+              }
+            },
+            error => console.error('Erro ao carregar o usuário: ' + error)
+          );
         }
+      }
+    );
 
-        this.publicOfficeService.getAll().subscribe(
-          publicOffices => {
-            this.publicOffices = publicOffices;
+    this.publicOfficeService.getAll().subscribe(
+      publicOffices => this.publicOffices = publicOffices,
+      error => console.error('Erro ao carregar Cargos: ' + error)
+    );
 
-            this.publicAgencyService.getAll().subscribe(
-              publicAgencies => this.publicAgencies = publicAgencies,
-              error => console.error('Erro ao carregar : ' + error)
-            );
-          },
-          error => console.error('Erro ao carregar cargos: ' + error)
-        );
-      },
-      error => console.error('Erro ao carregar o usuário: ' + error)
+    this.publicAgencyService.getAll().subscribe(
+      publicAgencies => this.publicAgencies = publicAgencies,
+      error => console.error('Erro ao carregar Orgaos: ' + error)
     );
   }
 
@@ -231,6 +233,7 @@ export class UserDetailComponent implements OnInit {
     this.user.simple_address = this.form.get('simple_address').value;
     this.user.public_office_id = this.form.get('public_office_id').value;
     this.user.public_agency_id = this.form.get('public_agency_id').value;
+    this.user.type = this.form.get('type').value;
   }
 
   private stripPhoneNumbers(phoneNumber: string) {

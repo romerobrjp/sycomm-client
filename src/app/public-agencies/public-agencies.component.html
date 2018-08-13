@@ -37,8 +37,8 @@
 
     <tr>
       <th *ngFor="let col of columns" [ngSwitch]="col.field">
-        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" placeholder="Filtre por Nome..." (change)="handleFilter($event)">
-        <input *ngSwitchCase="'description'" [name]="col.field" pInputText type="text" placeholder="Filtre por Descrição..." (change)="handleFilter($event)">
+        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
+        <input *ngSwitchCase="'description'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
       </th>
 
       <th></th>
