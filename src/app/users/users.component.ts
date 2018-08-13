@@ -10,6 +10,7 @@ import { CpfPipe, TelefonePipe } from 'ng2-brpipes';
 import {GeneralUtils} from '../shared/general-utils';
 import {DataTable} from 'primeng/primeng';
 import 'rxjs-compat/add/operator/filter';
+import {Dictionary} from '../shared/dictionary';
 
 @Component({
   selector: 'app-users',
@@ -46,7 +47,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dictionary: Dictionary
   ) {
     this.cpfPipe = new CpfPipe();
     this.telefonePipe = new TelefonePipe();
@@ -163,7 +165,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   delete(user) {
     this.confirmationService.confirm({
       header: 'Confirmação',
-      message: `Deseja realmente remover o ${this.getUsersListTitle()} '${user.name}'?`,
+      message: `Deseja realmente remover o ${this.dictionary.userTypes[user.type]} '${user.name}'?`,
       icon: 'fa fa-question-circle',
       accept: () => {
         this.userService.delete(user.id).subscribe(
