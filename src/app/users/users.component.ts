@@ -163,7 +163,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   delete(user) {
     this.confirmationService.confirm({
       header: 'Confirmação',
-      message: 'Deseja realmente remover este usuário?',
+      message: `Deseja realmente remover o ${this.getUsersListTitle()} '${user.name}'?`,
       icon: 'fa fa-question-circle',
       accept: () => {
         this.userService.delete(user.id).subscribe(
