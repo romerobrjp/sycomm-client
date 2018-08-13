@@ -48,7 +48,6 @@ export class UsersComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
-    console.log(`constructor`);
     this.cpfPipe = new CpfPipe();
     this.telefonePipe = new TelefonePipe();
 

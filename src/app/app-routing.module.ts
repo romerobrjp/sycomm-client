@@ -38,12 +38,13 @@ const ROUTES = RouterModule.forRoot([
     canActivate: [AuthGuard]
   },
   {
-    path: 'users/:id',
+    path: 'users/new',
     component: UserDetailComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    pathMatch: 'full'
   },
   {
-    path: 'users/new',
+    path: 'users/:id',
     component: UserDetailComponent,
     canActivate: [AuthGuard]
   },

@@ -1,4 +1,4 @@
-<h1 class="text-center page-header">{{ getUsersListTitle() }}</h1>
+<h1 class="text-center page-header">{{ getUsersListTitle() }} ({{ totalCount }})</h1>
 
 <p-table
   id="users_table"
@@ -37,11 +37,11 @@
 
     <tr>
       <th *ngFor="let col of columns" [ngSwitch]="col.field">
-        <input *ngSwitchCase="'registration'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
-        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
-        <input *ngSwitchCase="'email'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
-        <input *ngSwitchCase="'cpf'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
-        <input *ngSwitchCase="'cellphone'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)">
+        <input *ngSwitchCase="'registration'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
+        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
+        <input *ngSwitchCase="'email'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
+        <input *ngSwitchCase="'cpf'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
+        <input *ngSwitchCase="'cellphone'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
       </th>
 
       <th></th>
@@ -67,7 +67,7 @@
   </ng-template>
 
   <ng-template pTemplate="paginatorright">
-    Página:
+    <label for="go_to_page_input" class="control-label">Ir para Página: <br/></label>
     <input
       id="go_to_page_input"
       type="number"
