@@ -163,9 +163,6 @@
             <ng-template pTemplate="body" let-activity>
               <tr>
                 <td>{{ activity.name }}</td>
-                <td>{{ activity.agenda.start_date | date: 'dd/MM/yyyy'}}</td>
-                <td>{{ activity.description }}</td>
-                <td>{{ dictionary.activityTypes[activity.activity_type] }}</td>
                 <td>
                   <span
                     class="label"
@@ -176,6 +173,9 @@
                     {{ dictionary.activityStatuses[activity.status] }}
                   </span>
                 </td>
+                <td>{{ activity.agenda.start_date | date: 'dd/MM/yyyy'}}</td>
+                <td>{{ activity.description }}</td>
+                <td>{{ dictionary.activityTypes[activity.activity_type] }}</td>
                 <td>{{ activity.customer_name }}</td>
                 <td>{{ activity.annotations }}</td>
 

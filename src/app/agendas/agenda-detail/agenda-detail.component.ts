@@ -1,4 +1,3 @@
-import {switchMap} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Message} from 'primeng/components/common/api';
@@ -86,10 +85,10 @@ export class AgendaDetailComponent implements OnInit {
 
     this.activitiesTableColumns = [
       { field: 'name', header: 'Nome' },
+      { field: 'status', header: 'Status' },
       { field: 'agenda.start_date', header: 'Data' },
       { field: 'description', header: 'Descrição' },
       { field: 'activity_type', header: 'Tipo' },
-      { field: 'status', header: 'Status' },
       { field: 'customer_name', header: 'Cliente' },
       { field: 'annotations', header: 'Anotações' },
     ];
@@ -170,7 +169,7 @@ export class AgendaDetailComponent implements OnInit {
     this.applyFormValues();
 
     this.agendaService.update(this.entity).subscribe(
-      (response) => {
+      () => {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Agenda atualizada'});
       },
       (errorResponse) => {
@@ -216,17 +215,15 @@ export class AgendaDetailComponent implements OnInit {
   }
 
   addCpf() {
-    let currentCpf: string = cpf_lib.strip(this.form.get('currentCpf').value);
+    const currentCpf: string = cpf_lib.strip(this.form.get('currentCpf').value);
 
     if (!cpf_lib.isValid(currentCpf)) {
       swal('Erro', 'Por favor, informe um CPF válido!', 'error');
       return false;
-    }
-    else if (this.customersCpf.includes(currentCpf)) {
+    } else if (this.customersCpf.includes(currentCpf)) {
       swal('Ops...', 'Este CPF já foi incluído, escolha outro.', 'warning');
       return false;
-    }
-    else if (currentCpf && currentCpf.length === 11) {
+    } else if (currentCpf && currentCpf.length === 11) {
       let user: User;
 
       this.userService.getByCpf(currentCpf).subscribe(
@@ -257,7 +254,7 @@ export class AgendaDetailComponent implements OnInit {
 
   removeCpf(event, cpf) {
     this.customersCpf.splice(this.customersCpf.indexOf(cpf), 1);
-    let customerWithCpf: User = this.customers.filter((c: User) => (c.cpf === cpf))[0];
+    const customerWithCpf: User = this.customers.filter((c: User) => (c.cpf === cpf))[0];
     this.customers.splice(this.customers.indexOf(customerWithCpf), 1);
   }
 
@@ -265,7 +262,7 @@ export class AgendaDetailComponent implements OnInit {
     let nameSurname: string;
 
     if (fullName) {
-      let splittedFullname: string[] = fullName.split(' ');
+      const splittedFullname: string[] = fullName.split(' ');
 
       if (splittedFullname.length > 1) {
         nameSurname = splittedFullname[0] + ' ' + splittedFullname[splittedFullname.length - 1];
@@ -311,7 +308,7 @@ export class AgendaDetailComponent implements OnInit {
       icon: 'fa fa-question-circle',
       accept: () => {
         this.activityService.delete(activity.id).subscribe(
-          response => this.loadAgendaActivities()
+          () => this.loadAgendaActivities()
         );
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Atividade removida!'});
       },
