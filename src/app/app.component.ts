@@ -10,7 +10,7 @@ import { AuthService } from './shared/auth.service';
 export class AppComponent {
   constructor(private tokenService: TokenService, private authService: AuthService) {
     this.tokenService.init({
-      apiBase: 'https://sycomm-api.herokuapp.com',
+      apiBase: 'http://api.sycomm.com:3000',
       globalOptions: {
         headers: {
           'Content-Type': 'application/json',
