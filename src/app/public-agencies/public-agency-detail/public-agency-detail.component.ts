@@ -47,13 +47,15 @@ export class PublicAgencyDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(
-      switchMap(
-        (params: Params) => this.publicAgencyService.getById(+params['id'])
-      )
-    ).subscribe(
-      publicAgency => this.setPublicAgency(publicAgency),
-      error => console.error('Erro ao carregar o Órgão: ' + error)
+    this.activatedRoute.params.subscribe(
+      (params: Params) => {
+        if (params['id']) {
+          this.publicAgencyService.getById(+params['id']).subscribe(
+            publicAgency => this.setPublicAgency(publicAgency),
+            error => console.error('Erro ao carregar o Órgão: ' + error)
+          );
+        }
+      }
     );
   }
 

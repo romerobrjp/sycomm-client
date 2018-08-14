@@ -47,13 +47,15 @@ export class PublicOfficeDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(
-      switchMap(
-        (params: Params) => this.publicOfficeService.getById(+params['id'])
-      )
-    ).subscribe(
-      publicOffice => this.setPublicOffice(publicOffice),
-      error => console.error('Erro ao carregar o Órgão: ' + error)
+    this.activatedRoute.params.subscribe(
+      (params: Params) => {
+        if (params['id']) {
+          this.publicOfficeService.getById(+params['id']).subscribe(
+            publicOffice => this.setPublicOffice(publicOffice),
+            error => console.error('Erro ao carregar o Órgão: ' + error)
+          );
+        }
+      }
     );
   }
 
