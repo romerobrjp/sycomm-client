@@ -76,10 +76,10 @@
           <thead>
             <tr>
               <th>Atividade</th>
+              <th>Status</th>
               <th>Tipo</th>
               <th>Data</th>
               <th>Descrição</th>
-              <th>Status</th>
               <th>Cliente</th>
               <th>Última movimentação</th>
             </tr>
@@ -88,9 +88,6 @@
           <tbody>
             <tr *ngFor="let activity of employeeDayActivities">
               <td><a [routerLink]="['/activities', activity.id]">{{ activity.name }}</a></td>
-              <td>{{ activityTypesDictionary[activity.activity_type] }}</td>
-              <td>{{ activity.agenda.start_date | date: 'dd/MM/yyyy'}}</td>
-              <td>{{ activity.description }}</td>
               <td>
                 <span
                   class="label"
@@ -101,6 +98,9 @@
                   {{ activityDictionary[activity.status] }}
                 </span>
               </td>
+              <td>{{ activityTypesDictionary[activity.activity_type] }}</td>
+              <td>{{ activity.agenda.start_date | date: 'dd/MM/yyyy'}}</td>
+              <td>{{ activity.description }}</td>
               <td><a [routerLink]="['/users', activity.customer_id]" [queryParams]="{ 'userType': 'Customer'}">{{ activity.customer_name }}</a></td>
               <td>{{ activity.updated_at | date: 'dd/MM/yyy HH:mm' }}</td>
             </tr>
