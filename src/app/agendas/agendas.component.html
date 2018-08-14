@@ -14,7 +14,7 @@
   [(selection)]="selectedAgendas"
   (onLazyLoad)="loadDataOnChange($event)"
 >
-  <ng-template pTemplate="caption">
+  <ng-template pTemplate="caption" *ngIf="authService.isAdmin()">
     <div style="text-align: left">
       <a routerLink="/agendas/new" class="btn btn-success table-btn-new mr-10" *ngIf="authService.isAdmin()">
         <i class="fa fa-plus"></i>
@@ -50,6 +50,7 @@
 
       <td>{{ agenda.name }}</td>
       <td>{{ agenda.start_date | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ agenda.end_date | date: 'dd/MM/yyyy' }}</td>
       <td>{{ agenda.activities.length }}</td>
       <td>{{ agenda.open_activities_count }}</td>
       <td>{{ agenda.customers.length }}</td>

@@ -210,6 +210,7 @@ export class AgendaDetailComponent implements OnInit {
   applyFormValues() {
     this.entity.name = this.form.get('name').value;
     this.entity.start_date = this.form.get('start_date').value;
+    this.entity.end_date = this.form.get('end_date').value;
     this.entity.employee_id = +this.form.get('employee_id').value;
     this.entity.customers_cpf = this.customersCpf.map( cpf => cpf_lib.strip(cpf));
   }
