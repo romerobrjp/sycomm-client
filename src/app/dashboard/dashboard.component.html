@@ -17,7 +17,8 @@
           <h3 class="box-title">{{ employee.name }} ({{ employee.activities?.length > 0 ? employee.activities?.length : '0' }} atividades)</h3>
           <br>
           <br>
-          <p>Último acesso em {{ employee.last_sign_in_at | date: 'dd/MM/yyyy hh:MM:ss' }}</p>
+          <p *ngIf="employee.last_sign_in_at">Último acesso em {{ employee.last_sign_in_at | date: 'dd/MM/yyyy hh:MM:ss' }}</p>
+          <p *ngIf="!employee.last_sign_in_at">Nunca acessou o sistema</p>
 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
