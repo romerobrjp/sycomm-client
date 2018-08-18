@@ -26,7 +26,9 @@ export class SignInComponent implements OnInit {
     this.formErrors = null;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // this.authService.signOut();
+  }
 
   signIn() {
     this.submitted = true;

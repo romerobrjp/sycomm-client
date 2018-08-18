@@ -1,31 +1,38 @@
-
 import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {User} from '../users/shared/user.model';
-import {TokenService} from './token.service';
+import {HttpClient} from './token.service';
 import {ErrorHandlerService} from './error-handler.service';
-import {Response} from '@angular/http';
+import {HttpResponse} from '@angular/common/http';
 
 @Injectable()
 export class AuthService {
   private currentUser: User;
 
-  constructor(private tokenService: TokenService) {}
+  constructor(private tokenService: HttpClient) {}
 
-  signUp(user: User): Observable<Response> {
-    return this.tokenService.registerAccount(user as any).pipe(catchError(ErrorHandlerService.handleResponseErrors));
+  signUp(login: string, password: string, passwordConfirmation: string): Observable<User> {
+    const registerData = {
+      login: login,
+      password: password,
+      passwordConfirmation: passwordConfirmation
+    };
+
+    return this.tokenService.registerAccount(registerData).pipe(
+      catchError(ErrorHandlerService.handleResponseErrors)
+    );
   }
 
   signIn(uid: string, password: string): Observable<User> {
     const signInData = {
-      email: uid,
+      login: uid,
       password: password
     };
 
     return this.tokenService.signIn(signInData).pipe(
       map(res => {
-        let user: User = res.json()['data'] as User;
+        const user: User = res.json()['data'] as User;
 
         this.currentUser = user;
         localStorage.setItem('currentUser', JSON.stringify(user));
@@ -35,13 +42,32 @@ export class AuthService {
     );
   }
 
-  signOut(): Observable<Response> {
-    localStorage.removeItem('currentUser');
-    return this.tokenService.signOut().pipe(catchError(ErrorHandlerService.handleResponseErrors));
+  signOut(): void {
+    this.tokenService.signOut().subscribe(
+      (responseSuccess) => {
+        localStorage.removeItem('currentUser');
+        console.log(JSON.stringify(responseSuccess));
+      },
+      (responseError) => {
+        console.error(JSON.stringify(responseError));
+      }
+    );
   }
 
   userSignedIn(): boolean {
+    console.log(`this.tokenService.userSignedIn(): ${this.tokenService.userSignedIn()}`);
     return this.tokenService.userSignedIn();
+  }
+
+  validateToken() {
+    this.tokenService.validateToken().subscribe(
+      res => {
+        console.log(res);
+      },
+      error => {
+        console.error(error);
+      }
+    );
   }
 
   getCurrentUser(): User {

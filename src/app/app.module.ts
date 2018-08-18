@@ -3,8 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // 3rd party modules
 import { TextMaskModule } from 'angular2-text-mask';
 import {Ng2BRPipesModule} from 'ng2-brpipes';
@@ -34,7 +33,7 @@ import { ActivityDetailComponent } from './activities/activity-detail/activity-d
 import { AgendasComponent } from './agendas/agendas.component';
 import { AgendaDetailComponent } from './agendas/agenda-detail/agenda-detail.component';
 import { PublicAgencyDetailComponent } from './public-agencies/public-agency-detail/public-agency-detail.component';
-import {PublicOfficeDetailComponent} from './public-offices/public-office-detail/public-office-detail.component';
+import { PublicOfficeDetailComponent } from './public-offices/public-office-detail/public-office-detail.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -43,8 +42,7 @@ import { PublicAgencyService } from './public-agencies/shared/public-agency.serv
 import { ActivityService } from './activities/shared/activity.service';
 import { AgendaService } from './agendas/shared/agenda.service';
 import { AuthService } from './shared/auth.service';
-import { TokenService } from './shared/token.service';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient } from './shared/token.service';
 import { Dictionary } from './shared/dictionary';
 import { ErrorHandlerService } from './shared/error-handler.service';
 // Primefaces Services
@@ -56,6 +54,8 @@ import { AuthGuard } from './guards/auth.guard';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
+import { AppHttpInterceptor } from './shared/http.interceptor';
+import { AngularTokenModule } from 'angular-token';
 
 @NgModule({
   declarations: [
@@ -77,7 +77,7 @@ import { AppRoutingModule } from './app-routing.module';
     AgendasComponent,
     AgendaDetailComponent,
     PublicAgencyDetailComponent,
-    PublicOfficeDetailComponent
+    PublicOfficeDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +85,9 @@ import { AppRoutingModule } from './app-routing.module';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpModule,
+    AngularTokenModule.forRoot({
+      apiBase: 'http://api.sycomm.com:3000',
+    }),
     AppRoutingModule,
     TableModule,
     GrowlModule,
@@ -106,12 +108,17 @@ import { AppRoutingModule } from './app-routing.module';
     AgendaService,
     MessageService,
     ConfirmationService,
-    Angular2TokenService,
+    AngularTokenModule,
     AuthService,
-    TokenService,
+    HttpClient,
     AuthGuard,
     Dictionary,
-    ErrorHandlerService
+    ErrorHandlerService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [ AppComponent ]
 })

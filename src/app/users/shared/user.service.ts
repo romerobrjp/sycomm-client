@@ -4,14 +4,14 @@ import {throwError as observableThrowError, Observable} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from './user.model';
-import { TokenService } from '../../shared/token.service';
 import {Response} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class UserService {
   urlResource = 'users';
 
-  constructor(private http: TokenService) {}
+  constructor(private http: HttpClient) {}
 
   listPaginated(page_number: number,
                 per_page: number,

@@ -2,22 +2,19 @@
 import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {TokenService} from '../../shared/token.service';
 import {PublicOffice} from './public-office.model';
 import {Response} from '@angular/http';
 import {throwError as observableThrowError} from 'rxjs/index';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class PublicOfficeService {
   public resourceUrl = 'public_offices';
 
-  constructor(private http: TokenService) { }
+  constructor(private http: HttpClient) { }
 
   public getAll(): Observable<PublicOffice[]> {
-    return this.http.get(this.resourceUrl).pipe(
-      map((response: Response) => this.responseToModels(response)),
-      catchError(null),
-    );
+    return this.http.get<PublicOffice[]>(this.resourceUrl);
   }
 
   listPaginated(page_number: number,
@@ -25,8 +22,7 @@ export class PublicOfficeService {
                 sortField: string,
                 sortDirection: string,
                 searchField: string,
-                searchText: string): Observable<Response>
-  {
+                searchText: string): Observable<Response> {
     const url = `${this.resourceUrl}/list_paginated?page_number=${page_number}&per_page=${per_page}&sortField=${sortField}&sortDirection=${sortDirection}&searchField=${searchField}&searchText=${searchText}`;
 
     return this.http.get(url).pipe(

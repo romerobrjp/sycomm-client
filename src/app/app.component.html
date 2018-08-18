@@ -7,12 +7,13 @@
   <title>Sycomm</title>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-  <div class="wrapper">
+  <div class="wrapper" *ngIf="authService.userSignedIn()">
     <app-header></app-header>
     <app-left-sidebar></app-left-sidebar>
     <app-content></app-content>
     <app-footer></app-footer>
     <app-control-sidebar></app-control-sidebar>
   </div>
+  <app-sign-in *ngIf="!authService.userSignedIn()"></app-sign-in>
 </body>
 </html>

@@ -4,22 +4,21 @@ import {throwError as observableThrowError, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Activity} from './activity.model';
-import {TokenService} from '../../shared/token.service';
-import {Response} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class ActivityService {
   urlResource = 'activities';
 
-  constructor(private http: TokenService) { }
+  constructor(private http: HttpClient) { }
 
-  listAllPaginated(page_number: number, per_page: number): Observable<Response> {
+  listAllPaginated(page_number: number, per_page: number): Observable<any> {
     const url = `${this.urlResource}/list_all_paginated?page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
   }
 
-  listUserActivitiesPaginated(employee_id: number, page_number: number, per_page: number): Observable<Response> {
+  listUserActivitiesPaginated(employee_id: number, page_number: number, per_page: number): Observable<any> {
     const url = `${this.urlResource}/list_user_activities_paginated?employee_id=${employee_id}&page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
@@ -52,7 +51,7 @@ export class ActivityService {
     );
   }
 
-  listByAgendaPaginated(agendaId: number, page_number: number, per_page: number): Observable<Response> {
+  listByAgendaPaginated(agendaId: number, page_number: number, per_page: number): Observable<any> {
     const url = `${this.urlResource}`;
 
     return this.http.get(`${url}/list_by_agenda_paginated?agenda_id=${agendaId}&page_number=${page_number}&per_page=${per_page}`).pipe(
