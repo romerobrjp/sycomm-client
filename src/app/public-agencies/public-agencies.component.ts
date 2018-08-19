@@ -55,8 +55,8 @@ export class PublicAgenciesComponent implements OnInit {
                                            this.paginator.searchField,
                                            this.paginator.searchText).subscribe(
       (response) => {
-        this.rows = response.json()['data'];
-        this.totalCount = response.json()['total_count'];
+        this.rows = response['data'];
+        this.totalCount = response['total_count'];
         if (document.getElementById('go_to_page_input')) { document.getElementById('go_to_page_input')['value'] = this.paginator.pageNumber; }
       },
       error => console.error('Ocorreu um erro ao tentar buscar os usuários:' + error)

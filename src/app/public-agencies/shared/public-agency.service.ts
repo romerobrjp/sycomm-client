@@ -2,13 +2,13 @@ import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {PublicAgency} from './public-agency.model';
-import {Response} from '@angular/http';
 import {throwError as observableThrowError} from 'rxjs/index';
 import { HttpClient } from '@angular/common/http';
+import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
 export class PublicAgencyService {
-  public resourceUrl = '/public_agencies';
+  public resourceUrl = `${APP_CONFIG.apiBaseUrl}/public_agencies`;
 
   constructor(private http: HttpClient) { }
 

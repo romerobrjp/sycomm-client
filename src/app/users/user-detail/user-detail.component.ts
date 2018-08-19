@@ -161,7 +161,7 @@ export class UserDetailComponent implements OnInit {
         // this.router.navigate(['/users'], navigationExtras);
       },
       (errorResponse) => {
-        for (const [key, value] of Object.entries(errorResponse.json().errors)) {
+        for (const [key, value] of Object.entries(errorResponse.errors)) {
           for (const [errorKey, errorMessage] of Object.entries(value)) {
             this.messageService.add({
               key: 'user_detail_messages',

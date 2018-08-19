@@ -59,8 +59,8 @@ export class AgendasComponent implements OnInit {
   listAllPaginated() {
     this.agendaService.listAllPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
       successResponse => {
-        this.rows = successResponse.json()['data'];
-        this.totalCount = successResponse.json()['total_count'];
+        this.rows = successResponse['data'];
+        this.totalCount = successResponse['total_count'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as agendas: ' + errorResponse);
@@ -71,8 +71,8 @@ export class AgendasComponent implements OnInit {
   listEmployeeAgendasPaginated() {
     // this.agendaService.listEmployeeAgendasPaginated(this.authService.getCurrentUser()['id'], this.paginator.pageNumber, this.paginator.perPage).subscribe(
     //   successResponse => {
-    //     this.rows = successResponse.json()['data'];
-    //     this.totalCount = successResponse.json()['total_count'];
+    //     this.rows = successResponse['data'];
+    //     this.totalCount = successResponse['total_count'];
     //   },
     //   errorResponse => {
     //     console.error('Ocorreu um erro ao tentar buscar as agendas deste usuário:' + errorResponse);

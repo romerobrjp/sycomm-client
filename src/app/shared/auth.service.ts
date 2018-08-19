@@ -5,6 +5,7 @@ import {User} from '../users/shared/user.model';
 import {HttpClient} from './token.service';
 import {ErrorHandlerService} from './error-handler.service';
 import {HttpResponse} from '@angular/common/http';
+import {tap} from 'rxjs/internal/operators';
 
 @Injectable()
 export class AuthService {
@@ -24,20 +25,19 @@ export class AuthService {
     );
   }
 
-  signIn(uid: string, password: string): Observable<User> {
+  signIn(uid: string, password: string): Observable<Object> {
     const signInData = {
       login: uid,
       password: password
     };
 
     return this.tokenService.signIn(signInData).pipe(
-      map(res => {
-        const user: User = res.json()['data'] as User;
-
-        this.currentUser = user;
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        return user;
-      }),
+      tap(
+        (responseSuccess: HttpResponse<Object>) => {
+          this.currentUser = responseSuccess.body['data'] as User;
+          localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+        }
+      ),
       catchError(ErrorHandlerService.handleResponseErrors)
     );
   }

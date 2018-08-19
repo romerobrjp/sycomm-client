@@ -2,12 +2,12 @@ import {throwError as observableThrowError, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Agenda} from './agenda.model';
-import {RequestOptions, Response} from '@angular/http';
 import {HttpClient} from '@angular/common/http';
+import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
 export class AgendaService {
-  urlResource = 'agendas';
+  urlResource = `${APP_CONFIG.apiBaseUrl}/agendas`;
 
   constructor(private http: HttpClient) { }
 

@@ -6,10 +6,11 @@ import { Injectable } from '@angular/core';
 import { User } from './user.model';
 import {Response} from '@angular/http';
 import { HttpClient } from '@angular/common/http';
+import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
 export class UserService {
-  urlResource = 'users';
+  urlResource = `${APP_CONFIG.apiBaseUrl}/users`;
 
   constructor(private http: HttpClient) {}
 

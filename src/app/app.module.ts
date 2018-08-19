@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // 3rd party modules
 import { TextMaskModule } from 'angular2-text-mask';
-import {Ng2BRPipesModule} from 'ng2-brpipes';
+import { Ng2BRPipesModule } from 'ng2-brpipes';
 // Primefaces modules
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
@@ -42,7 +42,6 @@ import { PublicAgencyService } from './public-agencies/shared/public-agency.serv
 import { ActivityService } from './activities/shared/activity.service';
 import { AgendaService } from './agendas/shared/agenda.service';
 import { AuthService } from './shared/auth.service';
-import { HttpClient } from './shared/token.service';
 import { Dictionary } from './shared/dictionary';
 import { ErrorHandlerService } from './shared/error-handler.service';
 // Primefaces Services
@@ -55,7 +54,11 @@ import { AuthGuard } from './guards/auth.guard';
 // Modules
 import { AppRoutingModule } from './app-routing.module';
 import { AppHttpInterceptor } from './shared/http.interceptor';
-import { AngularTokenModule } from 'angular-token';
+import {
+  AngularTokenService,
+  AngularTokenModule,
+  AngularTokenOptions
+} from 'angular-token';
 
 @NgModule({
   declarations: [
@@ -110,7 +113,6 @@ import { AngularTokenModule } from 'angular-token';
     ConfirmationService,
     AngularTokenModule,
     AuthService,
-    HttpClient,
     AuthGuard,
     Dictionary,
     ErrorHandlerService,

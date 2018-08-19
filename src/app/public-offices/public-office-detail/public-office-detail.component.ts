@@ -83,7 +83,7 @@ export class PublicOfficeDetailComponent implements OnInit {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Órgão atualizado!'});
       },
       (errorResponse) => {
-        for (const [key, value] of Object.entries(errorResponse.json().errors)) {
+        for (const [key, value] of Object.entries(errorResponse.errors)) {
           for (const [errorKey, errorMessage] of Object.entries(value)) {
             this.messageService.add({
               key: 'public_office_detail_messages',

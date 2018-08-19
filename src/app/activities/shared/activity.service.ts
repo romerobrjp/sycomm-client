@@ -5,10 +5,11 @@ import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Activity} from './activity.model';
 import {HttpClient} from '@angular/common/http';
+import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
 export class ActivityService {
-  urlResource = 'activities';
+  urlResource = `${APP_CONFIG.apiBaseUrl}/activities`;
 
   constructor(private http: HttpClient) { }
 

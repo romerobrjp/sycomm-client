@@ -3,13 +3,13 @@ import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {PublicOffice} from './public-office.model';
-import {Response} from '@angular/http';
 import {throwError as observableThrowError} from 'rxjs/index';
 import { HttpClient } from '@angular/common/http';
+import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
 export class PublicOfficeService {
-  public resourceUrl = 'public_offices';
+  public resourceUrl = `${APP_CONFIG.apiBaseUrl}/public_offices`;
 
   constructor(private http: HttpClient) { }
 
@@ -22,11 +22,10 @@ export class PublicOfficeService {
                 sortField: string,
                 sortDirection: string,
                 searchField: string,
-                searchText: string): Observable<Response> {
+                searchText: string): Observable<Object> {
     const url = `${this.resourceUrl}/list_paginated?page_number=${page_number}&per_page=${per_page}&sortField=${sortField}&sortDirection=${sortDirection}&searchField=${searchField}&searchText=${searchText}`;
 
     return this.http.get(url).pipe(
-      map((response: Response) => response),
       catchError(this.handleErrors)
     );
   }
