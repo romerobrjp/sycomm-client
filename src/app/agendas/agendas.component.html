@@ -21,7 +21,7 @@
         Novo
       </a>
 
-      <button class="btn btn-danger" type="button" *ngIf="authService.isAdmin()" (click)="deleteAllInprogress()"><i class="fa fa-trash-o mr-10"></i>Excluir</button>
+      <button class="btn btn-danger" type="button" *ngIf="authService.isAdmin()" (click)="deleteSelected()"><i class="fa fa-trash-o mr-10"></i>Excluir</button>
     </div>
   </ng-template>
 
