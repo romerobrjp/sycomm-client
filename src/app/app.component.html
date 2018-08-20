@@ -8,6 +8,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper" *ngIf="authService.userSignedIn()">
+    <app-loader></app-loader>
     <app-header></app-header>
     <app-left-sidebar></app-left-sidebar>
     <app-content></app-content>

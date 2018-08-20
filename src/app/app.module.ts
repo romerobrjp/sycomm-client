@@ -11,8 +11,9 @@ import { Ng2BRPipesModule } from 'ng2-brpipes';
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageModule } from 'primeng/message';
-import {ConfirmDialogModule, MessagesModule, CardModule, TooltipModule} from 'primeng/primeng';
+import { ConfirmDialogModule, MessagesModule, CardModule, TooltipModule } from 'primeng/primeng';
 import { DataViewModule } from 'primeng/dataview';
+import { BlockUIModule } from 'primeng/blockui';
 
 // Components
 import { AppComponent } from './app.component';
@@ -34,6 +35,7 @@ import { AgendasComponent } from './agendas/agendas.component';
 import { AgendaDetailComponent } from './agendas/agenda-detail/agenda-detail.component';
 import { PublicAgencyDetailComponent } from './public-agencies/public-agency-detail/public-agency-detail.component';
 import { PublicOfficeDetailComponent } from './public-offices/public-office-detail/public-office-detail.component';
+import { LoaderComponent } from './shared/loader/loader.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -53,12 +55,12 @@ import { AuthGuard } from './guards/auth.guard';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
+import { AngularTokenModule, } from 'angular-token';
+
+// Interceptors
 import { AppHttpInterceptor } from './shared/http.interceptor';
-import {
-  AngularTokenService,
-  AngularTokenModule,
-  AngularTokenOptions
-} from 'angular-token';
+import { LoaderInterceptorService } from './shared/loader/loader.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -81,6 +83,7 @@ import {
     AgendaDetailComponent,
     PublicAgencyDetailComponent,
     PublicOfficeDetailComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,6 +102,7 @@ import {
     ConfirmDialogModule,
     CardModule,
     TooltipModule,
+    BlockUIModule,
     DataViewModule,
     TextMaskModule,
     Ng2BRPipesModule,
@@ -121,6 +125,11 @@ import {
       useClass: AppHttpInterceptor,
       multi: true,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [ AppComponent ]
 })

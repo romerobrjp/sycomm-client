@@ -46,7 +46,6 @@ export class AuthService {
     this.tokenService.signOut().subscribe(
       (responseSuccess) => {
         localStorage.removeItem('currentUser');
-        console.log(JSON.stringify(responseSuccess));
       },
       (responseError) => {
         console.error(JSON.stringify(responseError));

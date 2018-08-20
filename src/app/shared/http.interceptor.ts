@@ -8,13 +8,10 @@ import { catchError } from 'rxjs/internal/operators';
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
 
-  constructor() {
-    console.log(`interceptor constructor`);
-  }
+  constructor() {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // send the newly created request
-    console.log(`VAI KCTAAAAAAAAAAAAAAA`);
     return next.handle(req)
       .pipe(
         catchError((error, caught) => {
