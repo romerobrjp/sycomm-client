@@ -38,10 +38,10 @@ export class SignInComponent implements OnInit {
         this.formErrors = null;
         this.router.navigate(['/dashboard']);
       },
-      error => {
+      (responseError) => {
         this.submitted = false;
-        if (error.status === 401) {
-          this.formErrors = JSON.parse(error._body).errors;
+        if (responseError.status === 401) {
+          this.formErrors = responseError.error.errors;
         } else {
           this.formErrors = ['Ocorreu um erro e não foi possível logar. Tente novamente mais tarde.'];
         }
