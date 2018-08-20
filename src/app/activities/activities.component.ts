@@ -54,8 +54,8 @@ export class ActivitiesComponent implements OnInit {
   listAllPaginated() {
     this.activityService.listAllPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
       successResponse => {
-        this.userActivities = successResponse.json()['data'];
-        this.totalCount = successResponse.json()['total_count'];
+        this.userActivities = successResponse['data'];
+        this.totalCount = successResponse['total_count'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as atividades: ' + errorResponse);
@@ -66,8 +66,8 @@ export class ActivitiesComponent implements OnInit {
   listUserActivitiesPaginated() {
     this.activityService.listUserActivitiesPaginated(this.authService.getCurrentUser()['id'], this.paginator.pageNumber, this.paginator.perPage).subscribe(
       successResponse => {
-        this.userActivities = successResponse.json()['data'];
-        this.totalCount = successResponse.json()['total_count'];
+        this.userActivities = successResponse['data'];
+        this.totalCount = successResponse['total_count'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as atividades deste usuário:' + errorResponse);

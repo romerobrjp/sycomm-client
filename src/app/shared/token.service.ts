@@ -1,3 +1,3 @@
-import { Angular2TokenService } from 'angular2-token';
+import { AngularTokenService } from 'angular-token';
 
-export class TokenService extends Angular2TokenService {}
+export class HttpClient extends AngularTokenService {}

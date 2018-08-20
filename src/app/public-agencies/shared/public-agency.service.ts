@@ -2,21 +2,18 @@ import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {PublicAgency} from './public-agency.model';
-import {TokenService} from '../../shared/token.service';
-import {Response} from '@angular/http';
 import {throwError as observableThrowError} from 'rxjs/index';
+import { HttpClient } from '@angular/common/http';
+import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
 export class PublicAgencyService {
-  public resourceUrl = '/public_agencies';
+  public resourceUrl = `${APP_CONFIG.apiBaseUrl}/public_agencies`;
 
-  constructor(private http: TokenService) { }
+  constructor(private http: HttpClient) { }
 
   public getAll(): Observable<PublicAgency[]> {
-    return this.http.get(this.resourceUrl).pipe(
-      map((response: Response) => this.responseToModels(response)),
-      catchError(null),
-    );
+    return this.http.get<PublicAgency[]>(this.resourceUrl);
   }
 
   listPaginated(page_number: number,
@@ -24,12 +21,10 @@ export class PublicAgencyService {
                 sortField: string,
                 sortDirection: string,
                 searchField: string,
-                searchText: string): Observable<Response>
-  {
+                searchText: string): Observable<Object> {
     const url = `${this.resourceUrl}/list_paginated?page_number=${page_number}&per_page=${per_page}&sortField=${sortField}&sortDirection=${sortDirection}&searchField=${searchField}&searchText=${searchText}`;
 
     return this.http.get(url).pipe(
-      map((response: Response) => response),
       catchError(this.handleErrors)
     );
   }
@@ -37,8 +32,7 @@ export class PublicAgencyService {
   getById(id: number): Observable<PublicAgency> {
     const url = `${this.resourceUrl}/${id}`;
 
-    return this.http.get(url).pipe(
-      map((response: Response) => this.responseToModel(response)),
+    return this.http.get<PublicAgency>(url).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -46,8 +40,7 @@ export class PublicAgencyService {
   create(model: PublicAgency): Observable<PublicAgency> {
     const url = `${this.resourceUrl}`;
 
-    return this.http.post(url, model).pipe(
-      map((response: Response) => this.responseToModel(response)),
+    return this.http.post<PublicAgency>(url, model).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -55,9 +48,8 @@ export class PublicAgencyService {
   update(model: PublicAgency): Observable<PublicAgency> {
     const url = `${this.resourceUrl}/${model.id}`;
 
-    return this.http.put(url, model).pipe(
+    return this.http.put<PublicAgency>(url, model).pipe(
       catchError(this.handleErrors),
-      map((response: Response) => this.responseToModel(response)),
     );
   }
 

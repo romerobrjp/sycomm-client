@@ -1,47 +1,72 @@
-
-import {catchError, map} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {User} from '../users/shared/user.model';
-import {TokenService} from './token.service';
 import {ErrorHandlerService} from './error-handler.service';
-import {Response} from '@angular/http';
+import {HttpResponse} from '@angular/common/http';
+import {tap} from 'rxjs/internal/operators';
+import {AngularTokenService} from 'angular-token';
 
 @Injectable()
 export class AuthService {
   private currentUser: User;
 
-  constructor(private tokenService: TokenService) {}
+  constructor(private tokenService: AngularTokenService) {}
 
-  signUp(user: User): Observable<Response> {
-    return this.tokenService.registerAccount(user as any).pipe(catchError(ErrorHandlerService.handleResponseErrors));
-  }
-
-  signIn(uid: string, password: string): Observable<User> {
-    const signInData = {
-      email: uid,
-      password: password
+  signUp(login: string, password: string, passwordConfirmation: string): Observable<User> {
+    const registerData = {
+      login: login,
+      password: password,
+      passwordConfirmation: passwordConfirmation
     };
 
-    return this.tokenService.signIn(signInData).pipe(
-      map(res => {
-        let user: User = res.json()['data'] as User;
-
-        this.currentUser = user;
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        return user;
-      }),
+    return this.tokenService.registerAccount(registerData).pipe(
       catchError(ErrorHandlerService.handleResponseErrors)
     );
   }
 
-  signOut(): Observable<Response> {
-    localStorage.removeItem('currentUser');
-    return this.tokenService.signOut().pipe(catchError(ErrorHandlerService.handleResponseErrors));
+  signIn(uid: string, password: string): Observable<Object> {
+    const signInData = {
+      login: uid,
+      password: password
+    };
+
+    return this.tokenService.signIn(signInData).pipe(
+      tap(
+        (responseSuccess: HttpResponse<Object>) => {
+          this.currentUser = responseSuccess.body['data'] as User;
+          localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+        }
+      ),
+      catchError(ErrorHandlerService.handleResponseErrors)
+    );
+  }
+
+  signOut(): void {
+    this.tokenService.signOut().subscribe(
+      (responseSuccess) => {
+        localStorage.removeItem('currentUser');
+        // this.router.navigate(['/sign-in']);
+      },
+      (responseError) => {
+        console.error(JSON.stringify(responseError));
+      }
+    );
   }
 
   userSignedIn(): boolean {
     return this.tokenService.userSignedIn();
+  }
+
+  validateToken() {
+    this.tokenService.validateToken().subscribe(
+      res => {
+        console.log(res);
+      },
+      error => {
+        console.error(error);
+      }
+    );
   }
 
   getCurrentUser(): User {
@@ -49,16 +74,6 @@ export class AuthService {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser')) as User;
     }
     return this.currentUser;
-    // else {
-    //   return this.tokenService.validateToken().subscribe(
-    //     (success) => {
-    //       console.log(`this.currentUser nao existe, recupera do back: ${JSON.stringify(success.json()['data'])}`);
-    //       this.currentUser = success.json()['data'] as User;
-    //       return success.json()['data'];
-    //     },
-    //     (error) => console.error(`Deu merda no getCurrenUser: ${error}`)
-    //   );
-    // }
   }
 
   updateCurrentUser(currentUser) {

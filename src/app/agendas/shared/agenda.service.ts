@@ -1,17 +1,15 @@
-
 import {throwError as observableThrowError, Observable} from 'rxjs';
-
 import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Agenda} from './agenda.model';
-import {TokenService} from '../../shared/token.service';
-import {RequestOptions, Response} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
+import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
 export class AgendaService {
-  urlResource = 'agendas';
+  urlResource = `${APP_CONFIG.apiBaseUrl}/agendas`;
 
-  constructor(private http: TokenService) { }
+  constructor(private http: HttpClient) { }
 
   listLastEmployeeAgendas(userId, quant): Observable<Agenda[]> {
     const url = `${this.urlResource}`;
@@ -22,13 +20,13 @@ export class AgendaService {
     );
   }
 
-  listAllPaginated(page_number: number, per_page: number): Observable<Response> {
+  listAllPaginated(page_number: number, per_page: number): Observable<any> {
     const url = `${this.urlResource}/list_all_paginated?page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
   }
 
-  listEmployeeAgendasPaginated(employeeId: number, page_number: number, per_page: number): Observable<Response> {
+  listEmployeeAgendasPaginated(employeeId: number, page_number: number, per_page: number): Observable<any> {
     const url = `${this.urlResource}/list_employee_agendas_paginated?employee_id=${employeeId}&page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
@@ -37,19 +35,22 @@ export class AgendaService {
   getById(id: number): Observable<Agenda> {
     const url = `${this.urlResource}/${id}`;
 
-    return this.http.get(url).pipe(
-      catchError(this.handleErrors),
-      map((response: Response) => this.responseToModel(response))
-    );
+    // return this.http.get<Agenda>(url).pipe(
+    //   catchError(this.handleErrors),
+    //   map((response: Response) => this.responseToModel(response))
+    // );
+    return this.http.get<Agenda>(url);
   }
 
   create(entity: Agenda): Observable<Agenda> {
     const url = `${this.urlResource}`;
 
-    return this.http.post(url, entity).pipe(
-      map((response: Response) => this.responseToModel(response)),
-      catchError(this.handleErrors),
-    );
+    // return this.http.post(url, entity).pipe(
+    //   map((response: Response) => this.responseToModel(response)),
+    //   catchError(this.handleErrors),
+    // );
+
+    return this.http.post<Agenda>(url, entity);
   }
 
   update(entity: Agenda): Observable<Agenda> {
@@ -71,22 +72,22 @@ export class AgendaService {
   }
 
   deleteAgendas(agendasIDs: number[]) {
-    const url = `${this.urlResource}/delete-many`;
-    const params = {
-      'agendas_ids': agendasIDs.toString()
-    };
-    const requestOptions = new RequestOptions({ body: params });
-
-    return this.http.delete(url, {body: requestOptions}).pipe(
-      catchError(this.handleErrors),
-      map(() => null),
-    );
+    // const url = `${this.urlResource}/delete-many`;
+    // const params = {
+    //   'agendas_ids': agendasIDs.toString()
+    // };
+    // const requestOptions = new RequestOptions({ body: params });
+    //
+    // return this.http.delete(url, {body: requestOptions}).pipe(
+    //   catchError(this.handleErrors),
+    //   map(() => null),
+    // );
   }
 
   private responseToModel(response: Response): Agenda {
     const jsonEntity = response.json();
 
-    let customersCpf: Array<string> = jsonEntity['customers'].map(c => c.cpf);
+    const customersCpf: Array<string> = jsonEntity['customers'].map(c => c.cpf);
 
     return new Agenda(
       jsonEntity['id'],
@@ -109,7 +110,7 @@ export class AgendaService {
     const items: Agenda[] = [];
 
     collection.forEach(jsonEntity => {
-      let customersCpf: Array<string> = jsonEntity['customers'].map(c => c.cpf);
+      const customersCpf: Array<string> = jsonEntity['customers'].map(c => c.cpf);
 
       const item = new Agenda(
         jsonEntity['id'],

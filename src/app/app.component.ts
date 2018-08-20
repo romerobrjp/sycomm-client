@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { TokenService } from './shared/token.service';
-import { AuthService } from './shared/auth.service';
+import {AuthService} from './shared/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +7,5 @@ import { AuthService } from './shared/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private tokenService: TokenService, private authService: AuthService) {
-    this.tokenService.init({
-      apiBase: 'https://sycomm-api.herokuapp.com',
-      globalOptions: {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.sycomm.v1'
-        }
-      }
-    });
-  }
+  constructor(public authService: AuthService) {}
 }

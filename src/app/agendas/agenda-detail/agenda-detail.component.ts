@@ -122,8 +122,8 @@ export class AgendaDetailComponent implements OnInit {
   loadAgendaActivities() {
     this.activityService.listByAgendaPaginated(this.entity.id, this.activitiesTablePaginator.pageNumber, this.activitiesTablePaginator.perPage).subscribe(
       successResponse => {
-        this.agendaActivities = successResponse.json()['data'];
-        this.activitiesTotalCount = successResponse.json()['total_count'];
+        this.agendaActivities = successResponse['data'];
+        this.activitiesTotalCount = successResponse['total_count'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as atividades: ' + errorResponse);
@@ -150,12 +150,12 @@ export class AgendaDetailComponent implements OnInit {
       },
       (error) => {
         this.messageService.clear();
-        this.messageService.add({ severity: 'error', summary: undefined, detail: error.json().errors });
+        this.messageService.add({ severity: 'error', summary: undefined, detail: error.errors });
         this.messageService.add({
           key: 'agenda_detail_messages',
           severity: 'error',
           summary: '',
-          detail: error.json().errors
+          detail: error.errors
         });
         return false;
       }
@@ -186,12 +186,12 @@ export class AgendaDetailComponent implements OnInit {
           }
         } else {
           this.messageService.clear();
-          this.messageService.add({ severity: 'error', summary: undefined, detail: errorResponse.json().errors });
+          this.messageService.add({ severity: 'error', summary: undefined, detail: errorResponse.errors });
           this.messageService.add({
             key: 'agenda_detail_messages',
             severity: 'error',
             summary: '',
-            detail: errorResponse.json().errors
+            detail: errorResponse.errors
           });
         }
       }

@@ -3,17 +3,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // 3rd party modules
 import { TextMaskModule } from 'angular2-text-mask';
-import {Ng2BRPipesModule} from 'ng2-brpipes';
+import { Ng2BRPipesModule } from 'ng2-brpipes';
 // Primefaces modules
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageModule } from 'primeng/message';
-import {ConfirmDialogModule, MessagesModule, CardModule, TooltipModule} from 'primeng/primeng';
+import {ConfirmDialogModule, MessagesModule, CardModule, TooltipModule, ProgressSpinnerModule} from 'primeng/primeng';
 import { DataViewModule } from 'primeng/dataview';
+import { BlockUIModule } from 'primeng/blockui';
 
 // Components
 import { AppComponent } from './app.component';
@@ -34,7 +34,8 @@ import { ActivityDetailComponent } from './activities/activity-detail/activity-d
 import { AgendasComponent } from './agendas/agendas.component';
 import { AgendaDetailComponent } from './agendas/agenda-detail/agenda-detail.component';
 import { PublicAgencyDetailComponent } from './public-agencies/public-agency-detail/public-agency-detail.component';
-import {PublicOfficeDetailComponent} from './public-offices/public-office-detail/public-office-detail.component';
+import { PublicOfficeDetailComponent } from './public-offices/public-office-detail/public-office-detail.component';
+import { LoaderComponent } from './shared/loader/loader.component';
 
 // Services
 import { UserService } from './users/shared/user.service';
@@ -43,8 +44,6 @@ import { PublicAgencyService } from './public-agencies/shared/public-agency.serv
 import { ActivityService } from './activities/shared/activity.service';
 import { AgendaService } from './agendas/shared/agenda.service';
 import { AuthService } from './shared/auth.service';
-import { TokenService } from './shared/token.service';
-import { Angular2TokenService } from 'angular2-token';
 import { Dictionary } from './shared/dictionary';
 import { ErrorHandlerService } from './shared/error-handler.service';
 // Primefaces Services
@@ -56,6 +55,12 @@ import { AuthGuard } from './guards/auth.guard';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
+import { AngularTokenModule, } from 'angular-token';
+
+// Interceptors
+import { AppHttpInterceptor } from './shared/http.interceptor';
+import { LoaderInterceptorService } from './shared/loader/loader.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -77,7 +82,8 @@ import { AppRoutingModule } from './app-routing.module';
     AgendasComponent,
     AgendaDetailComponent,
     PublicAgencyDetailComponent,
-    PublicOfficeDetailComponent
+    PublicOfficeDetailComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +91,9 @@ import { AppRoutingModule } from './app-routing.module';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpModule,
+    AngularTokenModule.forRoot({
+      apiBase: 'http://api.sycomm.com:3000',
+    }),
     AppRoutingModule,
     TableModule,
     GrowlModule,
@@ -94,6 +102,8 @@ import { AppRoutingModule } from './app-routing.module';
     ConfirmDialogModule,
     CardModule,
     TooltipModule,
+    BlockUIModule,
+    ProgressSpinnerModule,
     DataViewModule,
     TextMaskModule,
     Ng2BRPipesModule,
@@ -106,12 +116,21 @@ import { AppRoutingModule } from './app-routing.module';
     AgendaService,
     MessageService,
     ConfirmationService,
-    Angular2TokenService,
+    AngularTokenModule,
     AuthService,
-    TokenService,
     AuthGuard,
     Dictionary,
-    ErrorHandlerService
+    ErrorHandlerService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [ AppComponent ]
 })

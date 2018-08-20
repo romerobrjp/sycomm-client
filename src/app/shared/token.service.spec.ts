@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { TokenService } from './token.service';
+import { HttpClient } from './token.service';
 
-describe('TokenService', () => {
+describe('HttpClient', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TokenService]
+      providers: [HttpClient]
     });
   });
 
-  it('should be created', inject([TokenService], (service: TokenService) => {
+  it('should be created', inject([HttpClient], (service: HttpClient) => {
     expect(service).toBeTruthy();
   }));
 });

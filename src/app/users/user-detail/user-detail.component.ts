@@ -116,12 +116,12 @@ export class UserDetailComponent implements OnInit {
     );
 
     this.publicOfficeService.getAll().subscribe(
-      publicOffices => this.publicOffices = publicOffices,
+      responseSuccess => this.publicOffices = responseSuccess['data'],
       error => console.error('Erro ao carregar Cargos: ' + error)
     );
 
     this.publicAgencyService.getAll().subscribe(
-      publicAgencies => this.publicAgencies = publicAgencies,
+      responseSuccess => this.publicAgencies = responseSuccess['data'],
       error => console.error('Erro ao carregar Orgaos: ' + error)
     );
   }
@@ -161,7 +161,7 @@ export class UserDetailComponent implements OnInit {
         // this.router.navigate(['/users'], navigationExtras);
       },
       (errorResponse) => {
-        for (const [key, value] of Object.entries(errorResponse.json().errors)) {
+        for (const [key, value] of Object.entries(errorResponse.errors)) {
           for (const [errorKey, errorMessage] of Object.entries(value)) {
             this.messageService.add({
               key: 'user_detail_messages',

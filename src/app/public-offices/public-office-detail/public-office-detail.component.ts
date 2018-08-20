@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PublicOffice} from '../shared/public-office.model';
-import {switchMap} from 'rxjs/operators';
-import {ActivatedRoute, NavigationExtras, Params, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Dictionary} from '../../shared/dictionary';
@@ -83,7 +82,7 @@ export class PublicOfficeDetailComponent implements OnInit {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Órgão atualizado!'});
       },
       (errorResponse) => {
-        for (const [key, value] of Object.entries(errorResponse.json().errors)) {
+        for (const [key, value] of Object.entries(errorResponse.errors)) {
           for (const [errorKey, errorMessage] of Object.entries(value)) {
             this.messageService.add({
               key: 'public_office_detail_messages',
