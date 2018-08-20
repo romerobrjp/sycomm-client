@@ -2,16 +2,16 @@ import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {User} from '../users/shared/user.model';
-import {HttpClient} from './token.service';
 import {ErrorHandlerService} from './error-handler.service';
 import {HttpResponse} from '@angular/common/http';
 import {tap} from 'rxjs/internal/operators';
+import {AngularTokenService} from 'angular-token';
 
 @Injectable()
 export class AuthService {
   private currentUser: User;
 
-  constructor(private tokenService: HttpClient) {}
+  constructor(private tokenService: AngularTokenService) {}
 
   signUp(login: string, password: string, passwordConfirmation: string): Observable<User> {
     const registerData = {

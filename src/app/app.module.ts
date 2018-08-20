@@ -11,7 +11,7 @@ import { Ng2BRPipesModule } from 'ng2-brpipes';
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule, MessagesModule, CardModule, TooltipModule } from 'primeng/primeng';
+import {ConfirmDialogModule, MessagesModule, CardModule, TooltipModule, ProgressSpinnerModule} from 'primeng/primeng';
 import { DataViewModule } from 'primeng/dataview';
 import { BlockUIModule } from 'primeng/blockui';
 
@@ -103,6 +103,7 @@ import { LoaderInterceptorService } from './shared/loader/loader.interceptor';
     CardModule,
     TooltipModule,
     BlockUIModule,
+    ProgressSpinnerModule,
     DataViewModule,
     TextMaskModule,
     Ng2BRPipesModule,
