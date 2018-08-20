@@ -60,6 +60,7 @@ import { AngularTokenModule, } from 'angular-token';
 // Interceptors
 import { AppHttpInterceptor } from './shared/http.interceptor';
 import { LoaderInterceptorService } from './shared/loader/loader.interceptor';
+import {APP_CONFIG} from '../app-config';
 
 
 @NgModule({
@@ -92,7 +93,7 @@ import { LoaderInterceptorService } from './shared/loader/loader.interceptor';
     ReactiveFormsModule,
     HttpClientModule,
     AngularTokenModule.forRoot({
-      apiBase: 'http://api.sycomm.com:3000',
+      apiBase: APP_CONFIG.apiBaseUrl,
     }),
     AppRoutingModule,
     TableModule,
