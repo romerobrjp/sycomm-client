@@ -1,4 +1,4 @@
-import {catchError, map} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {User} from '../users/shared/user.model';
@@ -46,6 +46,7 @@ export class AuthService {
     this.tokenService.signOut().subscribe(
       (responseSuccess) => {
         localStorage.removeItem('currentUser');
+        // this.router.navigate(['/sign-in']);
       },
       (responseError) => {
         console.error(JSON.stringify(responseError));

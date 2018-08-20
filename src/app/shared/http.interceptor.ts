@@ -4,21 +4,28 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // send the newly created request
-    return next.handle(req)
-      .pipe(
-        catchError((error, caught) => {
-            return this.handleError(error);
+    return next.handle(req).pipe(
+      catchError(
+        (error) => {
+          if (error.status === 401) {
+            // auto logout if 401 response returned from api
+            this.authService.signOut();
+            location.reload(true);
           }
-        )
-      ) as any;
+          const err = error.error.message || error.statusText;
+          return throwError(err);
+        }
+      )
+    );
   }
 
   private handleError = (error: Response) => {
