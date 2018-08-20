@@ -32,8 +32,9 @@
         />
       </div>
 
-      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')" *ngIf="isCustomer()">
+      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')" *ngIf="isEmployee() || isCustomer()">
         <label for="cpf" class="control-label" *ngIf="isCustomer()">CPF *</label>
+        <label for="cpf" class="control-label" *ngIf="isEmployee()">CPF</label>
         <input
           id="cpf"
           formControlName="cpf"

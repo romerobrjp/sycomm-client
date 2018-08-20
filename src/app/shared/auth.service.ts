@@ -55,7 +55,6 @@ export class AuthService {
   }
 
   userSignedIn(): boolean {
-    console.log(`this.tokenService.userSignedIn(): ${this.tokenService.userSignedIn()}`);
     return this.tokenService.userSignedIn();
   }
 
@@ -75,16 +74,6 @@ export class AuthService {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser')) as User;
     }
     return this.currentUser;
-    // else {
-    //   return this.tokenService.validateToken().subscribe(
-    //     (success) => {
-    //       console.log(`this.currentUser nao existe, recupera do back: ${JSON.stringify(success.json()['data'])}`);
-    //       this.currentUser = success.json()['data'] as User;
-    //       return success.json()['data'];
-    //     },
-    //     (error) => console.error(`Deu merda no getCurrenUser: ${error}`)
-    //   );
-    // }
   }
 
   updateCurrentUser(currentUser) {
