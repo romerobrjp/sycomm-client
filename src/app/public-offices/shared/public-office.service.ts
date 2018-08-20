@@ -1,4 +1,3 @@
-
 import {map, catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
@@ -33,8 +32,7 @@ export class PublicOfficeService {
   getById(id: number): Observable<PublicOffice> {
     const url = `${this.resourceUrl}/${id}`;
 
-    return this.http.get(url).pipe(
-      map((response: Response) => this.responseToModel(response)),
+    return this.http.get<PublicOffice>(url).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -42,8 +40,7 @@ export class PublicOfficeService {
   create(model: PublicOffice): Observable<PublicOffice> {
     const url = `${this.resourceUrl}`;
 
-    return this.http.post(url, model).pipe(
-      map((response: Response) => this.responseToModel(response)),
+    return this.http.post<PublicOffice>(url, model).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -51,9 +48,8 @@ export class PublicOfficeService {
   update(model: PublicOffice): Observable<PublicOffice> {
     const url = `${this.resourceUrl}/${model.id}`;
 
-    return this.http.put(url, model).pipe(
+    return this.http.put<PublicOffice>(url, model).pipe(
       catchError(this.handleErrors),
-      map((response: Response) => this.responseToModel(response)),
     );
   }
 
@@ -71,32 +67,5 @@ export class PublicOfficeService {
   private handleErrors(error: Response) {
     console.error('Erro em UserService: ' + error);
     return observableThrowError(error);
-  }
-
-  private responseToModel(response: Response): PublicOffice {
-    const modelJson = response.json();
-
-    return new PublicOffice(
-      modelJson['id'],
-      modelJson['name'],
-      modelJson['description']
-    );
-  }
-
-  private responseToModels(response: Response): Array<PublicOffice> {
-    const collection = response.json()['data'] as Array<any>;
-    const items: PublicOffice[] = [];
-
-    collection.forEach(modelJson => {
-      const item = new PublicOffice(
-        modelJson['id'],
-        modelJson['name'],
-        modelJson['description'],
-      );
-
-      items.push(item);
-    });
-
-    return items;
   }
 }

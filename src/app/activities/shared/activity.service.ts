@@ -1,6 +1,4 @@
-
 import {throwError as observableThrowError, Observable} from 'rxjs';
-
 import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Activity} from './activity.model';
@@ -11,15 +9,15 @@ import {APP_CONFIG} from '../../../app-config';
 export class ActivityService {
   urlResource = `${APP_CONFIG.apiBaseUrl}/activities`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  listAllPaginated(page_number: number, per_page: number): Observable<any> {
+  listAllPaginated(page_number: number, per_page: number): Observable<Object> {
     const url = `${this.urlResource}/list_all_paginated?page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
   }
 
-  listUserActivitiesPaginated(employee_id: number, page_number: number, per_page: number): Observable<any> {
+  listUserActivitiesPaginated(employee_id: number, page_number: number, per_page: number): Observable<Object> {
     const url = `${this.urlResource}/list_user_activities_paginated?employee_id=${employee_id}&page_number=${page_number}&per_page=${per_page}`;
 
     return this.http.get(url).pipe(catchError(this.handleErrors));
@@ -28,8 +26,7 @@ export class ActivityService {
   listAllDayActivities(): Observable<Activity[]> {
     const url = `${this.urlResource}/list_day_activities`;
 
-    return this.http.get(url).pipe(
-      map((response: Response) => this.responseToModels(response)),
+    return this.http.get<Activity[]>(url).pipe(
       catchError(this.handleErrors)
     );
   }
@@ -37,8 +34,7 @@ export class ActivityService {
   listEmployeeDayActivities(employeeId: number): Observable<Activity[]> {
     const url = `${this.urlResource}`;
 
-    return this.http.get(`${url}/list_employee_day_activities?employee_id=${employeeId}`).pipe(
-      map((response: Response) => this.responseToModels(response)),
+    return this.http.get<Activity[]>(`${url}/list_employee_day_activities?employee_id=${employeeId}`).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -46,8 +42,7 @@ export class ActivityService {
   listEmployeeYesterdayActivities(employeeId, quant): Observable<Activity[]> {
     const url = `${this.urlResource}`;
 
-    return this.http.get(`${url}/list_employee_yesterday_activities?employee_id=${employeeId}&quant=${quant}`).pipe(
-      map((response: Response) => this.responseToModels(response)),
+    return this.http.get<Activity[]>(`${url}/list_employee_yesterday_activities?employee_id=${employeeId}&quant=${quant}`).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -63,8 +58,7 @@ export class ActivityService {
   getById(id: number): Observable<Activity> {
     const url = `${this.urlResource}/${id}`;
 
-    return this.http.get(url).pipe(
-      map((response: Response) => this.responseToModel(response)),
+    return this.http.get<Activity>(url).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -72,8 +66,7 @@ export class ActivityService {
   create(entity: Activity, agendaId: number): Observable<Activity> {
     const url = `${this.urlResource}`;
 
-    return this.http.post(url, { activity: entity, agenda_id: agendaId }).pipe(
-      map((response: Response) => this.responseToModel(response)),
+    return this.http.post<Activity>(url, { activity: entity, agenda_id: agendaId }).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -81,9 +74,8 @@ export class ActivityService {
   update(act: Activity): Observable<Activity> {
     const url = `${this.urlResource}/${act.id}`;
 
-    return this.http.put(url, act).pipe(
+    return this.http.put<Activity>(url, act).pipe(
       catchError(this.handleErrors),
-      map((response: Response) => this.responseToModel(response))
     );
   }
 
@@ -94,53 +86,6 @@ export class ActivityService {
       catchError(this.handleErrors),
       map(() => null),
     );
-  }
-
-  private responseToModel(response: Response): Activity {
-    const jsonEntity = response.json();
-
-    return new Activity(
-      jsonEntity['id'],
-      jsonEntity['name'],
-      jsonEntity['description'],
-      jsonEntity['annotations'],
-      jsonEntity['status'],
-      jsonEntity['activity_type'],
-      jsonEntity['employee_id'],
-      jsonEntity['customer_id'],
-      jsonEntity['customer_name'],
-      jsonEntity['created_at'],
-      jsonEntity['updated_at'],
-      jsonEntity['agenda'],
-      jsonEntity['employee'],
-    );
-  }
-
-  private responseToModels(response: Response): Array<Activity> {
-    const collection = response.json()['data'] as Array<any>;
-    const items: Activity[] = [];
-
-    collection.forEach(jsonEntity => {
-      const item = new Activity(
-        jsonEntity['id'],
-        jsonEntity['name'],
-        jsonEntity['description'],
-        jsonEntity['annotations'],
-        jsonEntity['status'],
-        jsonEntity['activity_type'],
-        jsonEntity['employee_id'],
-        jsonEntity['customer_id'],
-        jsonEntity['customer_name'],
-        jsonEntity['created_at'],
-        jsonEntity['updated_at'],
-        jsonEntity['agenda'],
-        jsonEntity['employee'],
-      );
-
-      items.push(item);
-    });
-
-    return items;
   }
 
   private handleErrors(error: Response) {

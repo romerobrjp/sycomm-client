@@ -21,11 +21,10 @@ export class PublicAgencyService {
                 sortField: string,
                 sortDirection: string,
                 searchField: string,
-                searchText: string): Observable<Response> {
+                searchText: string): Observable<Object> {
     const url = `${this.resourceUrl}/list_paginated?page_number=${page_number}&per_page=${per_page}&sortField=${sortField}&sortDirection=${sortDirection}&searchField=${searchField}&searchText=${searchText}`;
 
     return this.http.get(url).pipe(
-      map((response: Response) => response),
       catchError(this.handleErrors)
     );
   }
@@ -33,8 +32,7 @@ export class PublicAgencyService {
   getById(id: number): Observable<PublicAgency> {
     const url = `${this.resourceUrl}/${id}`;
 
-    return this.http.get(url).pipe(
-      map((response: Response) => this.responseToModel(response)),
+    return this.http.get<PublicAgency>(url).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -42,8 +40,7 @@ export class PublicAgencyService {
   create(model: PublicAgency): Observable<PublicAgency> {
     const url = `${this.resourceUrl}`;
 
-    return this.http.post(url, model).pipe(
-      map((response: Response) => this.responseToModel(response)),
+    return this.http.post<PublicAgency>(url, model).pipe(
       catchError(this.handleErrors),
     );
   }
@@ -51,9 +48,8 @@ export class PublicAgencyService {
   update(model: PublicAgency): Observable<PublicAgency> {
     const url = `${this.resourceUrl}/${model.id}`;
 
-    return this.http.put(url, model).pipe(
+    return this.http.put<PublicAgency>(url, model).pipe(
       catchError(this.handleErrors),
-      map((response: Response) => this.responseToModel(response)),
     );
   }
 

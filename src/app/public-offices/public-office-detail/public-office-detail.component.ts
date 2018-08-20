@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PublicOffice} from '../shared/public-office.model';
-import {switchMap} from 'rxjs/operators';
-import {ActivatedRoute, NavigationExtras, Params, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Dictionary} from '../../shared/dictionary';
