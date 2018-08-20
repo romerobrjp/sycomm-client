@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
   listDayActivities() {
     this.activityService.listAllDayActivities().subscribe(
       successResponse => {
-        this.dayActivities = successResponse;
+        this.dayActivities = successResponse['data'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as atividades do dia:' + errorResponse);
@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
   listEmployeesWithDayActivities() {
     this.userService.listEmployeesWithDayActivities().subscribe(
       successResponse => {
-        this.employeesWithDayActivities = successResponse;
+        this.employeesWithDayActivities = successResponse['data'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar os funcionario com atividades hoje:' + errorResponse);
@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
   listEmployeeLastActivities() {
     this.activityService.listEmployeeYesterdayActivities(this.authService.getCurrentUser()['id'], 5).subscribe(
       successResponse => {
-        this.employeeLastActivities = successResponse;
+        this.employeeLastActivities = successResponse['data'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as atividades deste usuário:' + errorResponse);
@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit {
   listEmployeeDayActivities() {
     this.activityService.listEmployeeDayActivities(this.authService.getCurrentUser()['id']).subscribe(
       successResponse => {
-        this.employeeDayActivities = successResponse;
+        this.employeeDayActivities = successResponse['data'];
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar as atividades deste usuário:' + errorResponse);
@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getTitle(): string {
-    if (this.authService.isAdmin()) return "Atividades do dia"
-    if (this.authService.isEmployee()) return "Dashboard"
+    if (this.authService.isAdmin()) { return 'Atividades do dia'; }
+    if (this.authService.isEmployee()) { return 'Dashboard'; }
   }
 }
