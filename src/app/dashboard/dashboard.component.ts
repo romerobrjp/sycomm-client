@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
   listEmployeesWithDayActivities() {
     this.userService.listEmployeesWithDayActivities().subscribe(
       successResponse => {
-        this.employeesWithDayActivities = successResponse['data'];
+        this.employeesWithDayActivities = successResponse;
       },
       errorResponse => {
         console.error('Ocorreu um erro ao tentar buscar os funcionario com atividades hoje:' + errorResponse);
