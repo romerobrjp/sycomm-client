@@ -108,33 +108,63 @@ export class AgendasComponent implements OnInit {
   }
 
   deleteAllInprogress() {
-  //   if (this.selectedAgendas && this.selectedAgendas.length > 0) {
-  //     const agendasIDs: Array<number> = this.selectedAgendas.map(agenda => agenda.id);
+    //   if (this.selectedAgendas && this.selectedAgendas.length > 0) {
+    //     const agendasIDs: Array<number> = this.selectedAgendas.map(agenda => agenda.id);
 
-  //     swal({ title: `${this.selectedAgendas.length} agendas selecionadas.`, text: `Caso alguma das agendas selecionadas possua atividades, elas também serão excluídas. Prosseguir?`, type: 'warning', showCancelButton: true }).then(
-  //       result => {
-  //         if (result.value) {
-  //           this.agendaService.deleteAgendas(agendasIDs).subscribe(
-  //             () => {
-  //               this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Agendas removidas!'});
-  //               this.listAllPaginated();
-  //             },
-  //             (responseError) => {
-  //               this.messageService.add({severity: 'error', summary: 'Erro', detail: responseError});
-  //             },
-  //             () => {
-  //               this.selectedAgendas = [];
-  //             }
-  //           );
-  //         } else {
-  //           return false;
-  //         }
-  //       }
-  //     );
-  //   } else {
-  //     swal('Aviso', 'Selecione ao menos uma agenda para realizar esta ação.', 'warning');
-  //     return false;
-  //   }
+    //     swal({ title: `${this.selectedAgendas.length} agendas selecionadas.`, text: `Caso alguma das agendas selecionadas possua atividades, elas também serão excluídas. Prosseguir?`, type: 'warning', showCancelButton: true }).then(
+    //       result => {
+    //         if (result.value) {
+    //           this.agendaService.deleteAgendas(agendasIDs).subscribe(
+    //             () => {
+    //               this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Agendas removidas!'});
+    //               this.listAllPaginated();
+    //             },
+    //             (responseError) => {
+    //               this.messageService.add({severity: 'error', summary: 'Erro', detail: responseError});
+    //             },
+    //             () => {
+    //               this.selectedAgendas = [];
+    //             }
+    //           );
+    //         } else {
+    //           return false;
+    //         }
+    //       }
+    //     );
+    //   } else {
+    //     swal('Aviso', 'Selecione ao menos uma agenda para realizar esta ação.', 'warning');
+    //     return false;
+    //   }
+  }
+
+  deleteSelected() {
+    if (this.selectedAgendas && this.selectedAgendas.length > 0) {
+      const agendasIDs: Array<number> = this.selectedAgendas.map(agenda => agenda.id);
+
+      swal({ title: `${this.selectedAgendas.length} agendas selecionadas.`, text: `Caso alguma das agendas selecionadas possua atividades, elas também serão excluídas. Prosseguir?`, type: 'warning', showCancelButton: true }).then(
+        result => {
+          if (result.value) {
+            this.agendaService.deleteAgendas(agendasIDs).subscribe(
+              () => {
+                this.messageService.add({severity: 'success', summary: 'Sucesso', detail: `${this.selectedAgendas.length} Agendas removidas!` });
+                this.listAllPaginated();
+              },
+              (responseError) => {
+                this.messageService.add({severity: 'error', summary: 'Erro', detail: responseError});
+              },
+              () => {
+                this.selectedAgendas = [];
+              }
+            );
+          } else {
+            return false;
+          }
+        }
+      );
+    } else {
+      swal('Aviso', 'Selecione ao menos uma agenda para realizar esta ação.', 'warning');
+      return false;
+    }
   }
 
   deleteSelected() {

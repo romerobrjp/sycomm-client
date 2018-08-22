@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-
-// operators
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators';
 import {AuthService} from './auth.service';
+import swal from 'sweetalert2';
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
@@ -18,19 +17,14 @@ export class AppHttpInterceptor implements HttpInterceptor {
         (error) => {
           if (error.status === 401) {
             // auto logout if 401 response returned from api
+            swal('Atenção', 'Sua sessão expirou. Por favor, autentique-se novamente.', 'warning');
             this.authService.signOut();
-            location.reload(true);
+            // location.reload(true);
           }
-          const err = error.error.message || error.statusText;
-          return throwError(err);
+          // const err = error.error.message || error.statusText;
+          return throwError(error);
         }
       )
     );
-  }
-
-  private handleError = (error: Response) => {
-    console.error('An error has occurred: ' + error);
-    // Do messaging and error handling here
-    return throwError(error);
   }
 }

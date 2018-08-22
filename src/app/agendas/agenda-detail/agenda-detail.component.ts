@@ -186,12 +186,12 @@ export class AgendaDetailComponent implements OnInit {
           }
         } else {
           this.messageService.clear();
-          this.messageService.add({ severity: 'error', summary: undefined, detail: errorResponse.errors });
+          this.messageService.add({ severity: 'error', summary: undefined, detail: errorResponse.error.message });
           this.messageService.add({
             key: 'agenda_detail_messages',
             severity: 'error',
             summary: '',
-            detail: errorResponse.errors
+            detail: errorResponse.error.message
           });
         }
       }
