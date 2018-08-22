@@ -1,16 +1,13 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Router, ActivatedRoute, Event, NavigationStart, NavigationEnd, NavigationError, Params} from '@angular/router';
-
-import { User } from './shared/user.model';
-import { UserService } from './shared/user.service';
-
-import { MessageService } from 'primeng/components/common/messageservice';
+import {Router, ActivatedRoute, NavigationEnd} from '@angular/router';
+import {User} from './shared/user.model';
+import {UserService} from './shared/user.service';
+import {MessageService} from 'primeng/components/common/messageservice';
 import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
-import { CpfPipe, TelefonePipe } from 'ng2-brpipes';
+import {CpfPipe, TelefonePipe} from 'ng2-brpipes';
 import {GeneralUtils} from '../shared/general-utils';
 import {DataTable} from 'primeng/primeng';
 import 'rxjs-compat/add/operator/filter';
-import {Dictionary} from '../shared/dictionary';
 
 @Component({
   selector: 'app-users',
@@ -48,7 +45,6 @@ export class UsersComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private dictionary: Dictionary
   ) {
     this.cpfPipe = new CpfPipe();
     this.telefonePipe = new TelefonePipe();
@@ -149,8 +145,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     if (pageNumber < 1) {
       pageNumber = 1;
-    }
-    else if (pageNumber > totalPagesNumber) {
+    } else if (pageNumber > totalPagesNumber) {
       pageNumber = totalPagesNumber;
     }
 
@@ -165,11 +160,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   delete(user) {
     this.confirmationService.confirm({
       header: 'Confirmação',
-      message: `Deseja realmente remover o ${this.dictionary.userTypes[user.type]} '${user.name}'?`,
+      message: `Deseja realmente remover o usuário '${user.name}'?`,
       icon: 'fa fa-question-circle',
       accept: () => {
         this.userService.delete(user.id).subscribe(
-          response => this.listPaginated()
+          () => this.listPaginated()
         );
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Usuário removido!'});
       },
