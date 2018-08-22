@@ -6,12 +6,13 @@ import {ErrorHandlerService} from './error-handler.service';
 import {HttpResponse} from '@angular/common/http';
 import {tap} from 'rxjs/internal/operators';
 import {AngularTokenService} from 'angular-token';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthService {
   private currentUser: User;
 
-  constructor(private tokenService: AngularTokenService) {}
+  constructor(private tokenService: AngularTokenService, private router: Router) {}
 
   signUp(login: string, password: string, passwordConfirmation: string): Observable<User> {
     const registerData = {
@@ -43,10 +44,10 @@ export class AuthService {
   }
 
   signOut(): void {
+    localStorage.removeItem('currentUser');
     this.tokenService.signOut().subscribe(
       (responseSuccess) => {
-        localStorage.removeItem('currentUser');
-        // this.router.navigate(['/sign-in']);
+        this.router.navigate(['/sign-in']);
       },
       (responseError) => {
         console.error(JSON.stringify(responseError));
@@ -55,7 +56,12 @@ export class AuthService {
   }
 
   userSignedIn(): boolean {
-    return this.tokenService.userSignedIn();
+    // console.log(this.tokenService.userSignedIn());
+    // return this.tokenService.userSignedIn();
+    if (localStorage.getItem('currentUser')) {
+      return true;
+    }
+    return false;
   }
 
   validateToken() {
