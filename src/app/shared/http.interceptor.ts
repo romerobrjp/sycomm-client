@@ -19,18 +19,12 @@ export class AppHttpInterceptor implements HttpInterceptor {
           if (error.status === 401) {
             // auto logout if 401 response returned from api
             this.authService.signOut();
-            location.reload(true);
+            // location.reload(true);
           }
-          const err = error.error.message || error.statusText;
-          return throwError(err);
+          // const err = error.error.message || error.statusText;
+          return throwError(error);
         }
       )
     );
-  }
-
-  private handleError = (error: Response) => {
-    console.error('An error has occurred: ' + error);
-    // Do messaging and error handling here
-    return throwError(error);
   }
 }
