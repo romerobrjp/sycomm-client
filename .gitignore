@@ -42,3 +42,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Arquivos de ambiente
+app-config.ts
+package.json
+package-lock.json
