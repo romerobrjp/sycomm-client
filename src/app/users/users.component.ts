@@ -8,6 +8,11 @@ import {CpfPipe, TelefonePipe} from 'ng2-brpipes';
 import {GeneralUtils} from '../shared/general-utils';
 import {DataTable} from 'primeng/primeng';
 import 'rxjs-compat/add/operator/filter';
+import {Dictionary} from '../shared/dictionary';
+import {PublicOfficeService} from '../public-offices/shared/public-office.service';
+import {PublicAgencyService} from '../public-agencies/shared/public-agency.service';
+import {PublicAgency} from '../public-agencies/shared/public-agency.model';
+import {PublicOffice} from '../public-offices/shared/public-office.model';
 
 @Component({
   selector: 'app-users',
@@ -33,6 +38,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   };
   totalCount = 0;
   userListingType: string;
+  publicOffices: PublicOffice[] = [];
+  publicAgencies: PublicAgency[] = [];
   @ViewChild('usersTable') usersTable: DataTable;
 
   private cpfPipe: CpfPipe;
@@ -45,6 +52,9 @@ export class UsersComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    public dictionary: Dictionary,
+    private publicOfficeService: PublicOfficeService,
+    private publicAgencyService: PublicAgencyService,
   ) {
     this.cpfPipe = new CpfPipe();
     this.telefonePipe = new TelefonePipe();
@@ -92,13 +102,25 @@ export class UsersComponent implements OnInit, OnDestroy {
               break;
             }
           }
+
+          this.publicOfficeService.getAll().subscribe(
+            responseSuccess => this.publicOffices = responseSuccess['data'],
+            error => console.error('Erro ao carregar Cargos: ' + error)
+          );
+
+          this.publicAgencyService.getAll().subscribe(
+            responseSuccess => this.publicAgencies = responseSuccess['data'],
+            error => console.error('Erro ao carregar Orgaos: ' + error)
+          );
+
           this.listPaginated();
         }
       }
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
@@ -133,9 +155,15 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   handleFilter(event: any) {
+    // quando filtrar por um campo, resetar o valor dos outros inputs
+    Array.from(document.getElementsByClassName('field-filter-input')).forEach((item) => {
+      if (item['name'] !== event.srcElement.name) {
+        item['value'] = '';
+      }
+    });
+
     this.paginator.searchField = event.srcElement.name;
     this.paginator.searchText = event.target.value;
-
     this.listPaginated();
   }
 

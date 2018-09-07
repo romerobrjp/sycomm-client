@@ -37,11 +37,60 @@
 
     <tr>
       <th *ngFor="let col of columns" [ngSwitch]="col.field">
-        <input *ngSwitchCase="'registration'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
-        <input *ngSwitchCase="'name'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
-        <input *ngSwitchCase="'email'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
-        <input *ngSwitchCase="'cpf'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
-        <input *ngSwitchCase="'cellphone'" [name]="col.field" pInputText type="text" (change)="handleFilter($event)" placeholder="Filtre por {{col.header}}..." />
+        <input *ngSwitchCase="'registration'"
+               (change)="handleFilter($event)"
+               [name]="col.field"
+               class="form-control field-filter-input"
+               placeholder="Filtrar por {{col.header}}..."
+               type="text"
+        />
+        <input *ngSwitchCase="'name'"
+               (change)="handleFilter($event)"
+               [name]="col.field"
+               class="form-control field-filter-input"
+               placeholder="Filtrar por {{col.header}}..."
+               type="text"
+        />
+        <input *ngSwitchCase="'email'"
+               (change)="handleFilter($event)"
+               [name]="col.field"
+               class="form-control field-filter-input"
+               placeholder="Filtrar por {{col.header}}..."
+               type="text"
+        />
+        <input *ngSwitchCase="'cpf'"
+               (change)="handleFilter($event)"
+               [name]="col.field"
+               class="form-control field-filter-input"
+               placeholder="Filtrar por {{col.header}}..."
+               type="text"
+        />
+        <input *ngSwitchCase="'cellphone'"
+               (change)="handleFilter($event)"
+               [name]="col.field"
+               class="form-control field-filter-input"
+               placeholder="Filtrar por {{col.header}}..."
+               type="text"
+        />
+        <select id="public_office_filter"
+                (change)="handleFilter($event)"
+                *ngSwitchCase="'public_office'"
+                [name]="col.field"
+                class="form-control field-filter-input"
+        >
+          <option value="">Qualquer um</option>
+          <option *ngFor="let option of publicOffices" [value]="option.id">{{ option.name }}</option>
+        </select>
+
+        <select id="public_agency_filter"
+                (change)="handleFilter($event)"
+                *ngSwitchCase="'public_agency'"
+                [name]="col.field"
+                class="form-control field-filter-input"
+        >
+          <option value="">Qualquer um</option>
+          <option *ngFor="let option of publicAgencies" [value]="option.id">{{ option.name }}</option>
+        </select>
       </th>
 
       <th></th>
