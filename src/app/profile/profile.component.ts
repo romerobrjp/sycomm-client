@@ -9,6 +9,8 @@ import {AuthService} from '../shared/auth.service';
 import {User} from '../users/shared/user.model';
 import {Dictionary} from '../shared/dictionary';
 import {GeneralUtils} from '../shared/general-utils';
+import swal from 'sweetalert2';
+import {AngularTokenService} from 'angular-token';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +20,7 @@ import {GeneralUtils} from '../shared/general-utils';
 export class ProfileComponent implements OnInit {
   userProfile: User;
   form: FormGroup;
+  changePasswordForm: FormGroup;
   formUtils: FormUtils;
   // masks
   cpfMask = FormUtils.cpfMask;
@@ -25,12 +28,13 @@ export class ProfileComponent implements OnInit {
   phoneMask = FormUtils.phoneMask;
 
   constructor(
-    private userService: UserService,
     public authService: AuthService,
+    public dictionary: Dictionary,
+    private userService: UserService,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private router: Router,
-    public dictionary: Dictionary
+    private tokenService: AngularTokenService,
   ) {
     this.form = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -41,6 +45,12 @@ export class ProfileComponent implements OnInit {
       cellphone: ['', [Validators.required]],
       whatsapp: [''],
       simple_address: ['']
+    });
+
+    this.changePasswordForm = this.formBuilder.group({
+      oldPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required]],
+      newPasswordConfirmation: ['', [Validators.required]],
     });
 
     this.formUtils = new FormUtils(this.form);
@@ -72,11 +82,72 @@ export class ProfileComponent implements OnInit {
         for (const [key, value] of Object.entries(errorRseponse.error.errors)) {
           for (const [errorKey, errorMessage] of Object.entries(value)) {
             this.messageService.add({
-              key: 'user_detail_messages',
+              key: 'profile_messages',
               severity: 'error',
               summary: this.dictionary.userTypes[key],
               detail: errorMessage
             });
+          }
+        }
+      }
+    );
+  }
+
+  changePassword() {
+    this.messageService.clear();
+
+    const oldPassword = this.changePasswordForm.get('oldPassword').value;
+    const newPassword = this.changePasswordForm.get('newPassword').value;
+    const newPasswordConfirmation = this.changePasswordForm.get('newPasswordConfirmation').value;
+
+    if (!oldPassword) {
+      swal('Atenção', 'Por favor, informe a senha antiga.', 'warning');
+      return false;
+    }
+    if (!newPassword) {
+      swal('Atenção', 'Por favor, informe a nova senha.', 'warning');
+      return false;
+    }
+    if (!newPasswordConfirmation) {
+      swal('Atenção', 'Por favor, confirme a nova senha.', 'warning');
+      return false;
+    }
+
+    if (oldPassword === newPassword) {
+      swal('Atenção', 'A nova senha deve ser diferente a senha antiga!', 'error');
+      return false;
+    }
+
+    if (newPassword !== newPasswordConfirmation) {
+      swal('Atenção', 'A confirmação de senha não confere com a nova senha informada!', 'error');
+      return false;
+    }
+
+    this.tokenService.updatePassword({
+      password:             newPassword,
+      passwordConfirmation: newPasswordConfirmation,
+      passwordCurrent:      oldPassword,
+    }).subscribe(
+      responseSuccess => {
+        this.changePasswordForm.get('oldPassword').reset('');
+        this.changePasswordForm.get('newPassword').reset('');
+        this.changePasswordForm.get('newPasswordConfirmation').reset('');
+
+        console.log(responseSuccess);
+        swal('Sucesso', 'Senha atualizada!', 'success');
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Senha atualizada!'});
+      },
+      responseError => {
+        switch (responseError['status']) {
+          case 422: {
+            if (responseError.error.errors.full_messages[0] === 'Current password não é válido') {
+              swal('Erro', 'Senha atual incorreta. Tente novamente.', 'error');
+            }
+            break;
+          }
+          default: {
+            swal('Erro', 'Estamos problemas para efetuar a atualização da sua senha. Por favor, tente novamente mais tarde.', 'error');
+            this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Estamos problemas para efetuar a atualização da sua senha. Por favor, tente novamente mais tarde.'});
           }
         }
       }
