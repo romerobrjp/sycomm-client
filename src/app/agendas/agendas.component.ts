@@ -20,7 +20,12 @@ export class AgendasComponent implements OnInit {
   paginator = {
     pageNumber: 0,
     perPage: this.pageSizes[0],
-    offset: 0
+    offset: 0,
+    userType: '',
+    sortField: 'name',
+    sortOrder: 'asc',
+    searchField: '',
+    searchText: ''
   };
   totalCount = 0;
   openActivitiesCount = 0;
@@ -57,7 +62,14 @@ export class AgendasComponent implements OnInit {
   }
 
   listAllPaginated() {
-    this.agendaService.listAllPaginated(this.paginator.pageNumber, this.paginator.perPage).subscribe(
+    this.agendaService.listAllPaginated(
+      this.paginator.pageNumber,
+      this.paginator.perPage,
+      this.paginator.sortField,
+      this.paginator.sortOrder,
+      this.paginator.searchField,
+      this.paginator.searchText
+    ).subscribe(
       successResponse => {
         this.rows = successResponse['data'];
         this.totalCount = successResponse['total_count'];
@@ -165,5 +177,18 @@ export class AgendasComponent implements OnInit {
       swal('Aviso', 'Selecione ao menos uma agenda para realizar esta ação.', 'warning');
       return false;
     }
+  }
+
+  handleFilter(event: any) {
+    // quando filtrar por um campo, resetar o valor dos outros inputs
+    Array.from(document.getElementsByClassName('field-filter-input')).forEach((item) => {
+      if (item['name'] !== event.srcElement.name) {
+        item['value'] = '';
+      }
+    });
+
+    this.paginator.searchField = event.srcElement.name;
+    this.paginator.searchText = event.target.value;
+    this.listPaginated();
   }
 }

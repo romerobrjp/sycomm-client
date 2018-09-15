@@ -40,6 +40,22 @@
         Ações
       </th>
     </tr>
+
+    <tr>
+      <th></th>
+
+      <th *ngFor="let col of columns" [ngSwitch]="col.field">
+        <input *ngSwitchCase="'name'"
+               (change)="handleFilter($event)"
+               [name]="col.field"
+               class="form-control field-filter-input"
+               placeholder="Filtrar por {{col.header}}..."
+               type="text"
+        />
+      </th>
+
+      <th></th>
+    </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-agenda>
