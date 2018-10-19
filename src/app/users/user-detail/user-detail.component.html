@@ -27,9 +27,13 @@
           id="email"
           formControlName="email"
           class="form-control"
-          placeholder="joao@mail.com"
+          placeholder="seu@mail.com"
           type="text"
         />
+
+        <div class="text-danger" *ngIf="formUtils.showFieldError('email')">
+          <div *ngIf="form.get('email').errors.required"><strong>E-mail</strong> é obrigatório</div>
+        </div>
       </div>
 
       <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')" *ngIf="isEmployee() || isCustomer()">
@@ -50,7 +54,7 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="userType === 'Customer'">
+    <div class="row" *ngIf="isCustomer()">
       <div class="form-group col-lg-2 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('registration')">
         <label for="registration" class="control-label">Matrícula</label>
         <input
@@ -124,7 +128,7 @@
         />
 
         <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone')" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
-          <div *ngIf="form.get('cellphone').errors.required"><strong>Celular</strong> é obrigatório</div>
+          <div *ngIf="form.get('cellphone').errors.required && isCustomer()"><strong>Celular</strong> é obrigatório</div>
         </div>
       </div>
 
@@ -184,9 +188,41 @@
 
     <div class="row text-center">
       <div class="col-lg-12">
-        <button type="submit" class="btn btn-success mr-10" >{{ user.id ? 'Atualizar' : 'Cadastrar' }}</button>
+        <button type="submit" class="btn btn-success mr-10" [disabled]="form.invalid">{{ user.id ? 'Atualizar' : 'Cadastrar' }}</button>
+        <button type="submit" class="btn btn-info mr-10" (click)="syncConfirmeOnline($event)" *ngIf="isCustomer()">Sincronizar Confirme-Online</button>
         <button type="button" class="btn btn-default" (click)="goBack()">Voltar</button>
       </div>
     </div>
   </form>
 </div>
+
+<p-dialog
+  [(visible)]="displayConfirmeOnlineDialog"
+  [baseZIndex]="10000"
+  [maximizable]="true"
+  [minWidth]="800"
+  [minHeight]="600"
+  [responsive]="true"
+  header="Sincronizar dados do Confirme Online"
+>
+  <div *ngFor="let reg of confirmeOnlineRetrievedData">
+    <div class="panel panel-default" style="padding: 10px">
+      <div class="row" *ngFor="let item of reg | keyvalue">
+        <span *ngIf="userAttrs.includes(item.key)">
+        <!-- <span> -->
+          <div class="col-md-4" style="font-weight: bold">
+            {{ capitalizeFirstLetter(item.key) }}:
+          </div>
+          <div class="col-md-8">
+            {{item.value}}
+          </div>
+        </span>
+      </div>
+
+      <br />
+
+      <button type="button" class="btn btn-success mr-10 center">Escolher este</button>
+    </div>
+    <!-- <pre>{{ reg | json }}</pre> -->
+  </div>
+</p-dialog>

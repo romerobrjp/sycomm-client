@@ -4,7 +4,7 @@ import {throwError as observableThrowError, Observable} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from './user.model';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
@@ -92,10 +92,25 @@ export class UserService {
     );
   }
 
+  syncConfirmeOnline(op, us, ps, sg, cc): Observable<Object[]> {
+    const url = `${this.urlResource}/sync_confirme_online`;
+
+    const httpParams: HttpParams = new HttpParams().set('OP', op)
+                                                   .set('US', us)
+                                                   .set('PS', ps)
+                                                   .set('SG', sg)
+                                                   .set('CC', cc);
+
+    return this.http.get<Object[]>(url, { params: httpParams }).pipe(
+      catchError(this.handleErrors)
+    );
+  }
+
   // PRIVATE METHODS -----------------------------------------------------------
 
   private handleErrors(error: Response) {
-    console.error('Erro em UserService: ' + error);
+    console.log('Erro em UserService: ');
+    console.error(error);
     return observableThrowError(error);
   }
 }

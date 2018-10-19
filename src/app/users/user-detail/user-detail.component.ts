@@ -1,6 +1,4 @@
-
-import {switchMap} from 'rxjs/operators';
-import {Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router, NavigationExtras } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -19,6 +17,7 @@ import { Message } from 'primeng/components/common/api';
 import { Dictionary } from '../../shared/dictionary';
 import { FormUtils} from '../../shared/form-utils';
 import * as cpf_lib from '@fnando/cpf';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user',
@@ -39,8 +38,13 @@ export class UserDetailComponent implements OnInit {
   cpfMask = FormUtils.cpfMask;
   phoneMask = FormUtils.phoneMask;
 
+  confirmeOnlineRetrievedData;
+  displayConfirmeOnlineDialog = false;
+  userAttrs = ['NOME', 'ENDERECO', 'CPFCNPJ', 'TELEFONE', 'whatsapp'];
+
   constructor(
     public dictionary: Dictionary,
+    public authService: AuthService,
     private userService: UserService,
     private publicOfficeService: PublicOfficeService,
     private publicAgencyService: PublicAgencyService,
@@ -49,7 +53,6 @@ export class UserDetailComponent implements OnInit {
     private location: Location,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    public authService: AuthService,
   ) {
     this.user = new User(
       null,
@@ -127,6 +130,17 @@ export class UserDetailComponent implements OnInit {
   }
 
   create(): boolean {
+    // if (this.form.invalid) {
+    //   Object.keys(this.form.controls).forEach(key => {
+    //     // this.form.get(key).markAsDirty();
+    //     console.log(key);
+    //     this.form.get
+    //     this.formUtils.showFieldError(key);
+    //   });
+    //
+    //   return false;
+    // }
+
     this.applyFormValues();
 
     const navigationExtras: NavigationExtras = {
@@ -236,11 +250,40 @@ export class UserDetailComponent implements OnInit {
     this.user.type = this.form.get('type').value;
   }
 
+  syncConfirmeOnline(event) {
+    event.preventDefault();
+
+    this.userService.syncConfirmeOnline(1, 'INTBRASCREDI', 'ULOD8E', 'PSHAH', this.user.cpf).subscribe(
+      (responseSuccess) => {
+        console.log(responseSuccess);
+
+        if (responseSuccess['RESULTADO'] && responseSuccess['RESULTADO']['MSG'] === 'Registro Nao Localizado') {
+          swal('Aviso', 'Desculpe, registro não localizado!', 'warning');
+        } else {
+          this.confirmeOnlineRetrievedData = responseSuccess['RESULTADO']['REGISTRO'];
+
+          // for (let key in confirmeOnlineRetrievedData) {
+          //     let value = confirmeOnlineRetrievedData[key];
+          // }
+
+          this.displayConfirmeOnlineDialog = true;
+        }
+      },
+      (responseError) => {
+        console.log(responseError);
+      }
+    );
+  }
+
   private stripPhoneNumbers(phoneNumber: string) {
     if (phoneNumber) {
       return phoneNumber.replace(/\D/g, '');
     } else {
       return '';
     }
+  }
+
+  capitalizeFirstLetter(text) {
+    return text.charAt(0).toUpperCase() + text.toLowerCase().slice(1);
   }
 }
