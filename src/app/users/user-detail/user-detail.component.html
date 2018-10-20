@@ -205,8 +205,9 @@
   header="Importar dados do Confirme Online"
 >
   <div class="text-center alert alert-info" role="alert">
-    <p>Foram encontrados {{ candidates.length }} registros referentes a este cliente no Confirme Online.</p>
-    <p>Selecione o que deseja utilizar para atualizar os dados do cliente em edição. Se desistir da ideia, basta fechar esta janela.</p>
+    <p *ngIf="candidates.length == 1">Foi encontrado {{ candidates.length }} registro referente ao cliente {{ user.name}} no Confirme Online.</p>
+    <p *ngIf="candidates.length > 1">Foram encontrados {{ candidates.length }} registros referentes ao cliente {{ user.name}} no Confirme Online.</p>
+    <!--<p>Selecione o que deseja utilizar para atualizar os dados do cliente em edição. Se desistir da ideia, basta fechar esta janela.</p>-->
   </div>
   <div *ngFor="let candidate of candidates">
     <div class="panel panel-default" style="padding: 10px">
