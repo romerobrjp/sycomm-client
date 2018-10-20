@@ -4,161 +4,379 @@
   </h1>
 
   <form [formGroup]="form" class="text-center" (ngSubmit)="createOrUpdate()">
-    <div class="row">
-      <div class="form-group col-lg-3 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
-        <label for="name" class="control-label">Nome *</label>
-        <input
-          id="name"
-          formControlName="name"
-          class="form-control"
-          placeholder=""
-          type="text"
-        />
+    <!-- ADMIN { --------------------------------------------------------------------------------------------------- -->
+    <div class="container-fluid" *ngIf="isAdmin()">
+      <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-3 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
+          <label for="name" class="control-label">Nome *</label>
+          <input
+            id="name"
+            formControlName="name"
+            class="form-control"
+            placeholder=""
+            type="text"
+          />
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
-          <div *ngIf="form.get('name').errors.required"><strong>Nome</strong> é obrigatório</div>
+          <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
+            <div *ngIf="form.get('name').errors.required"><strong>Nome</strong> é obrigatório</div>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-3 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('email')">
+          <label for="email" class="control-label">E-mail</label>
+          <input
+            id="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="seu@mail.com"
+            type="text"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('email')">
+            <div *ngIf="form.get('email').errors.required"><strong>E-mail</strong> é obrigatório</div>
+          </div>
         </div>
       </div>
 
-      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('email')">
-        <label for="email" class="control-label" *ngIf="isAdmin() || isEmployee()">E-mail *</label>
-        <label for="email" class="control-label" *ngIf="isCustomer()">E-mail</label>
-        <input
-          id="email"
-          formControlName="email"
-          class="form-control"
-          placeholder="seu@mail.com"
-          type="text"
-        />
+      <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3">
+          <label for="landline" class="control-label">Telefone fixo</label>
+          <input
+            id="landline"
+            formControlName="landline"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
+        </div>
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('email')">
-          <div *ngIf="form.get('email').errors.required"><strong>E-mail</strong> é obrigatório</div>
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+          <label for="cellphone" class="control-label">Celular</label>
+          <input
+            id="cellphone"
+            formControlName="cellphone"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone')" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+            <div *ngIf="form.get('cellphone').errors.required && isCustomer()"><strong>Celular</strong> é obrigatório</div>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('whatsapp')">
+          <label for="whatsapp" class="control-label">WhatsApp</label>
+          <input
+            id="whatsapp"
+            formControlName="whatsapp"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
         </div>
       </div>
 
-      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')" *ngIf="isEmployee() || isCustomer()">
-        <label for="cpf" class="control-label" *ngIf="isCustomer()">CPF *</label>
-        <label for="cpf" class="control-label" *ngIf="isEmployee()">CPF</label>
-        <input
-          id="cpf"
-          formControlName="cpf"
-          class="form-control"
-          placeholder="000.000.000-00"
-          type="text"
-          [textMask]="{ mask: cpfMask }"
-        />
-
-        <div class="text-danger" *ngIf="formUtils.showFieldError('cpf') && isCustomer()">
-          <div *ngIf="form.get('cpf').errors.required"><strong>CPF</strong> é obrigatório</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="isCustomer()">
-      <div class="form-group col-lg-2 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('registration')">
-        <label for="registration" class="control-label">Matrícula</label>
-        <input
-          id="registration"
-          formControlName="registration"
-          class="form-control"
-          maxlength="10"
-          placeholder="1234567890"
-          type="text"
-        />
-
-        <div class="text-danger" *ngIf="formUtils.showFieldError('registration')">
-          <div *ngIf="form.get('registration').errors.required"><strong>Matrícula</strong> é obrigatória</div>
-        </div>
-      </div>
-
-      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('public_office_id')">
-        <label for="public_office" class="control-label">Cargo *</label>
+      <div class="form-group col-lg-2 col-lg-offset-3" *ngIf="authService.isAdmin()">
+        <label for="type" class="control-label">Tipo *</label>
         <select
-          id="public_office"
+          id="type"
+          disabled="disabled"
           class="form-control"
-          formControlName="public_office_id"
+          formControlName="type"
         >
-          <option *ngFor="let option of publicOffices" [value]="option.id">{{ option.name }}</option>
+          <option *ngFor="let option of dictionary.userTypesSelect" [value]="option.value">{{ option.text }}</option>
         </select>
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('public_office_id')">
-          <div *ngIf="form.get('public_office_id').errors.required"><strong>Cargo</strong> é obrigatório</div>
+        <div class="text-danger" *ngIf="formUtils.showFieldError('type')">
+          <div *ngIf="form.get('type').errors.required"><strong>Tipo</strong> é obrigatório</div>
+        </div>
+      </div>
+    </div>
+    <!-- ADMIN } --------------------------------------------------------------------------------------------------- -->
+
+    <!-- EMPLOYEE { ------------------------------------------------------------------------------------------------ -->
+    <div class="container-fluid" *ngIf="isEmployee()">
+      <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
+          <label for="name" class="control-label">Nome *</label>
+          <input
+            id="name"
+            formControlName="name"
+            class="form-control"
+            placeholder=""
+            type="text"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
+            <div *ngIf="form.get('name').errors.required"><strong>Nome</strong> é obrigatório</div>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('email')">
+          <label for="email" class="control-label">E-mail</label>
+          <input
+            id="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="seu@mail.com"
+            type="text"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('email')">
+            <div *ngIf="form.get('email').errors.required"><strong>E-mail</strong> é obrigatório</div>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')">
+          <label for="cpf" class="control-label">CPF</label>
+          <input
+            id="cpf"
+            formControlName="cpf"
+            class="form-control"
+            placeholder="000.000.000-00"
+            type="text"
+            [textMask]="{ mask: cpfMask }"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('cpf')">
+            <div *ngIf="form.get('cpf').errors.required"><strong>CPF</strong> é obrigatório</div>
+          </div>
         </div>
       </div>
 
-      <div class="form-group col-lg-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('public_agency_id')">
-        <label for="public_agency" class="control-label">Órgão *</label>
+      <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3">
+          <label for="landline" class="control-label">Telefone fixo</label>
+          <input
+            id="landline"
+            formControlName="landline"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+          <label for="cellphone" class="control-label">Celular *</label>
+          <input
+            id="cellphone"
+            formControlName="cellphone"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone')" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+            <div *ngIf="form.get('cellphone').errors.required && isCustomer()"><strong>Celular</strong> é obrigatório</div>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('whatsapp')">
+          <label for="whatsapp" class="control-label">WhatsApp</label>
+          <input
+            id="whatsapp"
+            formControlName="whatsapp"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-lg-6 col-lg-push-3" [ngClass]="formUtils.fieldClassForErrorOrSuccess('simple_address')">
+          <label for="simple_address" class="control-label">Endereço</label>
+          <input
+            id="simple_address"
+            formControlName="simple_address"
+            class="form-control"
+            placeholder=""
+            type="text"
+          />
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-lg-offset-3" *ngIf="authService.isAdmin()">
+        <label for="type" class="control-label">Tipo *</label>
         <select
-          id="public_agency"
+          id="type"
+          disabled="disabled"
           class="form-control"
-          formControlName="public_agency_id"
+          formControlName="type"
         >
-          <option *ngFor="let option of publicAgencies" [value]="option.id">{{ option.name }}</option>
+          <option *ngFor="let option of dictionary.userTypesSelect" [value]="option.value">{{ option.text }}</option>
         </select>
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('public_agency_id')">
-          <div *ngIf="form.get('public_agency_id').errors.required"><strong>Órgão</strong> é obrigatório</div>
+        <div class="text-danger" *ngIf="formUtils.showFieldError('type')">
+          <div *ngIf="form.get('type').errors.required"><strong>Tipo</strong> é obrigatório</div>
         </div>
       </div>
     </div>
+    <!-- EMPLOYEE } ------------------------------------------------------------------------------------------------ -->
 
-    <div class="row">
-      <div class="form-group col-lg-2 col-lg-offset-2">
-        <label for="landline" class="control-label">Telefone fixo</label>
-        <input
-          id="landline"
-          formControlName="landline"
-          class="form-control"
-          placeholder="(83) 9-1234-5678"
-          type="text"
-          [textMask]="{ mask: phoneMask }"
-        />
-      </div>
+    <!-- CUSTOMER { ------------------------------------------------------------------------------------------------ -->
+    <div class="container-fluid" *ngIf="isCustomer()">
+      <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('name')">
+          <label for="name" class="control-label">Nome *</label>
+          <input
+            id="name"
+            formControlName="name"
+            class="form-control"
+            placeholder=""
+            type="text"
+          />
 
-      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
-        <label for="cellphone" class="control-label" *ngIf="isAdmin() || isEmployee()">Celular</label>
-        <label for="cellphone" class="control-label" *ngIf="isCustomer()">Celular *</label>
-        <input
-          id="cellphone"
-          formControlName="cellphone"
-          class="form-control"
-          placeholder="(83) 9-1234-5678"
-          type="text"
-          [textMask]="{ mask: phoneMask }"
-        />
+          <div class="text-danger" *ngIf="formUtils.showFieldError('name')">
+            <div *ngIf="form.get('name').errors.required"><strong>Nome</strong> é obrigatório</div>
+          </div>
+        </div>
 
-        <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone')" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
-          <div *ngIf="form.get('cellphone').errors.required && isCustomer()"><strong>Celular</strong> é obrigatório</div>
+        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('email')">
+          <label for="email" class="control-label">E-mail</label>
+          <input
+            id="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="seu@mail.com"
+            type="text"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('email')">
+            <div *ngIf="form.get('email').errors.required"><strong>E-mail</strong> é obrigatório</div>
+          </div>
         </div>
       </div>
 
-      <div class="form-group col-lg-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('whatsapp')">
-        <label for="whatsapp" class="control-label">WhatsApp</label>
-        <input
-          id="whatsapp"
-          formControlName="whatsapp"
-          class="form-control"
-          placeholder="(83) 9-1234-5678"
-          type="text"
-          [textMask]="{ mask: phoneMask }"
-        />
-      </div>
-    </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cpf')">
+          <label for="cpf" class="control-label">CPF *</label>
+          <input
+            id="cpf"
+            formControlName="cpf"
+            class="form-control"
+            placeholder="000.000.000-00"
+            type="text"
+            [textMask]="{ mask: cpfMask }"
+          />
 
-    <div class="row" *ngIf="!authService.isAdmin()">
-      <div class="form-group col-lg-5 col-lg-offset-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('simple_address')">
-        <label for="simple_address" class="control-label">Endereço</label>
-        <input
-          id="simple_address"
-          formControlName="simple_address"
-          class="form-control"
-          placeholder=""
-          type="text"
-        />
-      </div>
-    </div>
+          <div class="text-danger" *ngIf="formUtils.showFieldError('cpf') && isCustomer()">
+            <div *ngIf="form.get('cpf').errors.required"><strong>CPF</strong> é obrigatório</div>
+          </div>
+        </div>
 
-    <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('registration')">
+          <label for="registration" class="control-label">Matrícula</label>
+          <input
+            id="registration"
+            formControlName="registration"
+            class="form-control"
+            maxlength="10"
+            placeholder="1234567890"
+            type="text"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('registration')">
+            <div *ngIf="form.get('registration').errors.required"><strong>Matrícula</strong> é obrigatória</div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('public_office_id')">
+          <label for="public_office" class="control-label">Cargo *</label>
+          <select
+            id="public_office"
+            class="form-control"
+            formControlName="public_office_id"
+          >
+            <option *ngFor="let option of publicOffices" [value]="option.id">{{ option.name }}</option>
+          </select>
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('public_office_id')">
+            <div *ngIf="form.get('public_office_id').errors.required"><strong>Cargo</strong> é obrigatório</div>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('public_agency_id')">
+          <label for="public_agency" class="control-label">Órgão *</label>
+          <select
+            id="public_agency"
+            class="form-control"
+            formControlName="public_agency_id"
+          >
+            <option *ngFor="let option of publicAgencies" [value]="option.id">{{ option.name }}</option>
+          </select>
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('public_agency_id')">
+            <div *ngIf="form.get('public_agency_id').errors.required"><strong>Órgão</strong> é obrigatório</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-2">
+          <label for="landline" class="control-label">Telefone fixo</label>
+          <input
+            id="landline"
+            formControlName="landline"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+          <label for="cellphone" class="control-label">Celular *</label>
+          <input
+            id="cellphone"
+            formControlName="cellphone"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
+
+          <div class="text-danger" *ngIf="formUtils.showFieldError('cellphone')" [ngClass]="formUtils.fieldClassForErrorOrSuccess('cellphone')">
+            <div *ngIf="form.get('cellphone').errors.required && isCustomer()"><strong>Celular</strong> é obrigatório</div>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-2 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('whatsapp')">
+          <label for="whatsapp" class="control-label">WhatsApp</label>
+          <input
+            id="whatsapp"
+            formControlName="whatsapp"
+            class="form-control"
+            placeholder="(83) 9-1234-5678"
+            type="text"
+            [textMask]="{ mask: phoneMask }"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-lg-6 col-lg-push-2" [ngClass]="formUtils.fieldClassForErrorOrSuccess('simple_address')">
+          <label for="simple_address" class="control-label">Endereço</label>
+          <input
+            id="simple_address"
+            formControlName="simple_address"
+            class="form-control"
+            placeholder=""
+            type="text"
+          />
+        </div>
+      </div>
+
       <div class="form-group col-lg-2 col-lg-offset-2" *ngIf="authService.isAdmin()">
         <label for="type" class="control-label">Tipo *</label>
         <select
@@ -175,11 +393,12 @@
         </div>
       </div>
     </div>
+    <!-- CUSTOMER } ------------------------------------------------------------------------------------------------ -->
 
     <br/>
 
     <div class="row">
-      <div class="col-lg-6 col-lg-offset-2">
+      <div class="col-lg-8 col-lg-offset-2">
         <p-messages [(value)]="msgs" key="user_detail_messages"></p-messages>
       </div>
     </div>
@@ -188,9 +407,13 @@
 
     <div class="row text-center">
       <div class="col-lg-12">
-        <button type="submit" class="btn btn-success mr-10" [disabled]="form.invalid">{{ user.id ? 'Atualizar' : 'Cadastrar' }}</button>
-        <button type="submit" class="btn btn-info mr-10" (click)="syncConfirmeOnline($event)" *ngIf="isCustomer()">Sincronizar Confirme-Online</button>
-        <button type="button" class="btn btn-default" (click)="goBack()">Voltar</button>
+        <!--<button type="submit" class="btn btn-success mr-10" [disabled]="form.invalid">{{ user.id ? 'Atualizar' : 'Cadastrar' }}</button>-->
+        <button type="submit" class="btn btn-success">{{ user.id ? 'Atualizar' : 'Cadastrar' }}</button>
+        <button type="button" class="btn btn-default ml-10" (click)="goBack()">Voltar</button>
+        <span *ngIf="isCustomer()">
+          <span class="ml-10" style="color: #c3c3c3;">|</span>
+          <button type="submit" class="btn btn-info ml-10" (click)="syncConfirmeOnline($event)">Sincronizar com Confirme-Online</button>
+        </span>
       </div>
     </div>
   </form>
@@ -200,13 +423,12 @@
   [(visible)]="displayConfirmeOnlineDialog"
   [maximizable]="true"
   [minWidth]="800"
-  [minHeight]="600"
   [responsive]="true"
   header="Importar dados do Confirme Online"
 >
-  <div class="text-center alert alert-info" role="alert">
-    <p *ngIf="candidates.length == 1">Foi encontrado {{ candidates.length }} registro referente ao cliente {{ user.name}} no Confirme Online.</p>
-    <p *ngIf="candidates.length > 1">Foram encontrados {{ candidates.length }} registros referentes ao cliente {{ user.name}} no Confirme Online.</p>
+  <div class="text-center well">
+    <p *ngIf="candidates.length == 1">Foi encontrado <strong>{{ candidates.length }}</strong> registro referente ao cliente {{ user.name}} no Confirme Online.</p>
+    <p *ngIf="candidates.length > 1">Foram encontrados <strong>{{ candidates.length }}</strong> registros referentes ao cliente {{ user.name}} no Confirme Online.</p>
     <!--<p>Selecione o que deseja utilizar para atualizar os dados do cliente em edição. Se desistir da ideia, basta fechar esta janela.</p>-->
   </div>
   <div *ngFor="let candidate of candidates">
@@ -223,11 +445,17 @@
 
       <br />
 
-      <div class="center">
+      <div class="text-center">
         <button type="button" class="btn btn-success mr-10 center" (click)="selectUserFromConfirmeOnline(candidate)">Usar este</button>
       </div>
     </div>
   </div>
+
+  <p-footer>
+    <div class="text-center">
+      <button class="btn btn-danger" type="button" (click)="displayConfirmeOnlineDialog = false;">Cancelar</button>
+    </div>
+  </p-footer>
 </p-dialog>
 
 <p-confirmDialog #updateUserFromConfirmeOnlineDialog>

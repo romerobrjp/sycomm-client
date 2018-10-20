@@ -83,19 +83,47 @@ export class UserDetailComponent implements OnInit {
       null
     );
 
-    this.form = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      email: [''],
-      registration: ['', Validators.required],
-      cpf: ['', [Validators.required]],
-      landline: [''],
-      cellphone: ['', [Validators.required]],
-      whatsapp: [''],
-      simple_address: [''],
-      public_office_id: [null, Validators.required],
-      public_agency_id: [null, Validators.required],
-      type: [null, Validators.required]
-    });
+    this.userType = this.activatedRoute.snapshot.queryParamMap.get('userType');
+
+    switch (this.userType) {
+      case 'Admin': {
+        this.form = this.formBuilder.group({
+          name: ['', [Validators.required]],
+          email: [''],
+          landline: [''],
+          cellphone: [''],
+          whatsapp: [''],
+          type: [null, Validators.required]
+        });
+      }
+      case 'Employee': {
+        this.form = this.formBuilder.group({
+          name: ['', [Validators.required]],
+          email: [''],
+          cpf: ['', [Validators.required]],
+          landline: [''],
+          cellphone: ['', [Validators.required]],
+          whatsapp: [''],
+          simple_address: [''],
+          type: [null, Validators.required]
+        });
+      }
+      case 'Customer': {
+        this.form = this.formBuilder.group({
+          name: ['', [Validators.required]],
+          email: [''],
+          registration: ['', Validators.required],
+          cpf: ['', [Validators.required]],
+          landline: [''],
+          cellphone: ['', [Validators.required]],
+          whatsapp: [''],
+          simple_address: [''],
+          public_office_id: [null, Validators.required],
+          public_agency_id: [null, Validators.required],
+          type: [null, Validators.required]
+        });
+      }
+    }
 
     this.formUtils = new FormUtils(this.form);
   }
