@@ -16,4 +16,8 @@ export class GeneralUtils {
 
     return elt['options'][elt['selectedIndex']].text;
   }
+
+  static capitalizeFirstLetter(text) {
+    return text.charAt(0).toUpperCase() + text.toLowerCase().slice(1);
+  }
 }
