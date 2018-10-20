@@ -198,31 +198,40 @@
 
 <p-dialog
   [(visible)]="displayConfirmeOnlineDialog"
-  [baseZIndex]="10000"
   [maximizable]="true"
   [minWidth]="800"
   [minHeight]="600"
   [responsive]="true"
-  header="Sincronizar dados do Confirme Online"
+  header="Importar dados do Confirme Online"
 >
-  <div *ngFor="let reg of confirmeOnlineRetrievedData">
+  <div class="text-center alert alert-info" role="alert">
+    <p>Foram encontrados {{ candidates.length }} registros referentes a este cliente no Confirme Online.</p>
+    <p>Selecione o que deseja utilizar para atualizar os dados do cliente em edição. Se desistir da ideia, basta fechar esta janela.</p>
+  </div>
+  <div *ngFor="let candidate of candidates">
     <div class="panel panel-default" style="padding: 10px">
-      <div class="row" *ngFor="let item of reg | keyvalue">
-        <span *ngIf="userAttrs.includes(item.key)">
-        <!-- <span> -->
-          <div class="col-md-4" style="font-weight: bold">
-            {{ capitalizeFirstLetter(item.key) }}:
-          </div>
-          <div class="col-md-8">
-            {{item.value}}
-          </div>
-        </span>
+      <div class="row" *ngFor="let item of candidate | keyvalue">
+        <div class="col-md-1" style="font-weight: bold">
+          {{ item.key }}:
+        </div>
+        <div class="col-md-11">
+          <span *ngIf="item.key == 'CPF'">{{ item.value | cpf }}</span>
+          <span *ngIf="item.key != 'CPF'">{{ item.value }}</span>
+        </div>
       </div>
 
       <br />
 
-      <button type="button" class="btn btn-success mr-10 center">Escolher este</button>
+      <div class="center">
+        <button type="button" class="btn btn-success mr-10 center" (click)="selectUserFromConfirmeOnline(candidate)">Usar este</button>
+      </div>
     </div>
-    <!-- <pre>{{ reg | json }}</pre> -->
   </div>
 </p-dialog>
+
+<p-confirmDialog #updateUserFromConfirmeOnlineDialog>
+  <p-footer>
+    <button class="btn btn-success mr-10" type="button" (click)="updateUserFromConfirmeOnlineDialog.accept();">Sim</button>
+    <button class="btn btn-default" type="button" (click)="updateUserFromConfirmeOnlineDialog.reject()">Não</button>
+  </p-footer>
+</p-confirmDialog>
