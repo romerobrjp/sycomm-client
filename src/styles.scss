@@ -3,7 +3,7 @@
 @import "./assets/primeng-custom.scss";
 
 .activity-not-started {
-  background-color: red;
+  background-color: gray;
 }
 .activity-in-progress {
   background-color: dodgerblue;
@@ -11,6 +11,10 @@
 
 .activity-finished {
   background-color: forestgreen;
+}
+
+.activity-expired {
+  background-color: red;
 }
 
 .go-to-page-input {
