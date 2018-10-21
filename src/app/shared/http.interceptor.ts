@@ -14,15 +14,15 @@ export class AppHttpInterceptor implements HttpInterceptor {
     // send the newly created request
     return next.handle(req).pipe(
       catchError(
-        (error) => {
-          if (error.status === 401) {
+        (reqError) => {
+          if (reqError.status === 401 && reqError.error.errors[0] !== 'E-mail ou senha inválidos.') {
             // auto logout if 401 response returned from api
             swal('Atenção', 'Sua sessão expirou. Por favor, autentique-se novamente.', 'warning');
             this.authService.signOut();
             // location.reload(true);
           }
           // const err = error.error.message || error.statusText;
-          return throwError(error);
+          return throwError(reqError);
         }
       )
     );

@@ -8,4 +8,16 @@ export class GeneralUtils {
       return '';
     }
   }
+
+  static getTextFromSelectOneElement(elementId) {
+    const elt = document.getElementById(elementId);
+
+    if (elt['selectedIndex'] === -1) { return null; }
+
+    return elt['options'][elt['selectedIndex']].text;
+  }
+
+  static capitalizeFirstLetter(text) {
+    return text.charAt(0).toUpperCase() + text.toLowerCase().slice(1);
+  }
 }

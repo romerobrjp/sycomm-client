@@ -61,7 +61,7 @@
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs">
             <li class="active"><a href="#settings" data-toggle="tab">Editar</a></li>
-            <!--<li><a href="#activity" data-toggle="tab">Agendas</a></li>-->
+            <li><a href="#change_password" data-toggle="tab">Alterar Senha</a></li>
             <!--<li><a href="#timeline" data-toggle="tab">Atividades</a></li>-->
           </ul>
           <div class="tab-content">
@@ -264,7 +264,7 @@
 
                 <div class="row">
                   <div class="col-lg-12">
-                    <p-messages key="user_detail_messages"></p-messages>
+                    <p-messages key="profile_messages"></p-messages>
                   </div>
                 </div>
 
@@ -276,6 +276,61 @@
               </form>
             </div>
             <!-- /.tab-pane -->
+
+            <div class="tab-pane" id="change_password">
+              <form [formGroup]="changePasswordForm" class="form-horizontal" (ngSubmit)="changePassword()">
+                <div class="form-group">
+                  <label for="old_password" class="col-sm-3 control-label">Senha antiga</label>
+
+                  <div class="col-sm-9">
+                    <input id="old_password"
+                           class="form-control"
+                           formControlName="oldPassword"
+                           placeholder="Informe a senha antiga..."
+                           type="password"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="new_password" class="col-sm-3 control-label">Senha nova</label>
+
+                  <div class="col-sm-9">
+                    <input id="new_password"
+                           class="form-control"
+                           formControlName="newPassword"
+                           placeholder="Informe a nova senha..."
+                           type="password"
+                     />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="new_password_confirmation" class="col-sm-3 control-label">Nova senha (confirmação)</label>
+
+                  <div class="col-sm-9">
+                    <input id="new_password_confirmation"
+                           class="form-control"
+                           formControlName="newPasswordConfirmation"
+                           placeholder="Confirme a nova senha..."
+                           type="password"
+                    />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-12">
+                    <p-messages key="change_password_messages"></p-messages>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6 col-lg-offset-5">
+                    <button type="submit" class="btn btn-success">Alterar</button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
           <!-- /.tab-content -->
         </div>

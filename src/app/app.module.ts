@@ -11,9 +11,10 @@ import { Ng2BRPipesModule } from 'ng2-brpipes';
 import { TableModule } from 'primeng/table';
 import { GrowlModule } from 'primeng/growl';
 import { MessageModule } from 'primeng/message';
-import {ConfirmDialogModule, MessagesModule, CardModule, TooltipModule, ProgressSpinnerModule} from 'primeng/primeng';
+import { ConfirmDialogModule, MessagesModule, CardModule, TooltipModule, ProgressSpinnerModule } from 'primeng/primeng';
 import { DataViewModule } from 'primeng/dataview';
 import { BlockUIModule } from 'primeng/blockui';
+import { DialogModule } from 'primeng/dialog';
 
 // Components
 import { AppComponent } from './app.component';
@@ -46,6 +47,7 @@ import { AgendaService } from './agendas/shared/agenda.service';
 import { AuthService } from './shared/auth.service';
 import { Dictionary } from './shared/dictionary';
 import { ErrorHandlerService } from './shared/error-handler.service';
+import { LoaderInterceptorService } from './shared/loader/loader.interceptor';
 // Primefaces Services
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
@@ -59,9 +61,8 @@ import { AngularTokenModule, } from 'angular-token';
 
 // Interceptors
 import { AppHttpInterceptor } from './shared/http.interceptor';
-import { LoaderInterceptorService } from './shared/loader/loader.interceptor';
-import {APP_CONFIG} from '../app-config';
 
+import {APP_CONFIG} from '../app-config';
 
 @NgModule({
   declarations: [
@@ -101,13 +102,14 @@ import {APP_CONFIG} from '../app-config';
     MessageModule,
     MessagesModule,
     ConfirmDialogModule,
+    DialogModule,
     CardModule,
     TooltipModule,
     BlockUIModule,
     ProgressSpinnerModule,
     DataViewModule,
     TextMaskModule,
-    Ng2BRPipesModule,
+    Ng2BRPipesModule
   ],
   providers: [
     UserService,

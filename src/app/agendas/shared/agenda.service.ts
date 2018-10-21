@@ -2,7 +2,7 @@ import {throwError as observableThrowError, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {ErrorHandler, Injectable} from '@angular/core';
 import {Agenda} from './agenda.model';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {APP_CONFIG} from '../../../app-config';
 
 @Injectable()
@@ -19,10 +19,22 @@ export class AgendaService implements ErrorHandler {
     );
   }
 
-  listAllPaginated(page_number: number, per_page: number): Observable<Object> {
+  listAllPaginated(page_number: number,
+                   per_page: number,
+                   sortField: string,
+                   sortDirection: string,
+                   searchField: string,
+                   searchText: string): Observable<Object> {
     const url = `${this.urlResource}/list_all_paginated?page_number=${page_number}&per_page=${per_page}`;
 
-    return this.http.get<Object>(url).pipe(catchError(this.handleError));
+    const params: HttpParams = new HttpParams().set('page_number', page_number.toString())
+                                               .set('per_page', per_page.toString())
+                                               .set('sortField', sortField)
+                                               .set('sortDirection', sortDirection)
+                                               .set('searchField', searchField)
+                                               .set('searchText', searchText);
+
+    return this.http.get<Object>(url, { params: params }).pipe(catchError(this.handleError));
   }
 
   listEmployeeAgendasPaginated(employeeId: number, page_number: number, per_page: number): Observable<Object> {

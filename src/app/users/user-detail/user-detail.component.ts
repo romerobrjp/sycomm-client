@@ -1,6 +1,4 @@
-
-import {switchMap} from 'rxjs/operators';
-import {Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router, NavigationExtras } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -19,6 +17,8 @@ import { Message } from 'primeng/components/common/api';
 import { Dictionary } from '../../shared/dictionary';
 import { FormUtils} from '../../shared/form-utils';
 import * as cpf_lib from '@fnando/cpf';
+import swal from 'sweetalert2';
+import {ConfirmationService} from 'primeng/api';
 
 @Component({
   selector: 'app-user',
@@ -27,7 +27,7 @@ import * as cpf_lib from '@fnando/cpf';
 })
 
 export class UserDetailComponent implements OnInit {
-  user;
+  user: User;
   publicOffices: PublicOffice[];
   publicAgencies: PublicAgency[];
   form: FormGroup;
@@ -39,8 +39,12 @@ export class UserDetailComponent implements OnInit {
   cpfMask = FormUtils.cpfMask;
   phoneMask = FormUtils.phoneMask;
 
+  displayConfirmeOnlineDialog = false;
+  candidates: Object[] = [];
+
   constructor(
     public dictionary: Dictionary,
+    public authService: AuthService,
     private userService: UserService,
     private publicOfficeService: PublicOfficeService,
     private publicAgencyService: PublicAgencyService,
@@ -49,7 +53,7 @@ export class UserDetailComponent implements OnInit {
     private location: Location,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    public authService: AuthService,
+    private confirmationService: ConfirmationService,
   ) {
     this.user = new User(
       null,
@@ -79,19 +83,47 @@ export class UserDetailComponent implements OnInit {
       null
     );
 
-    this.form = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      email: [''],
-      registration: ['', Validators.required],
-      cpf: ['', [Validators.required]],
-      landline: [''],
-      cellphone: ['', [Validators.required]],
-      whatsapp: [''],
-      simple_address: [''],
-      public_office_id: [null, Validators.required],
-      public_agency_id: [null, Validators.required],
-      type: [null, Validators.required]
-    });
+    this.userType = this.activatedRoute.snapshot.queryParamMap.get('userType');
+
+    switch (this.userType) {
+      case 'Admin': {
+        this.form = this.formBuilder.group({
+          name: ['', [Validators.required]],
+          email: [''],
+          landline: [''],
+          cellphone: [''],
+          whatsapp: [''],
+          type: [null, Validators.required]
+        });
+      }
+      case 'Employee': {
+        this.form = this.formBuilder.group({
+          name: ['', [Validators.required]],
+          email: [''],
+          cpf: ['', [Validators.required]],
+          landline: [''],
+          cellphone: ['', [Validators.required]],
+          whatsapp: [''],
+          simple_address: [''],
+          type: [null, Validators.required]
+        });
+      }
+      case 'Customer': {
+        this.form = this.formBuilder.group({
+          name: ['', [Validators.required]],
+          email: [''],
+          registration: ['', Validators.required],
+          cpf: ['', [Validators.required]],
+          landline: [''],
+          cellphone: ['', [Validators.required]],
+          whatsapp: [''],
+          simple_address: [''],
+          public_office_id: [null, Validators.required],
+          public_agency_id: [null, Validators.required],
+          type: [null, Validators.required]
+        });
+      }
+    }
 
     this.formUtils = new FormUtils(this.form);
   }
@@ -127,6 +159,17 @@ export class UserDetailComponent implements OnInit {
   }
 
   create(): boolean {
+    // if (this.form.invalid) {
+    //   Object.keys(this.form.controls).forEach(key => {
+    //     // this.form.get(key).markAsDirty();
+    //     console.log(key);
+    //     this.form.get
+    //     this.formUtils.showFieldError(key);
+    //   });
+    //
+    //   return false;
+    // }
+
     this.applyFormValues();
 
     const navigationExtras: NavigationExtras = {
@@ -147,13 +190,14 @@ export class UserDetailComponent implements OnInit {
     return true;
   }
 
-  update(): void {
+  update(confirmeOnline: boolean = false): void {
     this.messageService.clear();
-    this.applyFormValues();
 
-    const navigationExtras: NavigationExtras = {
-      queryParams: { 'userType': this.user.type }
-    };
+    if (!confirmeOnline) this.applyFormValues();
+
+    // const navigationExtras: NavigationExtras = {
+    //   queryParams: { 'userType': this.user.type }
+    // };
 
     this.userService.update(this.user).subscribe(
       (response) => {
@@ -161,7 +205,7 @@ export class UserDetailComponent implements OnInit {
         // this.router.navigate(['/users'], navigationExtras);
       },
       (errorResponse) => {
-        for (const [key, value] of Object.entries(errorResponse.errors)) {
+        for (const [key, value] of Object.entries(errorResponse['error']['errors'])) {
           for (const [errorKey, errorMessage] of Object.entries(value)) {
             this.messageService.add({
               key: 'user_detail_messages',
@@ -235,6 +279,100 @@ export class UserDetailComponent implements OnInit {
     this.user.public_agency_id = this.form.get('public_agency_id').value;
     this.user.type = this.form.get('type').value;
   }
+
+  // CONFIRME ONLINE { ---------------------------------------------------------------------------------------------------------------------
+
+  syncConfirmeOnline(event) {
+    event.preventDefault();
+
+    this.userService.syncConfirmeOnline(this.user.cpf).subscribe(
+      (responseSuccess) => {
+        console.log(responseSuccess);
+        let confirmeOnlineRetrievedData: Object[] = [];
+
+        if (responseSuccess['RESULTADO'] && responseSuccess['RESULTADO']['MSG'] === 'Registro Nao Localizado') {
+          swal('Aviso', 'Desculpe, este cliente não se encontra na base de dados do Confirme Online.', 'warning');
+        }
+        else {
+          if (responseSuccess['RESULTADO']['REGISTRO'] instanceof Array) {
+            confirmeOnlineRetrievedData = responseSuccess['RESULTADO']['REGISTRO'];
+          } else {
+            confirmeOnlineRetrievedData.push(responseSuccess['RESULTADO']['REGISTRO']);
+          }
+
+          this.candidates = confirmeOnlineRetrievedData.map(
+            (snapshot) => {
+              return {
+                'Nome' : snapshot['NOME'] === 'NULL' ? null : snapshot['NOME'],
+                'CPF' : snapshot['CPFCNPJ'] === 'NULL' ? null : snapshot['CPFCNPJ'],
+                'Celular' : snapshot['TELEFONE'] === 'NULL' ? null : snapshot['TELEFONE'],
+                'Whatsapp' : this.generateWhatsapp(snapshot['TELEFONE'], snapshot['whatsapp']),
+                'Endereço' : this.generateSimpleAdressFromConfirmeOnline(snapshot['ENDERECO'], snapshot['NUMERO'], snapshot['COMPLEMENTO'], snapshot['BAIRRO'], snapshot['CEP'], snapshot['CIDADE'], snapshot['UF']),
+              };
+            }
+          );
+
+          this.candidates.forEach(u => console.log(u));
+
+          this.displayConfirmeOnlineDialog = true;
+        }
+      },
+      (responseError) => {
+        console.log(responseError);
+      }
+    );
+  }
+
+  selectUserFromConfirmeOnline(candidate: Object): void {
+    this.confirmationService.confirm(
+      {
+        header: 'Confirmação',
+        message: `Tem certeza que deseja atualizar o cliente '${candidate['Nome']}' com os dados escolhidos?`,
+        icon: 'fa fa-question-circle',
+        accept: () => {
+          this.user.name = candidate['Nome'];
+          this.user.cpf = candidate['CPF'];
+          this.user.cellphone = candidate['Celular'] === 'NULL' ? null : candidate['Celular'];
+          this.user.whatsapp = candidate['Whatsapp'] === 'NULL' ? null : candidate['Whatsapp'];
+          this.user.simple_address = candidate['Endereço'] === 'NULL' ? null : candidate['Endereço'];
+
+          this.update(true);
+
+          this.displayConfirmeOnlineDialog = false;
+          this.ngOnInit();
+        },
+        reject: () => {
+          return false;
+        }
+      }
+    );
+  }
+
+  private generateSimpleAdressFromConfirmeOnline(logradouro: string,
+                                                 numero: string,
+                                                 complemento: string,
+                                                 bairro: string,
+                                                 cep: string,
+                                                 cidade: string,
+                                                 uf: string): string {
+    logradouro = logradouro === 'NULL' ? '' : `${logradouro},`;
+    numero = numero === 'NULL' ? '' : `${numero},`;
+    complemento = complemento === 'NULL' ? '' : `${complemento},`;
+    bairro = bairro === 'NULL' ? '' : `${bairro},`;
+    cep = cep === 'NULL' ? '' : `${cep},`;
+    cidade = cidade === 'NULL' ? '' : `${cidade},`;
+    uf = uf === 'NULL' ? '' : `${uf}`;
+
+    return `${logradouro} ${numero} ${complemento} ${bairro} ${cep} ${cidade} ${uf}`;
+  }
+
+  private generateWhatsapp(landline: string, isWhatsapp: boolean): string {
+    if (isWhatsapp) {
+      return landline;
+    }
+  }
+
+  // CONFIRME ONLINE } ---------------------------------------------------------------------------------------------------------------------
 
   private stripPhoneNumbers(phoneNumber: string) {
     if (phoneNumber) {
