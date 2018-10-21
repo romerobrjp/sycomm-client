@@ -92,14 +92,10 @@ export class UserService {
     );
   }
 
-  syncConfirmeOnline(op, us, ps, sg, cc): Observable<Object[]> {
+  syncConfirmeOnline(cpf): Observable<Object[]> {
     const url = `${this.urlResource}/sync_confirme_online`;
 
-    const httpParams: HttpParams = new HttpParams().set('OP', op)
-                                                   .set('US', us)
-                                                   .set('PS', ps)
-                                                   .set('SG', sg)
-                                                   .set('CC', cc);
+    const httpParams: HttpParams = new HttpParams().set('cpf', cpf);
 
     return this.http.get<Object[]>(url, { params: httpParams }).pipe(
       catchError(this.handleErrors)

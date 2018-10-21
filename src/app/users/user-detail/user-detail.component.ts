@@ -285,7 +285,7 @@ export class UserDetailComponent implements OnInit {
   syncConfirmeOnline(event) {
     event.preventDefault();
 
-    this.userService.syncConfirmeOnline(1, 'INTBRASCREDI', 'ULOD8E', 'PSHAH', this.user.cpf).subscribe(
+    this.userService.syncConfirmeOnline(this.user.cpf).subscribe(
       (responseSuccess) => {
         console.log(responseSuccess);
         let confirmeOnlineRetrievedData: Object[] = [];
