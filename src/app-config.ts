@@ -7,5 +7,5 @@ export interface ApplicationConfig {
 export const APP_CONFIG: ApplicationConfig = {
   appName: 'Sycomm',
   appVersion: '1.0.0',
-  apiBaseUrl: 'https://sycomm-api.herokuapp.com',
+  apiBaseUrl: '191.252.2.192:3000',
 };
