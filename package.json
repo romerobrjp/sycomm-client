@@ -28,7 +28,7 @@
     "admin-lte": "^2.4.8",
     "angular-token": "^6.0.4",
     "angular2-text-mask": "^8.0.4",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "buffer": "^5.2.1",
     "concat-stream": "^1.6.2",
     "core-js": "^2.5.7",
